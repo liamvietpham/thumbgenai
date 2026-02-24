@@ -171,33 +171,84 @@ export function FeaturesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 mt-8 gap-10">
           <div className="md:col-span-2">
-            <img
-              alt="Dashboard showing AI thumbnail generation analytics and results"
-              loading="lazy"
-              width="1000"
-              height="500"
-              decoding="async"
-              data-nimg="1"
-              className="h-full w-auto"
-              // srcSet="/_next/image?url=%2Fassets%2Ffeatures-showcase-1.png&w=1080&q=75 1x, /_next/image?url=%2Fassets%2Ffeatures-showcase-1.png&w=2048&q=75 2x"
-              src="/features-showcase-1.webp"
-              style={{ color: 'transparent' }}
-            />
+            <div className="relative overflow-hidden rounded-[28px] border-2 border-[#255fbe] shadow-[0_16px_38px_rgba(30,58,100,0.2)] hover:-translate-y-0.5 transition duration-300">
+              <img
+                alt="Dashboard showing AI thumbnail generation analytics and results"
+                loading="lazy"
+                width="1000"
+                height="500"
+                decoding="async"
+                data-nimg="1"
+                className="block h-full w-full object-cover"
+                // srcSet="/_next/image?url=%2Fassets%2Ffeatures-showcase-1.png&w=1080&q=75 1x, /_next/image?url=%2Fassets%2Ffeatures-showcase-1.png&w=2048&q=75 2x"
+                src="/features-showcase.webp"
+                style={{ color: 'transparent' }}
+              />
+
+              <div className="pointer-events-none absolute right-0 top-[36%] w-[44%] rounded-tl-2xl rounded-bl-2xl border border-white/45 bg-white/55 px-3 py-2 text-white shadow-[0_12px_30px_rgba(20,32,60,0.2)] backdrop-blur-sm sm:top-[35%] sm:w-[40%] sm:px-7 sm:py-5">
+                <p className="text-2xl leading-none font-light tracking-tight sm:text-4xl">10X</p>
+                <p className="mt-1 text-[8px] leading-none font-light tracking-[0.08em] uppercase opacity-95 sm:mt-2 sm:text-[12px]">
+                  REDUCE DEVELOPMENT TIME
+                </p>
+              </div>
+
+              <div className="pointer-events-none absolute bottom-[10%] right-0 w-[80%] rounded-tl-2xl rounded-bl-2xl rounded-tr-none rounded-br-none bg-[#255fbe] p-4 text-white shadow-[0_12px_24px_rgba(15,87,234,0.35)] sm:w-[88%] sm:p-8">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex -space-x-1.5 sm:-space-x-2">
+                    <img
+                      alt="Sophia Carter avatar"
+                      loading="lazy"
+                      className="size-8 rounded-full border-2 border-white object-cover sm:size-9"
+                      src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200"
+                    />
+                    <img
+                      alt="Ethan Walker avatar"
+                      loading="lazy"
+                      className="size-8 rounded-full border-2 border-white object-cover sm:size-9"
+                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200"
+                    />
+                    <img
+                      alt="Maya Patel avatar"
+                      loading="lazy"
+                      className="size-8 rounded-full border-2 border-white object-cover sm:size-9"
+                      src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&auto=format&fit=crop&q=60"
+                    />
+                    <span className="grid size-8 place-items-center rounded-full border-2 border-white bg-white text-base leading-none text-[#5a6d8f] sm:size-9 sm:text-lg">
+                      +
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-[14px] leading-none tracking-[0.08em] sm:text-[18px]">★★★★★</p>
+                    <p className="mt-1 text-[8px] leading-none font-medium tracking-[0.01em] opacity-95 sm:text-[10px]">
+                      Used by 1,000+ developers
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="md:col-span-1">
-            <img
-              alt="Example of AI generated thumbnails"
-              loading="lazy"
-              width="1000"
-              height="500"
-              decoding="async"
-              data-nimg="1"
-              className="hover:-translate-y-0.5 transition duration-300"
-              // srcSet="/_next/image?url=%2Fassets%2Ffeatures-showcase-2.png&w=1080&q=75 1x, /_next/imageurl=%2Fassets%2Ffeatures-showcase-2.png&w=2048&q=75 2x"
-              src="/features-showcase-2.webp"
-              style={{ color: 'transparent' }}
-            />
+            <div className="mx-auto w-full max-w-90 h-67.5 overflow-hidden rounded-[28px] border border-[#4c7fd2] bg-linear-to-b from-[#1a3470] via-[#1f4e97] to-[#2f79d7] pl-8 pt-10 shadow-[0_16px_30px_rgba(31,67,126,0.24)] transition hover:-translate-y-0.5 duration-300 md:max-w-none">
+              <div className="h-full rounded-tl-2xl bg-[#f7fbff] p-4 sm:p-5">
+                <p className="text-[12px] font-medium text-[#3c4f69] sm:text-[14px]">Monthly Invoice</p>
+                <p className="mt-1 text-[36px] leading-none font-medium tracking-tight text-[#2d3f58] sm:mt-2 sm:text-[22px]">
+                  $180.00
+                </p>
+
+                <div className="mt-2 flex h-32 items-end gap-2 sm:gap-2.5">
+                  {[76, 28, 45, 36, 60, 48, 64, 74, 30, 46, 38].map((bar, index) => (
+                    <div
+                      key={index}
+                      className={`w-full rounded-full ${
+                        index === 6 ? 'bg-[#255fbe]' : 'bg-[#dbe4f8]'
+                      }`}
+                      style={{ height: `${bar}%` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
             <h3 className="text-[24px]/7.5 text-[#1b3f78] font-medium mt-6">
               boost your views with AI-optimized designs
             </h3>

@@ -48,7 +48,7 @@ export function AspectRatioSelector({
 
 export function PreviewPanel({ aspect }: { aspect: AspectValue }) {
   return (
-    <div className="rounded-2xl border border-[#8eaedf] bg-[#dbe8fb]/75 p-6 shadow-xl">
+    <div className="rounded-2xl border border-[#8eaedf] bg-[#dbe8fb]/75 p-6 shadow-xl h-fit">
       <h2 className="mb-4 text-lg font-semibold text-[#1d447f]">Preview</h2>
 
       <div className="relative mx-auto w-full max-w-2xl">

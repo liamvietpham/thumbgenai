@@ -387,7 +387,7 @@ export default function GeneratePage() {
               </button>
             </div>
           </div>
-
+          
           <PreviewPanel aspect={aspect} />
         </div>
       </main>

@@ -160,7 +160,7 @@ export function HeroSection() {
               transform: `rotateX(${tilt.rotateX.toFixed(2)}deg) rotateY(${tilt.rotateY.toFixed(2)}deg)`,
             }}
           >
-            <div className="w-full rounded-[15px] bg-[linear-gradient(180deg,#255fbe_0%,rgba(37,95,190,0.28)_35%,rgba(37,95,190,0)_100%)] p-1">
+            <div className="w-full overflow-hidden rounded-[15px] bg-[linear-gradient(180deg,#255fbe_0%,rgba(37,95,190,0.28)_35%,rgba(37,95,190,0)_100%)] p-1">
               <img
                 alt="hero section showcase"
                 loading="lazy"
@@ -168,7 +168,7 @@ export function HeroSection() {
                 height="720"
                 decoding="async"
                 data-nimg="1"
-                className="w-full rounded-[13px] bg-[#0b1222] will-change-transform transform:[translateZ(0)]"
+                className="block w-full rounded-[14px] will-change-transform transform:[translateZ(0)]"
                 src="/hero_img.webp"
                 style={{ color: 'transparent' }}
               />
