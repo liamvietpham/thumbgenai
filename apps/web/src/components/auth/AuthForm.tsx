@@ -28,38 +28,47 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           <span className="h-px flex-1 bg-[#b7c6df]" />
         </div>
 
-        {!isLogin ? (
-          <InputRow
-            type="text"
-            name="name"
-            placeholder="Name"
-            icon={
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#8a9bb6]" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="5" />
-                <path d="M20 21a8 8 0 0 0-16 0" />
-              </svg>
-            }
-            className="mt-0"
-          />
-        ) : null}
+        <div className="mt-0">
+          {isLogin ? (
+            <div className="flex h-9 items-center text-[11px] font-normal text-[#24508f] sm:h-9.5 sm:text-xs">
+              Note: use your email and password to continue
+            </div>
+          ) : (
+            <InputRow
+              type="text"
+              name="name"
+              placeholder="Name"
+              required
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#8a9bb6]" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="5" />
+                  <path d="M20 21a8 8 0 0 0-16 0" />
+                </svg>
+              }
+              className="mt-0"
+            />
+          )}
+        </div>
 
         <InputRow
           type="email"
           name="email"
           placeholder="Email id"
+          required
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#8a9bb6]" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
               <rect x="2" y="4" width="20" height="16" rx="2" />
             </svg>
           }
-          className={isLogin ? '' : 'mt-3'}
+          className="mt-3"
         />
 
         <InputRow
           type="password"
           name="password"
           placeholder="Password"
+          required
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#8a9bb6]" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
@@ -96,6 +105,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 function InputRow({
   icon,
   className,
+  required = true,
   ...inputProps
 }: InputHTMLAttributes<HTMLInputElement> & {
   icon: ReactNode;
@@ -108,7 +118,7 @@ function InputRow({
       {icon}
       <input
         className="w-full border-none bg-transparent text-xs text-[#516583] placeholder-[#7f91ae] outline-none sm:text-sm"
-        required
+        required={required}
         {...inputProps}
       />
     </div>
