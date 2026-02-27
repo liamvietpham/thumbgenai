@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import CloseIcon from '@/assets/icons/close.svg';
+import MenuIcon from '@/assets/icons/menu.svg';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -54,13 +56,9 @@ export function Header() {
             aria-expanded={open}
           >
             {open ? (
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
+              <CloseIcon className="h-5 w-5" />
             ) : (
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 7h16M4 12h16M4 17h16" />
-              </svg>
+              <MenuIcon className="h-5 w-5" />
             )}
           </button>
 

@@ -1,3 +1,7 @@
+import LightningIcon from '@/assets/icons/lightning.svg';
+import PaletteIcon from '@/assets/icons/palette.svg';
+import WandIcon from '@/assets/icons/wand.svg';
+
 export default function AboutPage() {
   return (
     <div className="rounded-2xl border border-[#8eaedf] bg-[#dbe8fb]/70 p-8 text-[#4f6f9f] backdrop-blur-md md:p-12">
@@ -30,20 +34,7 @@ export default function AboutPage() {
           <ul className="space-y-4">
             <li className="flex items-start gap-4">
               <div className="p-2 text-[#2f5ea5]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="size-4.5"
-                >
-                  <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
-                </svg>
+                <LightningIcon className="size-4.5" />
               </div>
               <div>
                 <h4 className="mb-1 font-medium text-[#1f3f75]">Lightning Fast</h4>
@@ -55,27 +46,7 @@ export default function AboutPage() {
 
             <li className="flex items-start gap-4">
               <div className="p-2 text-[#2f5ea5]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="size-4.5"
-                >
-                  <path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"></path>
-                  <path d="m14 7 3 3"></path>
-                  <path d="M5 6v4"></path>
-                  <path d="M19 14v4"></path>
-                  <path d="M10 2v2"></path>
-                  <path d="M7 8H5"></path>
-                  <path d="M21 16h-2"></path>
-                  <path d="M11 3H9"></path>
-                </svg>
+                <WandIcon className="size-4.5" />
               </div>
               <div>
                 <h4 className="mb-1 font-medium text-[#1f3f75]">AI Powered</h4>
@@ -87,24 +58,7 @@ export default function AboutPage() {
 
             <li className="flex items-start gap-4">
               <div className="p-2 text-[#2f5ea5]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="size-4.5"
-                >
-                  <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
-                  <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
-                  <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
-                  <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
-                  <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
-                </svg>
+                <PaletteIcon className="size-4.5" />
               </div>
               <div>
                 <h4 className="mb-1 font-medium text-[#1f3f75]">Fully Customizable</h4>

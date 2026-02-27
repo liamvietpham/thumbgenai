@@ -3,6 +3,14 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AspectRatioSelector, AspectValue, PreviewPanel } from '@/components/generator/shared';
+import ArrowRightIcon from '@/assets/icons/arrow-right.svg';
+import ChevronDownIcon from '@/assets/icons/chevron-down.svg';
+import ChipIcon from '@/assets/icons/chip.svg';
+import ImageIcon from '@/assets/icons/image.svg';
+import PenIcon from '@/assets/icons/pen.svg';
+import SparkIcon from '@/assets/icons/spark.svg';
+import SquareIcon from '@/assets/icons/square.svg';
+import UserIcon from '@/assets/icons/user.svg';
 
 const styleOptions = [
   {
@@ -41,6 +49,8 @@ export default function GeneratePage() {
   const [modelOpen, setModelOpen] = useState(false);
   const [userPhotoName, setUserPhotoName] = useState('');
   const [scheme, setScheme] = useState<(typeof colorOptions)[number]['label']>('vibrant');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const styleRef = useRef<HTMLDivElement>(null);
   const modelRef = useRef<HTMLDivElement>(null);
 
@@ -57,76 +67,30 @@ export default function GeneratePage() {
 
   const getStyleIcon = (icon: (typeof styleOptions)[number]['icon']) => {
     if (icon === 'spark') {
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="h-5 w-5"
-        >
-          <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" />
-        </svg>
-      );
+      return <SparkIcon className="h-5 w-5" />;
     }
     if (icon === 'square') {
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="h-5 w-5"
-        >
-          <rect x="4" y="4" width="16" height="16" rx="2" />
-        </svg>
-      );
+      return <SquareIcon className="h-5 w-5" />;
     }
     if (icon === 'image') {
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="h-5 w-5"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-          <circle cx="9" cy="9" r="2" />
-          <path d="m21 15-3.5-3.5a2 2 0 0 0-2.8 0L6 20" />
-        </svg>
-      );
+      return <ImageIcon className="h-5 w-5" />;
     }
     if (icon === 'pen') {
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="h-5 w-5"
-        >
-          <path d="m12 20-7 2 2-7L16 6l5 5-9 9z" />
-        </svg>
-      );
+      return <PenIcon className="h-5 w-5" />;
     }
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="h-5 w-5"
-      >
-        <rect x="7" y="7" width="10" height="10" rx="2" />
-        <path d="M4 10V8M4 16v-2M20 10V8M20 16v-2M10 4H8M16 4h-2M10 20H8M16 20h-2" />
-      </svg>
-    );
+    return <ChipIcon className="h-5 w-5" />;
+  };
+
+  const handleGenerate = async () => {
+    setGeneratedImageUrl(null);
+    setIsGenerating(true);
+    try {
+      // Replace this delay with the real generate API call.
+      await new Promise((resolve) => setTimeout(resolve, 1800));
+      setGeneratedImageUrl('/hero_img.webp');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -147,21 +111,7 @@ export default function GeneratePage() {
             className="flex items-center gap-1 rounded-full bg-[#2f5ea5] px-8 py-2 text-sm font-medium text-white transition-colors hover:bg-[#244a82]"
           >
             Try Now
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14"></path>
-              <path d="m12 5 7 7-7 7"></path>
-            </svg>
+            <ArrowRightIcon className="h-[18px] w-[18px]" aria-hidden="true" />
           </Link>
         </section>
       </div>
@@ -208,21 +158,14 @@ export default function GeneratePage() {
                       <span className="mt-0.5 text-[#2f5ea5]">
                         {getStyleIcon(selectedStyle?.icon ?? 'square')}
                       </span>
-                      <div>
+                    <div>
                         <p className="font-medium">{selectedStyle?.label}</p>
                         <p className="text-xs text-[#6b88b5]">{selectedStyle?.desc}</p>
                       </div>
                     </div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
+                    <ChevronDownIcon
                       className={`h-5 w-5 text-[#6b88b5] transition-transform ${styleOpen ? 'rotate-180' : ''}`}
-                    >
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
+                    />
                   </button>
 
                   {styleOpen ? (
@@ -290,16 +233,9 @@ export default function GeneratePage() {
                         ({modelOptions.find((m) => m.label === model)?.credits} credits)
                       </span>
                     </div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
+                    <ChevronDownIcon
                       className={`h-5 w-5 text-[#6b88b5] transition-transform ${modelOpen ? 'rotate-180' : ''}`}
-                    >
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
+                    />
                   </button>
 
                   {modelOpen ? (
@@ -337,17 +273,7 @@ export default function GeneratePage() {
                 >
                   <div className="flex flex-wrap items-start gap-3">
                     <div className="flex size-16 items-center justify-center rounded-xl border border-dashed border-[#8eaedf] bg-[#dbe8fb]/55 text-[#6b88b5]">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="h-6 w-6"
-                      >
-                        <circle cx="12" cy="8" r="4"></circle>
-                        <path d="M4 20a8 8 0 0 1 16 0"></path>
-                      </svg>
+                      <UserIcon className="h-6 w-6" />
                     </div>
                     <div className="space-y-2">
                       <p>
@@ -382,13 +308,23 @@ export default function GeneratePage() {
                 </div>
               </div>
 
-              <button className="w-full rounded-xl bg-linear-to-b from-[#2f5ea5] to-[#244a82] py-3.5 text-[15px] font-medium text-white transition-colors hover:from-[#244a82] cursor-pointer">
-                Generate Thumbnail
+              <button
+                type="button"
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="w-full rounded-xl bg-linear-to-b from-[#2f5ea5] to-[#244a82] py-3.5 text-[15px] font-medium text-white transition-colors hover:from-[#244a82] cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isGenerating ? 'Generating...' : 'Generate Thumbnail'}
               </button>
             </div>
           </div>
           
-          <PreviewPanel aspect={aspect} />
+          <PreviewPanel
+            aspect={aspect}
+            isLoading={isGenerating}
+            hasResult={Boolean(generatedImageUrl)}
+            imageUrl={generatedImageUrl ?? undefined}
+          />
         </div>
       </main>
     </div>

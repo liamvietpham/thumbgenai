@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { AspectRatioSelector, AspectValue, PreviewPanel } from '@/components/generator/shared';
+import LinkIcon from '@/assets/icons/link.svg';
+import UploadIcon from '@/assets/icons/upload.svg';
 
 export default function RecreatePage() {
   const [inputMode, setInputMode] = useState<'upload' | 'url'>('upload');
@@ -27,23 +29,7 @@ export default function RecreatePage() {
                 onClick={() => setInputMode('upload')}
                 type="button"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-1 inline"
-                  aria-hidden="true"
-                >
-                  <path d="M12 3v12"></path>
-                  <path d="m17 8-5-5-5 5"></path>
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                </svg>
+                <UploadIcon className="mr-1 inline h-4 w-4" aria-hidden="true" />
                 Upload
               </button>
               <button
@@ -51,22 +37,7 @@ export default function RecreatePage() {
                 onClick={() => setInputMode('url')}
                 type="button"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-1 inline"
-                  aria-hidden="true"
-                >
-                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                </svg>
+                <LinkIcon className="mr-1 inline h-4 w-4" aria-hidden="true" />
                 Image URL
               </button>
             </div>

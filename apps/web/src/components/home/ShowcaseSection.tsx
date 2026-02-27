@@ -1,4 +1,5 @@
 import { glassCard } from './shared';
+import ExternalLinkIcon from '@/assets/icons/external-link.svg';
 
 export function ShowcaseSection() {
   return (
@@ -19,22 +20,10 @@ export function ShowcaseSection() {
         </p>
         <button className="group mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#255fbe] transition hover:text-[#1e4f9f]">
           Start generating free
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform duration-300 group-hover:translate-x-0.5"
+          <ExternalLinkIcon
+            className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5"
             aria-hidden="true"
-          >
-            <path d="M7 7h10v10"></path>
-            <path d="M7 17 17 7"></path>
-          </svg>
+          />
         </button>
       </div>
     </section>

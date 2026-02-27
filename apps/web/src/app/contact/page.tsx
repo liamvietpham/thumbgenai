@@ -1,3 +1,6 @@
+import LocationIcon from '@/assets/icons/location.svg';
+import MailIcon from '@/assets/icons/mail.svg';
+
 export default function ContactPage() {
   return (
     <div className="grid gap-8 md:grid-cols-2 md:gap-16">
@@ -15,21 +18,7 @@ export default function ContactPage() {
         <div className="space-y-6">
           <div className="flex items-center gap-4 text-[#4f6f9f]">
             <div className="rounded-xl border border-[#8eaedf] bg-[#dbe8fb]/70 p-3 text-[#2f5ea5]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
-                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-              </svg>
+              <MailIcon aria-hidden="true" />
             </div>
             <div>
               <h4 className="font-medium text-[#1d447f]">Email</h4>
@@ -39,24 +28,7 @@ export default function ContactPage() {
 
           <div className="flex items-center gap-4 text-[#4f6f9f]">
             <div className="rounded-xl border border-[#8eaedf] bg-[#dbe8fb]/70 p-3 text-[#2f5ea5]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="2" x2="5" y1="12" y2="12"></line>
-                <line x1="19" x2="22" y1="12" y2="12"></line>
-                <line x1="12" x2="12" y1="2" y2="5"></line>
-                <line x1="12" x2="12" y1="19" y2="22"></line>
-                <circle cx="12" cy="12" r="7"></circle>
-              </svg>
+              <LocationIcon aria-hidden="true" />
             </div>
             <div>
               <h4 className="font-medium text-[#1d447f]">Location</h4>

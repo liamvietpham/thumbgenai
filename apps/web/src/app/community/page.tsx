@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import DownloadIcon from '@/assets/icons/download.svg';
+import ExternalLinkIcon from '@/assets/icons/external-link.svg';
 
 type CommunityItem = {
   title: string;
@@ -104,11 +106,7 @@ export default function CommunityPage() {
                 }}
                 aria-label="Download thumbnail"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-4">
-                  <path d="M12 15V3"></path>
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <path d="m7 10 5 5 5-5"></path>
-                </svg>
+                <DownloadIcon className="size-4" />
               </button>
 
               <Link
@@ -117,10 +115,7 @@ export default function CommunityPage() {
                 className="flex h-6 w-6 items-center justify-center rounded bg-black/50 text-white transition-all hover:bg-[#2f5ea5]"
                 aria-label="Open preview"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-4">
-                  <path d="M7 7h10v10"></path>
-                  <path d="M7 17 17 7"></path>
-                </svg>
+                <ExternalLinkIcon className="size-4" />
               </Link>
             </div>
           </article>

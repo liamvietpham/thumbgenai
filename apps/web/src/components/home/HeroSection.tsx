@@ -2,6 +2,9 @@
 
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
+import CheckIcon from '@/assets/icons/check.svg';
+import ChevronRightIcon from '@/assets/icons/chevron-right.svg';
+import EyeIcon from '@/assets/icons/eye.svg';
 
 export function HeroSection() {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
@@ -34,21 +37,10 @@ export function HeroSection() {
           >
             <span className="rounded-full bg-[#255fbe] px-3.5 py-1 text-xs text-white">Free</span>
             <span className="min-w-0 truncate text-base sm:text-inherit">#1 AI Thumbnail Generator For YouTube</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="shrink-0 text-[#7b93bb] transition-transform duration-200 group-hover:translate-x-0.5"
+            <ChevronRightIcon
+              className="shrink-0 text-[#7b93bb] transition-transform duration-200 group-hover:translate-x-0.5 size-4"
               aria-hidden="true"
-            >
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
+            />
           </Link>
 
           <h1 className="text-5xl/17 md:text-6xl/21 font-medium max-w-3xl text-center text-[#1b3f78]">
@@ -74,78 +66,22 @@ export function HeroSection() {
               className="flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#255fbe] px-6 text-base text-[#36557f] transition hover:border-[#1e4f9f] hover:bg-[#eaf2ff] hover:text-[#1f4e94] sm:w-auto sm:text-lg"
               href="/community"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
+              <EyeIcon className="h-4.5 w-4.5" aria-hidden="true" />
               <span className="whitespace-nowrap">View Creations</span>
             </Link>
           </div>
 
           <div className="flex flex-wrap justify-center items-center gap-4 md:gap-14 mt-12">
             <div className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-5 text-[#255fbe]"
-                aria-hidden="true"
-              >
-                <path d="M20 6 9 17l-5-5"></path>
-              </svg>
+              <CheckIcon className="size-5 text-[#255fbe]" aria-hidden="true" />
               <p className="text-[#5b739b]">No design skills needed</p>
             </div>
             <div className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-5 text-[#255fbe]"
-                aria-hidden="true"
-              >
-                <path d="M20 6 9 17l-5-5"></path>
-              </svg>
+              <CheckIcon className="size-5 text-[#255fbe]" aria-hidden="true" />
               <p className="text-[#5b739b]">Fast generation</p>
             </div>
             <div className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-5 text-[#255fbe]"
-                aria-hidden="true"
-              >
-                <path d="M20 6 9 17l-5-5"></path>
-              </svg>
+              <CheckIcon className="size-5 text-[#255fbe]" aria-hidden="true" />
               <p className="text-[#5b739b]">High CTR templates</p>
             </div>
           </div>
