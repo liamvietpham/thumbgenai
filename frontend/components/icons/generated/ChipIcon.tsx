@@ -1,0 +1,3 @@
+import type { SVGProps } from "react";
+const ChipIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24" {...props}><rect width={10} height={10} x={7} y={7} rx={2} /><path d="M4 10V8m0 8v-2m16-4V8m0 8v-2M10 4H8m8 0h-2m-4 16H8m8 0h-2" /></svg>;
+export default ChipIcon;
