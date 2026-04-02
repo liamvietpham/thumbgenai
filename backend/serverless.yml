@@ -1,9 +1,9 @@
 service: thumbgen-ai-backend
-frameworkVersion: '4'
+frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs22.x
+  runtime: nodejs20.x
   architecture: arm64
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, env:AWS_REGION, 'ap-southeast-1'}
