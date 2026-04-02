@@ -1,0 +1,35 @@
+service: thumbgen-ai-backend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  architecture: arm64
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, env:AWS_REGION, 'ap-southeast-1'}
+  memorySize: 512
+  timeout: 29
+  logRetentionInDays: 14
+  environment:
+    NODE_ENV: ${self:provider.stage}
+
+package:
+  patterns:
+    - '!src/**'
+    - '!test/**'
+    - '!*.md'
+    - '!*.mjs'
+    - '!tsconfig*.json'
+    - '!nest-cli.json'
+    - 'dist/**'
+
+functions:
+  api:
+    handler: dist/lambda.handler
+    events:
+      - httpApi:
+          method: '*'
+          path: /
+      - httpApi:
+          method: '*'
+          path: /{proxy+}
