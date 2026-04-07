@@ -1,13 +1,13 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { Global, Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 export const DDB = Symbol('DDB');
 
 @Global()
 @Module({
-  imports: [ConfigService],
+  imports: [ConfigModule],
   providers: [
     {
       provide: DDB,
@@ -19,6 +19,7 @@ export const DDB = Symbol('DDB');
           marshallOptions: { removeUndefinedValues: true },
         });
       },
+      inject: [ConfigService],
     },
   ],
   exports: [DDB],

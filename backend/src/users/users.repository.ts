@@ -8,7 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import { DDB } from 'src/database/database.module';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateUser } from 'src/users/types/create-user.type';
-import { v7 as uuidv7 } from 'uuid';
 
 @Injectable()
 export class UsersRepository {
@@ -39,6 +38,7 @@ export class UsersRepository {
 
   async createUser(input: CreateUser) {
     const now = new Date().toISOString();
+    const { v7: uuidv7 } = await import('uuid');
 
     const user: UserEntity = {
       id: uuidv7(),
