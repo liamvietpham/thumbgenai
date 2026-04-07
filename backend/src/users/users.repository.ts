@@ -1,9 +1,9 @@
 import {
   DynamoDBDocumentClient,
-  PutCommand,
   QueryCommand,
+  TransactWriteCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DDB } from 'src/database/database.module';
 import { UserEntity } from 'src/users/entities/user.entity';
@@ -51,13 +51,44 @@ export class UsersRepository {
       pwdUpdatedAt: now,
     };
 
-    await this.ddb.send(
-      new PutCommand({
-        TableName: this.tableName,
-        Item: user,
-        ConditionExpression: 'attribute_not_exists(id)',
-      }),
-    );
+    try {
+      await this.ddb.send(
+        new TransactWriteCommand({
+          TransactItems: [
+            {
+              Put: {
+                TableName: this.tableName,
+                Item: user,
+                ConditionExpression: 'attribute_not_exists(id)',
+              },
+            },
+            {
+              Put: {
+                TableName: this.tableName,
+                Item: {
+                  id: `email#${user.email}`,
+                  isEmailLock: true,
+                  userId: user.id,
+                  createdAt: now,
+                },
+                ConditionExpression: 'attribute_not_exists(id)',
+              },
+            },
+          ],
+        }),
+      );
+    } catch (error) {
+      const err = error as { name?: string; message?: string };
+      const isConditionalTransactionConflict =
+        err.name === 'TransactionCanceledException' &&
+        err.message?.includes('ConditionalCheckFailed');
+
+      if (isConditionalTransactionConflict) {
+        throw new ConflictException('User already exists');
+      }
+
+      throw error;
+    }
 
     return user;
   }
