@@ -6,12 +6,13 @@ import {
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { argon2id, hash } from 'argon2';
 import { UsersRepository } from 'src/users/users.repository';
+import { mapUserToPublicUser, PublicUser } from 'src/users/mappers/user.mapper';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userRepository: UsersRepository) {}
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<PublicUser> {
     const { name, email, password, confirmPassword } = registerDto;
 
     if (password !== confirmPassword) {
@@ -30,10 +31,12 @@ export class AuthService {
       type: argon2id,
     });
 
-    return await this.userRepository.createUser({
+    const createdUser = await this.userRepository.createUser({
       name,
       email,
       password: hashPassword,
     });
+
+    return mapUserToPublicUser(createdUser);
   }
 }
