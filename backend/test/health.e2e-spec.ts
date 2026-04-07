@@ -2,8 +2,12 @@ import { INestApplication } from '@nestjs/common';
 import { createApp } from '../src/app.factory';
 
 type HealthResponse = {
-  status: string;
-  service: string;
+  success: boolean;
+  statusCode: number;
+  data: {
+    status: string;
+    service: string;
+  };
 };
 
 describe('HealthController (e2e)', () => {
@@ -16,14 +20,18 @@ describe('HealthController (e2e)', () => {
     baseUrl = await app.getUrl();
   });
 
-  it('GET /health returns service metadata', async () => {
+  it('GET /health returns wrapped success metadata', async () => {
     const response = await fetch(`${baseUrl}/health`);
     const body = (await response.json()) as HealthResponse;
 
     expect(response.status).toBe(200);
     expect(body).toEqual({
-      status: 'ok',
-      service: 'thumbgen-ai-backend',
+      success: true,
+      statusCode: 200,
+      data: {
+        status: 'ok',
+        service: 'thumbgen-ai-backend',
+      },
     });
   });
 
