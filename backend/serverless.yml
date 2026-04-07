@@ -12,6 +12,18 @@ provider:
   logRetentionInDays: 14
   environment:
     NODE_ENV: ${self:provider.stage}
+    USERS_TABLE: ${ssm:/thumbgenai/users-table}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:PutItem
+            - dynamodb:TransactWriteItems
+          Resource:
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}/index/email-index
 
 package:
   patterns:
