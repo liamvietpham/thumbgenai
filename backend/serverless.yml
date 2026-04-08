@@ -3,7 +3,7 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs22.x
   architecture: arm64
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, env:AWS_REGION, 'ap-southeast-1'}
