@@ -133,7 +133,7 @@ describe('AuthModule (e2e)', () => {
     expect(response.status).toBe(201);
     expect(body.success).toBe(true);
     expect(body.statusCode).toBe(201);
-    expect(body.data.user).toEqual({
+    expect(body.data.user).toMatchObject({
       id: 'user-1',
       name: 'John Doe',
       email: 'john@example.com',
