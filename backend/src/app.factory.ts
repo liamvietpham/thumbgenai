@@ -6,7 +6,6 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { apiReference } from '@scalar/nestjs-api-reference';
 import { applyOpenApiPatches } from 'src/common/swagger/openapi.patch';
 
 export async function createApp(): Promise<INestApplication> {
@@ -37,6 +36,7 @@ export async function createApp(): Promise<INestApplication> {
 
   const baseDocument = SwaggerModule.createDocument(app, openApiConfig);
   const document = applyOpenApiPatches(baseDocument);
+  const { apiReference } = await import('@scalar/nestjs-api-reference');
 
   app.use(
     '/api-docs',
