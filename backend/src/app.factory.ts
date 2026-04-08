@@ -33,7 +33,6 @@ export async function createApp(): Promise<INestApplication> {
     .setVersion('1.0.0')
     .addBearerAuth()
     .build();
-
   const baseDocument = SwaggerModule.createDocument(app, openApiConfig);
   const document = applyOpenApiPatches(baseDocument);
   const { apiReference } = await import('@scalar/nestjs-api-reference');
@@ -49,6 +48,11 @@ export async function createApp(): Promise<INestApplication> {
       hideModels: true,
     }),
   );
+
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  });
 
   return app;
 }

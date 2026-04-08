@@ -13,6 +13,12 @@ provider:
   environment:
     NODE_ENV: ${self:provider.stage}
     USERS_TABLE: ${ssm:/thumbgenai/users-table}
+    SESSIONS_TABLE: ${ssm:/thumbgenai/sessions-table}
+    ACCESS_TOKEN_SECRET: ${ssm:/thumbgenai/access-token-secret}
+    REFRESH_TOKEN_SECRET: ${ssm:/thumbgenai/refresh-token-secret}
+    ACCESS_TOKEN_TTL: ${ssm:/thumbgenai/access-token-ttl}
+    REFRESH_TOKEN_TTL: ${ssm:/thumbgenai/refresh-token-ttl}
+    CORS_ORIGIN: ${ssm:/thumbgenai/cors-origin}
   iam:
     role:
       statements:
@@ -24,6 +30,8 @@ provider:
           Resource:
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}/index/email-index
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/sessions-table}
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/sessions-table}/index/userId-index
 
 package:
   patterns:

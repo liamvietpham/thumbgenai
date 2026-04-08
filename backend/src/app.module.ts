@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { HealthModule } from './health/health.module';
-import { AuthModule } from './auth/auth.module';
-import { DatabaseModule } from './database/database.module';
+import { HealthModule } from 'src/health/health.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { DatabaseModule } from 'src/database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from 'src/users/users.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from 'src/common/filters/all-exceptions.filter';
 import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
+import { SessionModule } from './session/session.module';
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import { ResponseInterceptor } from 'src/common/interceptors/response.intercepto
       isGlobal: true,
     }),
     UsersModule,
+    SessionModule,
   ],
 })
 export class AppModule {}

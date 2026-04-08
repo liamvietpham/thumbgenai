@@ -17,7 +17,7 @@ export class UsersRepository {
     @Inject(DDB) private readonly ddb: DynamoDBDocumentClient,
     private readonly configService: ConfigService,
   ) {
-    this.tableName = this.configService.get<string>('USERS_TABLE', '');
+    this.tableName = this.configService.getOrThrow<string>('USERS_TABLE');
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {

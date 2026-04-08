@@ -65,11 +65,38 @@ jobs:
       - name: Run tests
         run: yarn test --runInBand
 
+  test-e2e:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: backend/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run e2e tests
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
+        run: yarn test:e2e --runInBand
+
   deploy:
     name: Deploy backend to AWS Lambda
     needs:
       - lint
       - test
+      - test-e2e
     runs-on: ubuntu-latest
     permissions:
       contents: read
