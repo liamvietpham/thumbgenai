@@ -5,6 +5,9 @@ import {
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { apiReference } from '@scalar/nestjs-api-reference';
+import { applyOpenApiPatches } from 'src/common/swagger/openapi.patch';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +25,28 @@ export async function createApp(): Promise<INestApplication> {
 
         return new BadRequestException(messages);
       },
+    }),
+  );
+
+  const openApiConfig = new DocumentBuilder()
+    .setTitle('ThumbgenAI API')
+    .setDescription('API Reference')
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .build();
+
+  const baseDocument = SwaggerModule.createDocument(app, openApiConfig);
+  const document = applyOpenApiPatches(baseDocument);
+
+  app.use(
+    '/api-docs',
+    apiReference({
+      content: document,
+      title: 'ThumbgenAI API Reference',
+      theme: 'default',
+      layout: 'modern',
+      authentication: { preferredSecurityScheme: 'bearerAuth' },
+      hideModels: true,
     }),
   );
 
