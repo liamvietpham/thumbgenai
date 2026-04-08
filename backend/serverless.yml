@@ -35,6 +35,15 @@ package:
     - '!nest-cli.json'
     - 'dist/**'
 
+plugins:
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 5
+    includeLayers: true # optional
+
 functions:
   api:
     handler: dist/lambda.handler
