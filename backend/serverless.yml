@@ -26,6 +26,7 @@ provider:
           Action:
             - dynamodb:Query
             - dynamodb:PutItem
+            - dynamodb:DeleteItem
             - dynamodb:TransactWriteItems
           Resource:
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}

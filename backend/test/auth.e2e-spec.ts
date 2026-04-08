@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { argon2id, hash } from 'argon2';
 import { AuthService } from '../src/auth/auth.service';
 import { createApp } from '../src/app.factory';
@@ -22,6 +23,14 @@ type LoginSuccessResponse = {
       email: string;
       credits: number;
     };
+  };
+};
+
+type LogoutSuccessResponse = {
+  success: boolean;
+  statusCode: number;
+  data: {
+    message: string;
   };
 };
 
@@ -130,9 +139,9 @@ describe('AuthModule (e2e)', () => {
     const body = (await response.json()) as LoginSuccessResponse;
     const setCookieHeader = response.headers.get('set-cookie') ?? '';
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(200);
     expect(body.success).toBe(true);
-    expect(body.statusCode).toBe(201);
+    expect(body.statusCode).toBe(200);
     expect(body.data.user).toMatchObject({
       id: 'user-1',
       name: 'John Doe',
@@ -148,6 +157,80 @@ describe('AuthModule (e2e)', () => {
     expect(findByEmailSpy).toHaveBeenCalledWith('john@example.com');
     expect(generateSessionIdSpy).toHaveBeenCalledTimes(1);
     expect(createSessionSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('POST /auth/logout revokes the session, clears cookies, and returns 200', async () => {
+    const revokeSessionSpy = jest
+      .spyOn(SessionRepository.prototype, 'revokeSession')
+      .mockResolvedValue(undefined);
+    const jwtService = app.get(JwtService);
+    const refreshToken = jwtService.sign(
+      {
+        sub: 'user-1',
+        email: 'john@example.com',
+        sid: 'session-1',
+        type: 'refresh',
+      },
+      {
+        secret: process.env.REFRESH_TOKEN_SECRET,
+        expiresIn: process.env.REFRESH_TOKEN_TTL,
+      },
+    );
+
+    const response = await fetch(`${baseUrl}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        cookie: `refreshToken=${refreshToken}`,
+      },
+    });
+    const body = (await response.json()) as LogoutSuccessResponse;
+    const setCookieHeader = response.headers.get('set-cookie') ?? '';
+
+    expect(response.status).toBe(200);
+    expect(body).toEqual({
+      success: true,
+      statusCode: 200,
+      data: {
+        message: 'Logged out successfully',
+      },
+    });
+
+    expect(setCookieHeader).toContain('accessToken=');
+    expect(setCookieHeader).toContain('refreshToken=');
+    expect(setCookieHeader).toContain('Path=/auth');
+    expect(revokeSessionSpy).toHaveBeenCalledWith('session-1');
+  });
+
+  it('POST /auth/logout returns 400 when refresh token cookie is missing', async () => {
+    const response = await fetch(`${baseUrl}/auth/logout`, {
+      method: 'POST',
+    });
+    const body = (await response.json()) as ErrorResponse;
+    const setCookieHeader = response.headers.get('set-cookie') ?? '';
+
+    expect(response.status).toBe(400);
+    expect(body.success).toBe(false);
+    expect(body.statusCode).toBe(400);
+    expect(body.message).toBe('Refresh token is required');
+    expect(body.path).toBe('/auth/logout');
+    expect(setCookieHeader).toContain('accessToken=');
+    expect(setCookieHeader).toContain('refreshToken=');
+  });
+
+  it('POST /auth/logout returns 401 when refresh token is invalid', async () => {
+    const response = await fetch(`${baseUrl}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        cookie: 'refreshToken=invalid-token',
+      },
+    });
+    const body = (await response.json()) as ErrorResponse;
+
+    expect(response.status).toBe(401);
+    expect(body.success).toBe(false);
+    expect(body.statusCode).toBe(401);
+    expect(body.message).toBe('Invalid refresh token');
+    expect(body.path).toBe('/auth/logout');
   });
 
   afterEach(async () => {

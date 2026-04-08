@@ -16,12 +16,22 @@ import { SessionRepository } from 'src/session/session.repository';
 
 @Injectable()
 export class AuthService {
+  private readonly accessSecret: string;
+  private readonly refreshSecret: string;
+
   constructor(
     private readonly userRepository: UsersRepository,
     private readonly sessionRepository: SessionRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.accessSecret = this.configService.getOrThrow<string>(
+      'ACCESS_TOKEN_SECRET',
+    );
+    this.refreshSecret = this.configService.getOrThrow<string>(
+      'REFRESH_TOKEN_SECRET',
+    );
+  }
 
   async register(registerDto: RegisterDto): Promise<PublicUser> {
     const { name, email, password, confirmPassword } = registerDto;
@@ -69,21 +79,15 @@ export class AuthService {
     const sid = await this.generateSessionId();
 
     const payload = { sub: user.id, email: user.email, sid, type: 'access' };
-    const accessSecret = this.configService.getOrThrow<string>(
-      'ACCESS_TOKEN_SECRET',
-    );
-    const refreshSecret = this.configService.getOrThrow<string>(
-      'REFRESH_TOKEN_SECRET',
-    );
 
     const accessToken = this.jwtService.sign(payload, {
-      secret: accessSecret,
+      secret: this.accessSecret,
       expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL'),
     });
     const refreshToken = this.jwtService.sign(
       { ...payload, type: 'refresh' },
       {
-        secret: refreshSecret,
+        secret: this.refreshSecret,
         expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL'),
       },
     );
@@ -91,10 +95,10 @@ export class AuthService {
     const now = Date.now();
     const { exp: accessExp } = await this.jwtService.verifyAsync<{
       exp: number;
-    }>(accessToken, { secret: accessSecret });
+    }>(accessToken, { secret: this.accessSecret });
     const { exp: refreshExp } = await this.jwtService.verifyAsync<{
       exp: number;
-    }>(refreshToken, { secret: refreshSecret });
+    }>(refreshToken, { secret: this.refreshSecret });
 
     await this.sessionRepository.createSession({
       sid,
@@ -111,6 +115,31 @@ export class AuthService {
       accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
       refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0),
     };
+  }
+
+  async logout(refreshToken?: string) {
+    if (!refreshToken) {
+      throw new BadRequestException('Refresh token is required');
+    }
+
+    let payload: { sid: string; type?: string };
+
+    try {
+      payload = await this.jwtService.verifyAsync<{
+        sid: string;
+        type?: string;
+      }>(refreshToken, {
+        secret: this.refreshSecret,
+      });
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    if (payload.type !== 'refresh') {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    await this.sessionRepository.revokeSession(payload.sid);
   }
 
   private async generateSessionId(): Promise<string> {

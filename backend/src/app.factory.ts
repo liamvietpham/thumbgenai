@@ -7,9 +7,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { applyOpenApiPatches } from 'src/common/swagger/openapi.patch';
+import cookieParser from 'cookie-parser';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -35,19 +38,22 @@ export async function createApp(): Promise<INestApplication> {
     .build();
   const baseDocument = SwaggerModule.createDocument(app, openApiConfig);
   const document = applyOpenApiPatches(baseDocument);
-  const { apiReference } = await import('@scalar/nestjs-api-reference');
 
-  app.use(
-    '/api-docs',
-    apiReference({
-      content: document,
-      title: 'ThumbgenAI API Reference',
-      theme: 'default',
-      layout: 'modern',
-      authentication: { preferredSecurityScheme: 'bearerAuth' },
-      hideModels: true,
-    }),
-  );
+  if (process.env.NODE_ENV !== 'test') {
+    const { apiReference } = await import('@scalar/nestjs-api-reference');
+
+    app.use(
+      '/api-docs',
+      apiReference({
+        content: document,
+        title: 'ThumbgenAI API Reference',
+        theme: 'default',
+        layout: 'modern',
+        authentication: { preferredSecurityScheme: 'bearerAuth' },
+        hideModels: true,
+      }),
+    );
+  }
 
   app.enableCors({
     origin: process.env.CORS_ORIGIN,

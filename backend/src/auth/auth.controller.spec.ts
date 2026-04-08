@@ -1,12 +1,17 @@
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthController } from './auth.controller';
 
 type MockAuthService = {
   register: jest.MockedFunction<AuthService['register']>;
   login: jest.MockedFunction<AuthService['login']>;
+  logout: jest.MockedFunction<AuthService['logout']>;
 };
 
 describe('AuthController', () => {
@@ -23,6 +28,7 @@ describe('AuthController', () => {
           useValue: {
             register: jest.fn(),
             login: jest.fn(),
+            logout: jest.fn(),
           },
         },
       ],
@@ -155,5 +161,58 @@ describe('AuthController', () => {
       unauthorizedError,
     );
     expect(cookieSpy).not.toHaveBeenCalled();
+  });
+
+  it('clears auth cookies, forwards refresh token, and returns a logout payload', async () => {
+    process.env.NODE_ENV = 'prod';
+
+    const clearCookieSpy = jest.fn();
+    const response = {
+      clearCookie: clearCookieSpy,
+    } as unknown as Response;
+    const request = {
+      cookies: {
+        refreshToken: 'refresh-token',
+      },
+    } as Request;
+
+    authService.logout.mockResolvedValue(undefined);
+
+    await expect(controller.logout(response, request)).resolves.toEqual({
+      message: 'Logged out successfully',
+    });
+
+    expect(clearCookieSpy).toHaveBeenNthCalledWith(1, 'accessToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    expect(clearCookieSpy).toHaveBeenNthCalledWith(2, 'refreshToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/auth',
+    });
+    expect(authService.logout).toHaveBeenCalledWith('refresh-token');
+  });
+
+  it('clears cookies before propagating logout service errors', async () => {
+    const clearCookieSpy = jest.fn();
+    const response = {
+      clearCookie: clearCookieSpy,
+    } as unknown as Response;
+    const request = {
+      cookies: {},
+    } as Request;
+    const badRequestError = new BadRequestException('Refresh token is required');
+
+    authService.logout.mockRejectedValue(badRequestError);
+
+    await expect(controller.logout(response, request)).rejects.toBe(
+      badRequestError,
+    );
+
+    expect(clearCookieSpy).toHaveBeenCalledTimes(2);
+    expect(authService.logout).toHaveBeenCalledWith(undefined);
   });
 });

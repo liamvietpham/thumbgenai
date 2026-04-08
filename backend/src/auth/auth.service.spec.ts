@@ -17,6 +17,7 @@ type MockUsersRepository = {
 
 type MockSessionRepository = {
   createSession: jest.MockedFunction<SessionRepository['createSession']>;
+  revokeSession: jest.MockedFunction<SessionRepository['revokeSession']>;
 };
 
 type MockJwtService = {
@@ -43,6 +44,7 @@ describe('AuthService', () => {
 
     sessionRepository = {
       createSession: jest.fn(),
+      revokeSession: jest.fn(),
     };
 
     jwtService = {
@@ -287,5 +289,49 @@ describe('AuthService', () => {
     });
 
     nowSpy.mockRestore();
+  });
+
+  it('throws BadRequestException when logout refresh token is missing', async () => {
+    await expect(service.logout()).rejects.toBeInstanceOf(BadRequestException);
+
+    expect(jwtService.verifyAsync).not.toHaveBeenCalled();
+    expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedException when logout refresh token is invalid', async () => {
+    jwtService.verifyAsync.mockRejectedValue(new Error('jwt expired'));
+
+    await expect(service.logout('invalid-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+
+    expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedException when logout token type is not refresh', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sid: 'session-1',
+      type: 'access',
+    });
+
+    await expect(service.logout('access-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+
+    expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
+  });
+
+  it('verifies refresh token and revokes the matching session on logout', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sid: 'session-1',
+      type: 'refresh',
+    });
+
+    await expect(service.logout('refresh-token')).resolves.toBeUndefined();
+
+    expect(jwtService.verifyAsync).toHaveBeenCalledWith('refresh-token', {
+      secret: 'refresh-secret',
+    });
+    expect(sessionRepository.revokeSession).toHaveBeenCalledWith('session-1');
   });
 });
