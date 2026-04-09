@@ -28,20 +28,26 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.login(loginDto);
-    const { accessToken, refreshToken, user } = result;
+    const {
+      accessToken,
+      refreshToken,
+      user,
+      accessTokenMaxAgeMs,
+      refreshTokenMaxAgeMs,
+    } = result;
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
-      maxAge: result.accessTokenMaxAgeMs,
+      maxAge: accessTokenMaxAgeMs,
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
-      maxAge: result.refreshTokenMaxAgeMs,
+      maxAge: refreshTokenMaxAgeMs,
       path: '/auth',
     });
 
@@ -68,6 +74,41 @@ export class AuthController {
 
     return {
       message: 'Logged out successfully',
+    };
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(
+    @Res({ passthrough: true }) res: Response,
+    @Req() req: Request,
+  ) {
+    const refreshToken = req.cookies?.refreshToken as string | undefined;
+    const result = await this.authService.refresh(refreshToken);
+    const {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      accessTokenMaxAgeMs,
+      refreshTokenMaxAgeMs,
+    } = result;
+
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'prod',
+      sameSite: 'strict',
+      maxAge: accessTokenMaxAgeMs,
+    });
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'prod',
+      sameSite: 'strict',
+      maxAge: refreshTokenMaxAgeMs,
+      path: '/auth',
+    });
+
+    return {
+      message: 'Refresh successful',
     };
   }
 }

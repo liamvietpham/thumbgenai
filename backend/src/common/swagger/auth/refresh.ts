@@ -5,51 +5,51 @@ import {
   ensureCommonSchemas,
 } from 'src/common/swagger/shared';
 
-const LOGOUT_DATA_SCHEMA = '#/components/schemas/LogoutData';
+const REFRESH_DATA_SCHEMA = '#/components/schemas/RefreshData';
 
-export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
+export function patchAuthRefreshOpenApi(document: OpenAPIObject): void {
   ensureCommonSchemas(document);
   document.components ??= {};
   document.components.schemas ??= {};
-  document.components.schemas.LogoutData ??= {
+  document.components.schemas.RefreshData ??= {
     type: 'object',
     required: ['message'],
     properties: {
       message: {
         type: 'string',
-        example: 'Logged out successfully',
+        example: 'Refresh successful',
       },
     },
   };
 
-  const logoutOperation = document.paths?.['/auth/logout']?.post;
+  const refreshOperation = document.paths?.['/auth/refresh']?.post;
 
-  if (!logoutOperation) return;
+  if (!refreshOperation) return;
 
-  logoutOperation.tags ??= ['Auth'];
-  logoutOperation.summary ??= 'Logout';
-  logoutOperation.description ??=
-    'Clear auth cookies and revoke the current refresh-token-backed session.';
+  refreshOperation.tags ??= ['Auth'];
+  refreshOperation.summary ??= 'Refresh tokens';
+  refreshOperation.description ??=
+    'Rotate the refresh token from HttpOnly cookies and issue a new access token.';
 
-  logoutOperation.responses = {
-    ...logoutOperation.responses,
+  refreshOperation.responses = {
+    ...refreshOperation.responses,
     '200': {
-      description: 'Logout successful',
+      description: 'Refresh successful',
       headers: {
         'Set-Cookie': {
           description:
-            'Expired accessToken and refreshToken cookies are returned.',
+            'HttpOnly cookies for the rotated accessToken and refreshToken are returned.',
           schema: { type: 'string' },
         },
       },
       content: {
         'application/json': {
-          schema: buildSuccessSchemaWithDataRef(LOGOUT_DATA_SCHEMA),
+          schema: buildSuccessSchemaWithDataRef(REFRESH_DATA_SCHEMA),
           example: {
             success: true,
             statusCode: 200,
             data: {
-              message: 'Logged out successfully',
+              message: 'Refresh successful',
             },
           },
         },
@@ -58,24 +58,14 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
     '401': {
       description: 'Unauthorized',
       content: buildErrorExamples({
-        missingRefreshToken: {
-          summary: 'Refresh token cookie is missing',
-          value: {
-            success: false,
-            statusCode: 401,
-            message: 'Invalid refresh token',
-            timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/logout',
-          },
-        },
         invalidRefreshToken: {
-          summary: 'Refresh token is invalid or expired',
+          summary: 'Refresh token is invalid, expired, or already rotated',
           value: {
             success: false,
             statusCode: 401,
             message: 'Invalid refresh token',
-            timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/logout',
+            timestamp: '2026-04-09T00:00:00.000Z',
+            path: '/auth/refresh',
           },
         },
       }),
@@ -89,8 +79,8 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
             success: false,
             statusCode: 500,
             message: 'Internal server error',
-            timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/logout',
+            timestamp: '2026-04-09T00:00:00.000Z',
+            path: '/auth/refresh',
           },
         },
       }),

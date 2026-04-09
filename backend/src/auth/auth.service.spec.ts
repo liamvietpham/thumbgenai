@@ -18,6 +18,8 @@ type MockUsersRepository = {
 type MockSessionRepository = {
   createSession: jest.MockedFunction<SessionRepository['createSession']>;
   revokeSession: jest.MockedFunction<SessionRepository['revokeSession']>;
+  findSessionById: jest.MockedFunction<SessionRepository['findSessionById']>;
+  rotateSession: jest.MockedFunction<SessionRepository['rotateSession']>;
 };
 
 type MockJwtService = {
@@ -45,6 +47,8 @@ describe('AuthService', () => {
     sessionRepository = {
       createSession: jest.fn(),
       revokeSession: jest.fn(),
+      findSessionById: jest.fn(),
+      rotateSession: jest.fn(),
     };
 
     jwtService = {
@@ -291,8 +295,10 @@ describe('AuthService', () => {
     nowSpy.mockRestore();
   });
 
-  it('throws BadRequestException when logout refresh token is missing', async () => {
-    await expect(service.logout()).rejects.toBeInstanceOf(BadRequestException);
+  it('throws UnauthorizedException when logout refresh token is missing', async () => {
+    await expect(service.logout()).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
 
     expect(jwtService.verifyAsync).not.toHaveBeenCalled();
     expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
@@ -333,5 +339,180 @@ describe('AuthService', () => {
       secret: 'refresh-secret',
     });
     expect(sessionRepository.revokeSession).toHaveBeenCalledWith('session-1');
+  });
+
+  it('throws UnauthorizedException when refresh token is missing', async () => {
+    await expect(service.refresh()).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+
+    expect(jwtService.verifyAsync).not.toHaveBeenCalled();
+    expect(sessionRepository.findSessionById).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedException when refresh token verification fails', async () => {
+    jwtService.verifyAsync.mockRejectedValue(new Error('jwt expired'));
+
+    await expect(service.refresh('invalid-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+
+    expect(sessionRepository.findSessionById).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedException when refresh token type is not refresh', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sid: 'session-1',
+      type: 'access',
+      sub: 'user-1',
+      email: 'john@example.com',
+    });
+
+    await expect(service.refresh('access-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+
+    expect(sessionRepository.findSessionById).not.toHaveBeenCalled();
+  });
+
+  it('throws UnauthorizedException when stored session is missing during refresh', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sid: 'session-1',
+      type: 'refresh',
+      sub: 'user-1',
+      email: 'john@example.com',
+    });
+    sessionRepository.findSessionById.mockResolvedValue(undefined);
+
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+  });
+
+  it('throws UnauthorizedException when stored refresh token does not match', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sid: 'session-1',
+      type: 'refresh',
+      sub: 'user-1',
+      email: 'john@example.com',
+    });
+    sessionRepository.findSessionById.mockResolvedValue({
+      id: 'session-1',
+      userId: 'user-1',
+      refreshToken: 'another-token',
+      ttl: 1_700_086_400,
+      expiresAt: '2026-04-09T00:00:00.000Z',
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+    });
+
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+  });
+
+  it('throws UnauthorizedException when conditional rotate fails during refresh', async () => {
+    jwtService.verifyAsync.mockImplementation((token: string) => {
+      if (token === 'refresh-token') {
+        return Promise.resolve({
+          sid: 'session-1',
+          type: 'refresh',
+          sub: 'user-1',
+          email: 'john@example.com',
+        });
+      }
+      if (token === 'next-access-token') {
+        return Promise.resolve({ exp: 1_700_000_300 });
+      }
+      if (token === 'next-refresh-token') {
+        return Promise.resolve({ exp: 1_700_086_400 });
+      }
+      return Promise.reject(new Error(`Unexpected token: ${token}`));
+    });
+    jwtService.sign.mockImplementation(
+      (_payload: unknown, options?: { secret?: string }) => {
+        if (options?.secret === 'access-secret') return 'next-access-token';
+        if (options?.secret === 'refresh-secret') return 'next-refresh-token';
+        return 'unknown-token';
+      },
+    );
+    sessionRepository.findSessionById.mockResolvedValue({
+      id: 'session-1',
+      userId: 'user-1',
+      refreshToken: 'refresh-token',
+      ttl: 1_700_000_000,
+      expiresAt: '2026-04-08T00:00:00.000Z',
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+    });
+    sessionRepository.rotateSession.mockRejectedValue({
+      name: 'ConditionalCheckFailedException',
+    });
+
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+  });
+
+  it('rotates session and returns new tokens on refresh', async () => {
+    const now = 1_700_000_000_000;
+    const accessExp = 1_700_000_300;
+    const refreshExp = 1_700_086_400;
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(now);
+
+    jwtService.verifyAsync.mockImplementation((token: string) => {
+      if (token === 'refresh-token') {
+        return Promise.resolve({
+          sid: 'session-1',
+          type: 'refresh',
+          sub: 'user-1',
+          email: 'john@example.com',
+        });
+      }
+      if (token === 'next-access-token') {
+        return Promise.resolve({ exp: accessExp });
+      }
+      if (token === 'next-refresh-token') {
+        return Promise.resolve({ exp: refreshExp });
+      }
+      return Promise.reject(new Error(`Unexpected token: ${token}`));
+    });
+    jwtService.sign.mockImplementation(
+      (_payload: unknown, options?: { secret?: string }) => {
+        if (options?.secret === 'access-secret') return 'next-access-token';
+        if (options?.secret === 'refresh-secret') return 'next-refresh-token';
+        return 'unknown-token';
+      },
+    );
+    sessionRepository.findSessionById.mockResolvedValue({
+      id: 'session-1',
+      userId: 'user-1',
+      refreshToken: 'refresh-token',
+      ttl: 1_700_000_000,
+      expiresAt: '2026-04-08T00:00:00.000Z',
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+    });
+    sessionRepository.rotateSession.mockResolvedValue(undefined);
+
+    const result = await service.refresh('refresh-token');
+
+    expect(sessionRepository.findSessionById).toHaveBeenCalledWith('session-1');
+    expect(sessionRepository.rotateSession).toHaveBeenCalledWith({
+      sid: 'session-1',
+      refreshToken: 'next-refresh-token',
+      curRefreshToken: 'refresh-token',
+      expiresAt: new Date(refreshExp * 1000).toISOString(),
+      ttl: refreshExp,
+      updatedAt: new Date(now).toISOString(),
+    });
+    expect(result).toEqual({
+      accessToken: 'next-access-token',
+      refreshToken: 'next-refresh-token',
+      accessTokenMaxAgeMs: accessExp * 1000 - now,
+      refreshTokenMaxAgeMs: refreshExp * 1000 - now,
+    });
+
+    nowSpy.mockRestore();
   });
 });

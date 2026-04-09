@@ -13,6 +13,12 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { LoginResult } from './types/login-result.type';
 import { SessionRepository } from 'src/session/session.repository';
+import { RefreshResult } from 'src/auth/types/refresh-result.type';
+import {
+  AccessTokenPayload,
+  JwtExpPayload,
+  RefreshTokenPayload,
+} from 'src/auth/types/jwt-payload.type';
 
 @Injectable()
 export class AuthService {
@@ -78,7 +84,12 @@ export class AuthService {
 
     const sid = await this.generateSessionId();
 
-    const payload = { sub: user.id, email: user.email, sid, type: 'access' };
+    const payload: AccessTokenPayload = {
+      sub: user.id,
+      email: user.email,
+      sid,
+      type: 'access',
+    };
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.accessSecret,
@@ -93,12 +104,14 @@ export class AuthService {
     );
 
     const now = Date.now();
-    const { exp: accessExp } = await this.jwtService.verifyAsync<{
-      exp: number;
-    }>(accessToken, { secret: this.accessSecret });
-    const { exp: refreshExp } = await this.jwtService.verifyAsync<{
-      exp: number;
-    }>(refreshToken, { secret: this.refreshSecret });
+    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(
+      accessToken,
+      { secret: this.accessSecret },
+    );
+    const { exp: refreshExp } =
+      await this.jwtService.verifyAsync<JwtExpPayload>(refreshToken, {
+        secret: this.refreshSecret,
+      });
 
     await this.sessionRepository.createSession({
       sid,
@@ -119,18 +132,18 @@ export class AuthService {
 
   async logout(refreshToken?: string) {
     if (!refreshToken) {
-      throw new BadRequestException('Refresh token is required');
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
-    let payload: { sid: string; type?: string };
+    let payload: RefreshTokenPayload;
 
     try {
-      payload = await this.jwtService.verifyAsync<{
-        sid: string;
-        type?: string;
-      }>(refreshToken, {
-        secret: this.refreshSecret,
-      });
+      payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(
+        refreshToken,
+        {
+          secret: this.refreshSecret,
+        },
+      );
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -140,6 +153,98 @@ export class AuthService {
     }
 
     await this.sessionRepository.revokeSession(payload.sid);
+  }
+
+  async refresh(refreshToken?: string): Promise<RefreshResult> {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    let decoded: RefreshTokenPayload;
+
+    try {
+      decoded = await this.jwtService.verifyAsync<RefreshTokenPayload>(
+        refreshToken,
+        {
+          secret: this.refreshSecret,
+        },
+      );
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    if (decoded.type !== 'refresh') {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const session = await this.sessionRepository.findSessionById(decoded.sid);
+
+    if (!session) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    if (session.refreshToken !== refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    if (decoded.sub !== session.userId) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const payload: AccessTokenPayload = {
+      sub: decoded.sub,
+      email: decoded.email,
+      sid: decoded.sid,
+      type: 'access',
+    };
+
+    const newAccessToken = this.jwtService.sign(payload, {
+      secret: this.accessSecret,
+      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL'),
+    });
+    const newRefreshToken = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      {
+        secret: this.refreshSecret,
+        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL'),
+      },
+    );
+
+    const now = Date.now();
+    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(
+      newAccessToken,
+      { secret: this.accessSecret },
+    );
+    const { exp: refreshExp } =
+      await this.jwtService.verifyAsync<JwtExpPayload>(newRefreshToken, {
+        secret: this.refreshSecret,
+      });
+
+    try {
+      await this.sessionRepository.rotateSession({
+        sid: decoded.sid,
+        refreshToken: newRefreshToken,
+        curRefreshToken: refreshToken,
+        expiresAt: new Date(refreshExp * 1000).toISOString(),
+        ttl: refreshExp,
+        updatedAt: new Date(now).toISOString(),
+      });
+    } catch (error) {
+      const err = error as { name?: string };
+
+      if (err.name === 'ConditionalCheckFailedException') {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      throw error;
+    }
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
+      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0),
+    };
   }
 
   private async generateSessionId(): Promise<string> {

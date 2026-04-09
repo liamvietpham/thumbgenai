@@ -25,7 +25,8 @@ export function patchHealthStatusOpenApi(document: OpenAPIObject): void {
 
   healthOperation.tags ??= ['Health'];
   healthOperation.summary ??= 'Health check';
-  healthOperation.description ??= 'Return service metadata for liveness checks.';
+  healthOperation.description ??=
+    'Return service metadata for liveness checks.';
 
   healthOperation.responses = {
     ...healthOperation.responses,

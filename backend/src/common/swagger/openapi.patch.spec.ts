@@ -2,7 +2,7 @@ import type { OpenAPIObject } from '@nestjs/swagger';
 import { applyOpenApiPatches } from './openapi.patch';
 
 describe('applyOpenApiPatches', () => {
-  it('adds documented responses for health and logout routes', () => {
+  it('adds documented responses for health, logout, and refresh routes', () => {
     const document = {
       openapi: '3.0.0',
       info: {
@@ -46,6 +46,15 @@ describe('applyOpenApiPatches', () => {
             },
           },
         },
+        '/auth/refresh': {
+          post: {
+            responses: {
+              '200': {
+                description: '',
+              },
+            },
+          },
+        },
       },
       components: {
         schemas: {},
@@ -54,11 +63,11 @@ describe('applyOpenApiPatches', () => {
 
     const patchedDocument = applyOpenApiPatches(document);
 
-    expect(patchedDocument.paths?.['/health']?.get?.responses?.['200']).toMatchObject(
-      {
-        description: 'Service health status',
-      },
-    );
+    expect(
+      patchedDocument.paths?.['/health']?.get?.responses?.['200'],
+    ).toMatchObject({
+      description: 'Service health status',
+    });
     expect(
       patchedDocument.paths?.['/auth/logout']?.post?.responses?.['200'],
     ).toMatchObject({
@@ -72,5 +81,15 @@ describe('applyOpenApiPatches', () => {
     expect(
       patchedDocument.paths?.['/auth/logout']?.post?.responses?.['401'],
     ).toBeDefined();
+    expect(
+      patchedDocument.paths?.['/auth/refresh']?.post?.responses?.['200'],
+    ).toMatchObject({
+      description: 'Refresh successful',
+      headers: {
+        'Set-Cookie': {
+          schema: { type: 'string' },
+        },
+      },
+    });
   });
 });

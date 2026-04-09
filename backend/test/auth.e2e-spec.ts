@@ -34,6 +34,14 @@ type LogoutSuccessResponse = {
   };
 };
 
+type RefreshSuccessResponse = {
+  success: boolean;
+  statusCode: number;
+  data: {
+    message: string;
+  };
+};
+
 describe('AuthModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
@@ -201,17 +209,17 @@ describe('AuthModule (e2e)', () => {
     expect(revokeSessionSpy).toHaveBeenCalledWith('session-1');
   });
 
-  it('POST /auth/logout returns 400 when refresh token cookie is missing', async () => {
+  it('POST /auth/logout returns 401 when refresh token cookie is missing', async () => {
     const response = await fetch(`${baseUrl}/auth/logout`, {
       method: 'POST',
     });
     const body = (await response.json()) as ErrorResponse;
     const setCookieHeader = response.headers.get('set-cookie') ?? '';
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(401);
     expect(body.success).toBe(false);
-    expect(body.statusCode).toBe(400);
-    expect(body.message).toBe('Refresh token is required');
+    expect(body.statusCode).toBe(401);
+    expect(body.message).toBe('Invalid refresh token');
     expect(body.path).toBe('/auth/logout');
     expect(setCookieHeader).toContain('accessToken=');
     expect(setCookieHeader).toContain('refreshToken=');
@@ -231,6 +239,98 @@ describe('AuthModule (e2e)', () => {
     expect(body.statusCode).toBe(401);
     expect(body.message).toBe('Invalid refresh token');
     expect(body.path).toBe('/auth/logout');
+  });
+
+  it('POST /auth/refresh rotates cookies and returns 200', async () => {
+    const rotateSessionSpy = jest
+      .spyOn(SessionRepository.prototype, 'rotateSession')
+      .mockResolvedValue(undefined);
+    const findSessionByIdSpy = jest
+      .spyOn(SessionRepository.prototype, 'findSessionById')
+      .mockResolvedValue({
+        id: 'session-1',
+        userId: 'user-1',
+        refreshToken: 'placeholder',
+        ttl: 1_700_000_000,
+        expiresAt: '2026-04-08T00:00:00.000Z',
+        createdAt: '2026-04-08T00:00:00.000Z',
+        updatedAt: '2026-04-08T00:00:00.000Z',
+      });
+    const jwtService = app.get(JwtService);
+    const refreshToken = jwtService.sign(
+      {
+        sub: 'user-1',
+        email: 'john@example.com',
+        sid: 'session-1',
+        type: 'refresh',
+      },
+      {
+        secret: process.env.REFRESH_TOKEN_SECRET,
+        expiresIn: process.env.REFRESH_TOKEN_TTL,
+      },
+    );
+
+    findSessionByIdSpy.mockResolvedValue({
+      id: 'session-1',
+      userId: 'user-1',
+      refreshToken,
+      ttl: 1_700_000_000,
+      expiresAt: '2026-04-08T00:00:00.000Z',
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+    });
+
+    const response = await fetch(`${baseUrl}/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        cookie: `refreshToken=${refreshToken}`,
+      },
+    });
+    const body = (await response.json()) as RefreshSuccessResponse;
+    const setCookieHeader = response.headers.get('set-cookie') ?? '';
+
+    expect(response.status).toBe(200);
+    expect(body).toEqual({
+      success: true,
+      statusCode: 200,
+      data: {
+        message: 'Refresh successful',
+      },
+    });
+    expect(setCookieHeader).toContain('accessToken=');
+    expect(setCookieHeader).toContain('refreshToken=');
+    expect(setCookieHeader).toContain('Path=/auth');
+    expect(findSessionByIdSpy).toHaveBeenCalledWith('session-1');
+    expect(rotateSessionSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('POST /auth/refresh returns 401 when refresh token cookie is missing', async () => {
+    const response = await fetch(`${baseUrl}/auth/refresh`, {
+      method: 'POST',
+    });
+    const body = (await response.json()) as ErrorResponse;
+
+    expect(response.status).toBe(401);
+    expect(body.success).toBe(false);
+    expect(body.statusCode).toBe(401);
+    expect(body.message).toBe('Invalid refresh token');
+    expect(body.path).toBe('/auth/refresh');
+  });
+
+  it('POST /auth/refresh returns 401 when refresh token is invalid', async () => {
+    const response = await fetch(`${baseUrl}/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        cookie: 'refreshToken=invalid-token',
+      },
+    });
+    const body = (await response.json()) as ErrorResponse;
+
+    expect(response.status).toBe(401);
+    expect(body.success).toBe(false);
+    expect(body.statusCode).toBe(401);
+    expect(body.message).toBe('Invalid refresh token');
+    expect(body.path).toBe('/auth/refresh');
   });
 
   afterEach(async () => {

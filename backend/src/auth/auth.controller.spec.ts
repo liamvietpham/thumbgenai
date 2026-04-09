@@ -12,6 +12,7 @@ type MockAuthService = {
   register: jest.MockedFunction<AuthService['register']>;
   login: jest.MockedFunction<AuthService['login']>;
   logout: jest.MockedFunction<AuthService['logout']>;
+  refresh: jest.MockedFunction<AuthService['refresh']>;
 };
 
 describe('AuthController', () => {
@@ -29,6 +30,7 @@ describe('AuthController', () => {
             register: jest.fn(),
             login: jest.fn(),
             logout: jest.fn(),
+            refresh: jest.fn(),
           },
         },
       ],
@@ -204,7 +206,9 @@ describe('AuthController', () => {
     const request = {
       cookies: {},
     } as Request;
-    const badRequestError = new BadRequestException('Refresh token is required');
+    const badRequestError = new BadRequestException(
+      'Refresh token is required',
+    );
 
     authService.logout.mockRejectedValue(badRequestError);
 
@@ -214,5 +218,76 @@ describe('AuthController', () => {
 
     expect(clearCookieSpy).toHaveBeenCalledTimes(2);
     expect(authService.logout).toHaveBeenCalledWith(undefined);
+  });
+
+  it('sets rotated auth cookies and returns a refresh payload', async () => {
+    process.env.NODE_ENV = 'prod';
+
+    const cookieSpy = jest.fn();
+    const response = {
+      cookie: cookieSpy,
+    } as unknown as Response;
+    const request = {
+      cookies: {
+        refreshToken: 'current-refresh-token',
+      },
+    } as Request;
+
+    authService.refresh.mockResolvedValue({
+      accessToken: 'next-access-token',
+      refreshToken: 'next-refresh-token',
+      accessTokenMaxAgeMs: 900_000,
+      refreshTokenMaxAgeMs: 604_800_000,
+    });
+
+    await expect(controller.refresh(response, request)).resolves.toEqual({
+      message: 'Refresh successful',
+    });
+
+    expect(cookieSpy).toHaveBeenNthCalledWith(
+      1,
+      'accessToken',
+      'next-access-token',
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 900_000,
+      },
+    );
+    expect(cookieSpy).toHaveBeenNthCalledWith(
+      2,
+      'refreshToken',
+      'next-refresh-token',
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 604_800_000,
+        path: '/auth',
+      },
+    );
+    expect(authService.refresh).toHaveBeenCalledWith('current-refresh-token');
+  });
+
+  it('does not set refresh cookies when refresh fails', async () => {
+    const cookieSpy = jest.fn();
+    const response = {
+      cookie: cookieSpy,
+    } as unknown as Response;
+    const request = {
+      cookies: {},
+    } as Request;
+    const unauthorizedError = new UnauthorizedException(
+      'Invalid refresh token',
+    );
+
+    authService.refresh.mockRejectedValue(unauthorizedError);
+
+    await expect(controller.refresh(response, request)).rejects.toBe(
+      unauthorizedError,
+    );
+
+    expect(cookieSpy).not.toHaveBeenCalled();
   });
 });
