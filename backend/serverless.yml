@@ -19,6 +19,10 @@ provider:
     ACCESS_TOKEN_TTL: ${ssm:/thumbgenai/access-token-ttl}
     REFRESH_TOKEN_TTL: ${ssm:/thumbgenai/refresh-token-ttl}
     CORS_ORIGIN: ${ssm:/thumbgenai/cors-origin}
+    VERTEX_AI_KEY: ${ssm:/thumbgenai/vertex-ai-key}
+    VERTEX_AI_TIMEOUT_MS: ${ssm:/thumbgenai/vertex-ai-timeout-ms}
+    GOOGLE_CLOUD_PROJECT: ${ssm:/thumbgenai/google-cloud-project}
+    GOOGLE_CLOUD_LOCATION: ${ssm:/thumbgenai/google-cloud-location}
   iam:
     role:
       statements:
