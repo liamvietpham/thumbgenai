@@ -19,6 +19,7 @@ import {
   JwtExpPayload,
   RefreshTokenPayload,
 } from 'src/auth/types/jwt-payload.type';
+import { generateId } from 'src/common/utils/id.util';
 
 @Injectable()
 export class AuthService {
@@ -82,7 +83,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const sid = await this.generateSessionId();
+    const sid = await generateId();
 
     const payload: AccessTokenPayload = {
       sub: user.id,
@@ -245,10 +246,5 @@ export class AuthService {
       accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
       refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0),
     };
-  }
-
-  private async generateSessionId(): Promise<string> {
-    const { v7: uuidv7 } = await import('uuid');
-    return uuidv7();
   }
 }

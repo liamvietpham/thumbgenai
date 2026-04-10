@@ -5,6 +5,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { generateId } from 'src/common/utils/id.util';
 import { DDB } from 'src/database/database.module';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateUser } from 'src/users/types/create-user.type';
@@ -38,10 +39,10 @@ export class UsersRepository {
 
   async createUser(input: CreateUser) {
     const now = new Date().toISOString();
-    const { v7: uuidv7 } = await import('uuid');
+    const id = await generateId();
 
     const user: UserEntity = {
-      id: uuidv7(),
+      id,
       name: input.name,
       email: input.email,
       password: input.password,
