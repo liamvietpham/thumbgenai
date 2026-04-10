@@ -9,6 +9,11 @@ import { JwtService } from '@nestjs/jwt';
 import { SessionRepository } from 'src/session/session.repository';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthService } from './auth.service';
+import { generateId } from 'src/common/utils/id.util';
+
+jest.mock('src/common/utils/id.util', () => ({
+  generateId: jest.fn(),
+}));
 
 type MockUsersRepository = {
   findByEmail: jest.MockedFunction<UsersRepository['findByEmail']>;
@@ -37,8 +42,12 @@ describe('AuthService', () => {
   let sessionRepository: MockSessionRepository;
   let jwtService: MockJwtService;
   let configService: MockConfigService;
+  const mockGenerateId = generateId as jest.MockedFunction<typeof generateId>;
 
   beforeEach(() => {
+    mockGenerateId.mockReset();
+    mockGenerateId.mockResolvedValue('session-1');
+
     usersRepository = {
       findByEmail: jest.fn(),
       createUser: jest.fn(),
@@ -249,13 +258,6 @@ describe('AuthService', () => {
       return Promise.reject(new Error(`Unexpected token: ${token}`));
     });
 
-    jest
-      .spyOn(
-        service as unknown as { generateSessionId: () => Promise<string> },
-        'generateSessionId',
-      )
-      .mockResolvedValue('session-1');
-
     const result = await service.login({
       email: 'john@example.com',
       password: 'password-123',
@@ -269,6 +271,7 @@ describe('AuthService', () => {
     }
 
     expect(createSessionPayload.sid).toBe('session-1');
+    expect(mockGenerateId).toHaveBeenCalledTimes(1);
     expect(createSessionPayload.userId).toBe('user-2');
     expect(typeof createSessionPayload.refreshToken).toBe('string');
     expect(createSessionPayload.expiresAt).toBe(

@@ -1,10 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { argon2id, hash } from 'argon2';
-import { AuthService } from '../src/auth/auth.service';
+import { generateId } from 'src/common/utils/id.util';
 import { createApp } from '../src/app.factory';
 import { SessionRepository } from '../src/session/session.repository';
 import { UsersRepository } from '../src/users/users.repository';
+
+jest.mock('src/common/utils/id.util', () => ({
+  generateId: jest.fn(),
+}));
 
 type ErrorResponse = {
   success: boolean;
@@ -45,8 +49,12 @@ type RefreshSuccessResponse = {
 describe('AuthModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
+  const mockGenerateId = generateId as jest.MockedFunction<typeof generateId>;
 
   beforeEach(async () => {
+    mockGenerateId.mockReset();
+    mockGenerateId.mockResolvedValue('session-1');
+
     process.env.NODE_ENV = 'test';
     process.env.AWS_REGION = 'ap-southeast-1';
     process.env.USERS_TABLE = 'users-test';
@@ -125,14 +133,6 @@ describe('AuthModule (e2e)', () => {
     const createSessionSpy = jest
       .spyOn(SessionRepository.prototype, 'createSession')
       .mockResolvedValue(undefined);
-    const generateSessionIdSpy = jest
-      .spyOn(
-        AuthService.prototype as unknown as {
-          generateSessionId: () => Promise<string>;
-        },
-        'generateSessionId',
-      )
-      .mockResolvedValue('session-1');
 
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
@@ -163,7 +163,7 @@ describe('AuthModule (e2e)', () => {
     expect(setCookieHeader).toContain('Path=/auth');
 
     expect(findByEmailSpy).toHaveBeenCalledWith('john@example.com');
-    expect(generateSessionIdSpy).toHaveBeenCalledTimes(1);
+    expect(mockGenerateId).toHaveBeenCalledTimes(1);
     expect(createSessionSpy).toHaveBeenCalledTimes(1);
   });
 
