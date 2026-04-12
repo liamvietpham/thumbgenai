@@ -1,6 +1,7 @@
 import {
   ApiError,
   FinishReason,
+  GenerateContentParameters,
   GenerateContentResponse,
   GoogleGenAI,
   Modality,
@@ -8,18 +9,20 @@ import {
 import {
   BadGatewayException,
   Injectable,
+  Logger,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GenerateImageInput } from 'src/ai/types/generate-image-input.type';
 import { GenerateImageResult } from 'src/ai/types/generate-image-result.type';
 
 @Injectable()
 export class VertexProvider {
+  private readonly logger = new Logger(VertexProvider.name);
   private readonly client: GoogleGenAI;
   private readonly projectId: string;
   private readonly location: string;
   private readonly timeoutMs: number;
+  private readonly gcpServiceAccountKey: string;
 
   constructor(private readonly configService: ConfigService) {
     this.projectId = this.configService.getOrThrow<string>(
@@ -29,34 +32,37 @@ export class VertexProvider {
       'GOOGLE_CLOUD_LOCATION',
     );
     this.timeoutMs = Number(
-      this.configService.getOrThrow<string>('GOOGLE_CLOUD_TIMEOUT_MS'),
+      this.configService.getOrThrow<string>('VERTEX_AI_TIMEOUT_MS'),
+    );
+    this.gcpServiceAccountKey = this.configService.getOrThrow<string>(
+      'GCP_SERVICE_ACCOUNT_KEY',
     );
 
     this.client = new GoogleGenAI({
       vertexai: true,
       project: this.projectId,
       location: this.location,
-      apiVersion: 'v1',
+      googleAuthOptions: {
+        credentials: JSON.parse(this.gcpServiceAccountKey) as Record<
+          string,
+          string
+        >,
+      },
     });
   }
 
   async generateImage(
-    payload: GenerateImageInput,
+    params: GenerateContentParameters,
   ): Promise<GenerateImageResult> {
-    const { prompt, aspectRatio, model } = payload;
-    const resolvedModel = model ?? 'gemini-2.5-flash-image';
-
     try {
       const response = await this.client.models.generateContent({
-        model: resolvedModel,
-        contents: prompt,
+        ...params,
         config: {
           responseModalities: [Modality.TEXT, Modality.IMAGE],
-          imageConfig: {
-            ...(aspectRatio ? { aspectRatio } : {}),
-          },
+          ...params.config,
           httpOptions: {
             timeout: this.timeoutMs,
+            ...params.config?.httpOptions,
           },
         },
       });
@@ -83,7 +89,7 @@ export class VertexProvider {
 
       return {
         provider: 'vertex',
-        model: resolvedModel,
+        model: params.model,
         text,
         images,
       };

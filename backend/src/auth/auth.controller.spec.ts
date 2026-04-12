@@ -176,7 +176,7 @@ describe('AuthController', () => {
       cookies: {
         refreshToken: 'refresh-token',
       },
-    } as Request;
+    } as unknown as Request;
 
     authService.logout.mockResolvedValue(undefined);
 
@@ -205,7 +205,7 @@ describe('AuthController', () => {
     } as unknown as Response;
     const request = {
       cookies: {},
-    } as Request;
+    } as unknown as Request;
     const badRequestError = new BadRequestException(
       'Refresh token is required',
     );
@@ -231,7 +231,7 @@ describe('AuthController', () => {
       cookies: {
         refreshToken: 'current-refresh-token',
       },
-    } as Request;
+    } as unknown as Request;
 
     authService.refresh.mockResolvedValue({
       accessToken: 'next-access-token',

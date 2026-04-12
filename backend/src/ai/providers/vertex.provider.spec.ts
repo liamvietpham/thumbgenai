@@ -1,4 +1,9 @@
-import { ApiError, FinishReason, Modality } from '@google/genai';
+import {
+  ApiError,
+  FinishReason,
+  GenerateContentParameters,
+  Modality,
+} from '@google/genai';
 import {
   BadGatewayException,
   UnprocessableEntityException,
@@ -21,7 +26,21 @@ describe('VertexProvider', () => {
     const configMap: Record<string, string> = {
       GOOGLE_CLOUD_PROJECT: 'thumbgen-test',
       GOOGLE_CLOUD_LOCATION: 'global',
-      GOOGLE_CLOUD_TIMEOUT_MS: '20000',
+      VERTEX_AI_TIMEOUT_MS: '20000',
+      GCP_SERVICE_ACCOUNT_KEY: JSON.stringify({
+        type: 'service_account',
+        project_id: 'thumbgen-test',
+        private_key_id: 'test-private-key-id',
+        private_key:
+          '-----BEGIN PRIVATE KEY-----\nTEST\n-----END PRIVATE KEY-----\n',
+        client_email: 'vertex@test.iam.gserviceaccount.com',
+        client_id: 'test-client-id',
+        auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+        token_uri: 'https://oauth2.googleapis.com/token',
+        auth_provider_x509_cert_url:
+          'https://www.googleapis.com/oauth2/v1/certs',
+        client_x509_cert_url: 'https://example.com/cert',
+      }),
     };
 
     configService = {
@@ -45,7 +64,16 @@ describe('VertexProvider', () => {
     (provider as unknown as { client: MockClient }).client = mockClient;
   });
 
-  it('normalizes a successful image response and uses the default model', async () => {
+  const buildParams = (
+    overrides: Partial<GenerateContentParameters> = {},
+  ): GenerateContentParameters =>
+    ({
+      model: 'gemini-2.5-flash-image',
+      contents: 'Create a thumbnail for NestJS queues',
+      ...overrides,
+    }) as GenerateContentParameters;
+
+  it('normalizes a successful image response', async () => {
     mockClient.models.generateContent.mockResolvedValue({
       candidates: [
         {
@@ -64,24 +92,31 @@ describe('VertexProvider', () => {
       ],
     });
 
-    const result = await provider.generateImage({
-      prompt: 'Create a thumbnail for NestJS queues',
-      aspectRatio: '16:9',
-    });
+    const result = await provider.generateImage(
+      buildParams({
+        config: {
+          imageConfig: {
+            aspectRatio: '16:9',
+          },
+        },
+      }),
+    );
 
-    expect(mockClient.models.generateContent).toHaveBeenCalledWith({
-      model: 'gemini-2.5-flash-image',
-      contents: 'Create a thumbnail for NestJS queues',
-      config: {
-        responseModalities: [Modality.TEXT, Modality.IMAGE],
-        imageConfig: {
-          aspectRatio: '16:9',
+    expect(mockClient.models.generateContent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: 'gemini-2.5-flash-image',
+        contents: 'Create a thumbnail for NestJS queues',
+        config: {
+          responseModalities: [Modality.TEXT, Modality.IMAGE],
+          imageConfig: {
+            aspectRatio: '16:9',
+          },
+          httpOptions: {
+            timeout: 20_000,
+          },
         },
-        httpOptions: {
-          timeout: 20_000,
-        },
-      },
-    });
+      }),
+    );
 
     expect(result).toEqual({
       provider: 'vertex',
@@ -96,6 +131,58 @@ describe('VertexProvider', () => {
     });
   });
 
+  it('merges caller config with the provider defaults', async () => {
+    mockClient.models.generateContent.mockResolvedValue({
+      candidates: [
+        {
+          content: {
+            parts: [
+              {
+                inlineData: {
+                  mimeType: 'image/png',
+                  data: 'base64-image',
+                },
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    await provider.generateImage(
+      buildParams({
+        model: 'custom-image-model',
+        config: {
+          temperature: 0.8,
+          responseModalities: [Modality.IMAGE],
+          imageConfig: {
+            aspectRatio: '1:1',
+            imageSize: '1K',
+          },
+          httpOptions: {
+            timeout: 15_000,
+          },
+        },
+      }),
+    );
+
+    expect(mockClient.models.generateContent).toHaveBeenCalledWith({
+      model: 'custom-image-model',
+      contents: 'Create a thumbnail for NestJS queues',
+      config: {
+        temperature: 0.8,
+        responseModalities: [Modality.IMAGE],
+        imageConfig: {
+          aspectRatio: '1:1',
+          imageSize: '1K',
+        },
+        httpOptions: {
+          timeout: 15_000,
+        },
+      },
+    });
+  });
+
   it('throws a 422 with block reason details when the prompt is blocked', async () => {
     mockClient.models.generateContent.mockResolvedValue({
       promptFeedback: {
@@ -105,9 +192,7 @@ describe('VertexProvider', () => {
     });
 
     try {
-      await provider.generateImage({
-        prompt: 'blocked prompt',
-      });
+      await provider.generateImage(buildParams({ contents: 'blocked prompt' }));
       throw new Error('Expected generateImage to throw');
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException);
@@ -150,9 +235,7 @@ describe('VertexProvider', () => {
     });
 
     try {
-      await provider.generateImage({
-        prompt: 'unsafe prompt',
-      });
+      await provider.generateImage(buildParams({ contents: 'unsafe prompt' }));
       throw new Error('Expected generateImage to throw');
     } catch (error) {
       expect(error).toBeInstanceOf(UnprocessableEntityException);
@@ -196,9 +279,9 @@ describe('VertexProvider', () => {
     });
 
     try {
-      await provider.generateImage({
-        prompt: 'unexpected provider response',
-      });
+      await provider.generateImage(
+        buildParams({ contents: 'unexpected provider response' }),
+      );
       throw new Error('Expected generateImage to throw');
     } catch (error) {
       expect(error).toBeInstanceOf(BadGatewayException);
@@ -234,15 +317,11 @@ describe('VertexProvider', () => {
     );
 
     await expect(
-      provider.generateImage({
-        prompt: 'quota limited prompt',
-      }),
+      provider.generateImage(buildParams({ contents: 'quota limited prompt' })),
     ).rejects.toThrow(BadGatewayException);
 
     await expect(
-      provider.generateImage({
-        prompt: 'quota limited prompt',
-      }),
+      provider.generateImage(buildParams({ contents: 'quota limited prompt' })),
     ).rejects.toThrow('Vertex AI error: Quota exceeded');
   });
 
@@ -252,15 +331,11 @@ describe('VertexProvider', () => {
     mockClient.models.generateContent.mockRejectedValue(abortError);
 
     await expect(
-      provider.generateImage({
-        prompt: 'slow prompt',
-      }),
+      provider.generateImage(buildParams({ contents: 'slow prompt' })),
     ).rejects.toThrow(BadGatewayException);
 
     await expect(
-      provider.generateImage({
-        prompt: 'slow prompt',
-      }),
+      provider.generateImage(buildParams({ contents: 'slow prompt' })),
     ).rejects.toThrow('Vertex AI request timed out');
   });
 });

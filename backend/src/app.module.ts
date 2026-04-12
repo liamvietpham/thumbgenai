@@ -8,6 +8,9 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from 'src/common/filters/all-exceptions.filter';
 import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
 import { SessionModule } from './session/session.module';
+import { ThumbnailsModule } from './thumbnails/thumbnails.module';
+import { AiModule } from './ai/ai.module';
+import { S3Module } from './s3/s3.module';
 
 @Module({
   providers: [
@@ -29,6 +32,9 @@ import { SessionModule } from './session/session.module';
     }),
     UsersModule,
     SessionModule,
+    ThumbnailsModule,
+    AiModule,
+    S3Module,
   ],
 })
 export class AppModule {}

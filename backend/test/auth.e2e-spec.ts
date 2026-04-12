@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { argon2id, hash } from 'argon2';
+import { RefreshTokenPayload } from 'src/auth/types/jwt-payload.type';
 import { generateId } from 'src/common/utils/id.util';
 import { createApp } from '../src/app.factory';
 import { SessionRepository } from '../src/session/session.repository';
@@ -46,6 +47,11 @@ type RefreshSuccessResponse = {
   };
 };
 
+const ACCESS_TOKEN_SECRET = 'test-access-secret';
+const REFRESH_TOKEN_SECRET = 'test-refresh-secret';
+const ACCESS_TOKEN_TTL = '15m';
+const REFRESH_TOKEN_TTL = '7d';
+
 describe('AuthModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
@@ -59,10 +65,10 @@ describe('AuthModule (e2e)', () => {
     process.env.AWS_REGION = 'ap-southeast-1';
     process.env.USERS_TABLE = 'users-test';
     process.env.SESSIONS_TABLE = 'sessions-test';
-    process.env.ACCESS_TOKEN_SECRET = 'test-access-secret';
-    process.env.REFRESH_TOKEN_SECRET = 'test-refresh-secret';
-    process.env.ACCESS_TOKEN_TTL = '15m';
-    process.env.REFRESH_TOKEN_TTL = '7d';
+    process.env.ACCESS_TOKEN_SECRET = ACCESS_TOKEN_SECRET;
+    process.env.REFRESH_TOKEN_SECRET = REFRESH_TOKEN_SECRET;
+    process.env.ACCESS_TOKEN_TTL = ACCESS_TOKEN_TTL;
+    process.env.REFRESH_TOKEN_TTL = REFRESH_TOKEN_TTL;
     process.env.CORS_ORIGIN = 'http://localhost:3000';
 
     app = await createApp();
@@ -172,18 +178,16 @@ describe('AuthModule (e2e)', () => {
       .spyOn(SessionRepository.prototype, 'revokeSession')
       .mockResolvedValue(undefined);
     const jwtService = app.get(JwtService);
-    const refreshToken = jwtService.sign(
-      {
-        sub: 'user-1',
-        email: 'john@example.com',
-        sid: 'session-1',
-        type: 'refresh',
-      },
-      {
-        secret: process.env.REFRESH_TOKEN_SECRET,
-        expiresIn: process.env.REFRESH_TOKEN_TTL,
-      },
-    );
+    const payload: RefreshTokenPayload = {
+      sub: 'user-1',
+      email: 'john@example.com',
+      sid: 'session-1',
+      type: 'refresh',
+    };
+    const refreshToken = jwtService.sign(payload, {
+      secret: REFRESH_TOKEN_SECRET,
+      expiresIn: REFRESH_TOKEN_TTL,
+    });
 
     const response = await fetch(`${baseUrl}/auth/logout`, {
       method: 'POST',
@@ -257,18 +261,16 @@ describe('AuthModule (e2e)', () => {
         updatedAt: '2026-04-08T00:00:00.000Z',
       });
     const jwtService = app.get(JwtService);
-    const refreshToken = jwtService.sign(
-      {
-        sub: 'user-1',
-        email: 'john@example.com',
-        sid: 'session-1',
-        type: 'refresh',
-      },
-      {
-        secret: process.env.REFRESH_TOKEN_SECRET,
-        expiresIn: process.env.REFRESH_TOKEN_TTL,
-      },
-    );
+    const payload: RefreshTokenPayload = {
+      sub: 'user-1',
+      email: 'john@example.com',
+      sid: 'session-1',
+      type: 'refresh',
+    };
+    const refreshToken = jwtService.sign(payload, {
+      secret: REFRESH_TOKEN_SECRET,
+      expiresIn: REFRESH_TOKEN_TTL,
+    });
 
     findSessionByIdSpy.mockResolvedValue({
       id: 'session-1',

@@ -14,15 +14,17 @@ provider:
     NODE_ENV: ${self:provider.stage}
     USERS_TABLE: ${ssm:/thumbgenai/users-table}
     SESSIONS_TABLE: ${ssm:/thumbgenai/sessions-table}
+    THUMBNAILS_TABLE: ${ssm:/thumbgenai/thumbnails-table}
+    AWS_BUCKET_NAME: ${ssm:/thumbgenai/aws-bucket-name}
     ACCESS_TOKEN_SECRET: ${ssm:/thumbgenai/access-token-secret}
     REFRESH_TOKEN_SECRET: ${ssm:/thumbgenai/refresh-token-secret}
     ACCESS_TOKEN_TTL: ${ssm:/thumbgenai/access-token-ttl}
     REFRESH_TOKEN_TTL: ${ssm:/thumbgenai/refresh-token-ttl}
     CORS_ORIGIN: ${ssm:/thumbgenai/cors-origin}
-    VERTEX_AI_KEY: ${ssm:/thumbgenai/vertex-ai-key}
     VERTEX_AI_TIMEOUT_MS: ${ssm:/thumbgenai/vertex-ai-timeout-ms}
     GOOGLE_CLOUD_PROJECT: ${ssm:/thumbgenai/google-cloud-project}
     GOOGLE_CLOUD_LOCATION: ${ssm:/thumbgenai/google-cloud-location}
+    GCP_SERVICE_ACCOUNT_KEY: ${ssm:/thumbgenai/gcp-service-account-key}
   iam:
     role:
       statements:
