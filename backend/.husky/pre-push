@@ -1,0 +1,8 @@
+#!/bin/sh
+cd backend || exit 1
+
+echo "Running unit tests..."
+yarn test --runInBand || exit 1
+
+echo "Running e2e tests..."
+yarn test:e2e --runInBand || exit 1
