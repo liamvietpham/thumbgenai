@@ -3,6 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 import { createApp } from '../src/app.factory';
 import { AccessTokenPayload } from '../src/auth/types/jwt-payload.type';
 import { ThumbnailsService } from '../src/thumbnails/thumbnails.service';
+import {
+  setupTestEnv,
+  TEST_ACCESS_TOKEN_SECRET,
+  TEST_ACCESS_TOKEN_TTL,
+} from './setup-test-env';
 
 type ErrorResponse = {
   success: boolean;
@@ -18,11 +23,6 @@ type SuccessResponse<T> = {
   data: T;
 };
 
-const ACCESS_TOKEN_SECRET = 'test-access-secret';
-const REFRESH_TOKEN_SECRET = 'test-refresh-secret';
-const ACCESS_TOKEN_TTL = '15m';
-const REFRESH_TOKEN_TTL = '7d';
-
 describe('ThumbnailsModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
@@ -33,40 +33,8 @@ describe('ThumbnailsModule (e2e)', () => {
     typeof ThumbnailsService.prototype.updateThumbnail
   >;
 
-  const serviceAccountJson = JSON.stringify({
-    type: 'service_account',
-    project_id: 'thumbgen-test',
-    private_key_id: 'test-private-key-id',
-    private_key:
-      '-----BEGIN PRIVATE KEY-----\nTEST\n-----END PRIVATE KEY-----\n',
-    client_email: 'vertex@test.iam.gserviceaccount.com',
-    client_id: 'test-client-id',
-    auth_uri: 'https://accounts.google.com/o/oauth2/auth',
-    token_uri: 'https://oauth2.googleapis.com/token',
-    auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
-    client_x509_cert_url: 'https://example.com/cert',
-  });
-
   beforeEach(async () => {
-    process.env.NODE_ENV = 'test';
-    process.env.AWS_REGION = 'ap-southeast-1';
-    process.env.AWS_ACCESS_KEY_ID = 'test-access-key';
-    process.env.AWS_SECRET_ACCESS_KEY = 'test-secret-key';
-    process.env.AWS_BUCKET_NAME = 'thumbgen-bucket';
-    process.env.AWS_CLOUDFRONT_DOMAIN = 'https://cdn.example.com';
-    process.env.USERS_TABLE = 'users-test';
-    process.env.SESSIONS_TABLE = 'sessions-test';
-    process.env.THUMBNAILS_TABLE = 'thumbnails-test';
-    process.env.ACCESS_TOKEN_SECRET = ACCESS_TOKEN_SECRET;
-    process.env.REFRESH_TOKEN_SECRET = REFRESH_TOKEN_SECRET;
-    process.env.ACCESS_TOKEN_TTL = ACCESS_TOKEN_TTL;
-    process.env.REFRESH_TOKEN_TTL = REFRESH_TOKEN_TTL;
-    process.env.CORS_ORIGIN = 'http://localhost:3000';
-    process.env.GOOGLE_CLOUD_PROJECT = 'thumbgen-test';
-    process.env.GOOGLE_CLOUD_LOCATION = 'global';
-    process.env.VERTEX_AI_TIMEOUT_MS = '20000';
-    process.env.GCP_SERVICE_ACCOUNT_KEY = serviceAccountJson;
-
+    setupTestEnv();
     createThumbnailSpy = jest
       .spyOn(ThumbnailsService.prototype, 'createThumbnail')
       .mockResolvedValue({
@@ -107,8 +75,8 @@ describe('ThumbnailsModule (e2e)', () => {
       type: 'access',
     };
     const accessToken = jwtService.sign(payload, {
-      secret: ACCESS_TOKEN_SECRET,
-      expiresIn: ACCESS_TOKEN_TTL,
+      secret: TEST_ACCESS_TOKEN_SECRET,
+      expiresIn: TEST_ACCESS_TOKEN_TTL,
     });
 
     return `accessToken=${accessToken}`;

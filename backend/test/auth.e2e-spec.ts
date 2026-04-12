@@ -5,6 +5,11 @@ import { RefreshTokenPayload } from 'src/auth/types/jwt-payload.type';
 import { generateId } from 'src/common/utils/id.util';
 import { createApp } from '../src/app.factory';
 import { SessionRepository } from '../src/session/session.repository';
+import {
+  setupTestEnv,
+  TEST_REFRESH_TOKEN_SECRET,
+  TEST_REFRESH_TOKEN_TTL,
+} from './setup-test-env';
 import { UsersRepository } from '../src/users/users.repository';
 
 jest.mock('src/common/utils/id.util', () => ({
@@ -47,11 +52,6 @@ type RefreshSuccessResponse = {
   };
 };
 
-const ACCESS_TOKEN_SECRET = 'test-access-secret';
-const REFRESH_TOKEN_SECRET = 'test-refresh-secret';
-const ACCESS_TOKEN_TTL = '15m';
-const REFRESH_TOKEN_TTL = '7d';
-
 describe('AuthModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
@@ -61,16 +61,7 @@ describe('AuthModule (e2e)', () => {
     mockGenerateId.mockReset();
     mockGenerateId.mockResolvedValue('session-1');
 
-    process.env.NODE_ENV = 'test';
-    process.env.AWS_REGION = 'ap-southeast-1';
-    process.env.USERS_TABLE = 'users-test';
-    process.env.SESSIONS_TABLE = 'sessions-test';
-    process.env.ACCESS_TOKEN_SECRET = ACCESS_TOKEN_SECRET;
-    process.env.REFRESH_TOKEN_SECRET = REFRESH_TOKEN_SECRET;
-    process.env.ACCESS_TOKEN_TTL = ACCESS_TOKEN_TTL;
-    process.env.REFRESH_TOKEN_TTL = REFRESH_TOKEN_TTL;
-    process.env.CORS_ORIGIN = 'http://localhost:3000';
-
+    setupTestEnv();
     app = await createApp();
     await app.listen(0, '127.0.0.1');
     baseUrl = await app.getUrl();
@@ -185,8 +176,8 @@ describe('AuthModule (e2e)', () => {
       type: 'refresh',
     };
     const refreshToken = jwtService.sign(payload, {
-      secret: REFRESH_TOKEN_SECRET,
-      expiresIn: REFRESH_TOKEN_TTL,
+      secret: TEST_REFRESH_TOKEN_SECRET,
+      expiresIn: TEST_REFRESH_TOKEN_TTL,
     });
 
     const response = await fetch(`${baseUrl}/auth/logout`, {
@@ -268,8 +259,8 @@ describe('AuthModule (e2e)', () => {
       type: 'refresh',
     };
     const refreshToken = jwtService.sign(payload, {
-      secret: REFRESH_TOKEN_SECRET,
-      expiresIn: REFRESH_TOKEN_TTL,
+      secret: TEST_REFRESH_TOKEN_SECRET,
+      expiresIn: TEST_REFRESH_TOKEN_TTL,
     });
 
     findSessionByIdSpy.mockResolvedValue({
