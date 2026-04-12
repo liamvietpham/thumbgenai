@@ -66,8 +66,29 @@ functions:
     handler: dist/lambda.handler
     events:
       - httpApi:
-          method: '*'
-          path: /
+          method: GET
+          path: /health
+
       - httpApi:
-          method: '*'
-          path: /{proxy+}
+          method: POST
+          path: /auth/register
+      - httpApi:
+          method: POST
+          path: /auth/login
+      - httpApi:
+          method: POST
+          path: /auth/logout
+      - httpApi:
+          method: POST
+          path: /auth/refresh
+
+      - httpApi:
+          method: POST
+          path: /thumbnails
+      - httpApi:
+          method: POST
+          path: /thumbnails/{id}
+
+      - httpApi:
+          method: POST
+          path: /s3/presigned-url
