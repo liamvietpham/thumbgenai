@@ -18,6 +18,7 @@ provider:
     THUMBNAIL_JOBS_TABLE: ${ssm:/thumbgenai/thumbnail-jobs-table}
     AWS_BUCKET_NAME: ${ssm:/thumbgenai/aws-bucket-name}
     AWS_CLOUDFRONT_DOMAIN: ${ssm:/thumbgenai/aws-cloudfront-domain}
+    THUMBNAIL_JOBS_QUEUE_URL: ${ssm:/thumbgenai/thumbnail-jobs-queue-url}
     ACCESS_TOKEN_SECRET: ${ssm:/thumbgenai/access-token-secret}
     REFRESH_TOKEN_SECRET: ${ssm:/thumbgenai/refresh-token-secret}
     ACCESS_TOKEN_TTL: ${ssm:/thumbgenai/access-token-ttl}
@@ -38,11 +39,22 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
             - dynamodb:TransactWriteItems
+            - s3:PutObject
+            - sqs:SendMessage
+            - sqs:ReceiveMessage
+            - sqs:DeleteMessage
+            - sqs:GetQueueAttributes
+            - sqs:ChangeMessageVisibility
           Resource:
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/users-table}/index/email-index
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/sessions-table}
             - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/sessions-table}/index/userId-index
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/thumbnails-table}
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/thumbnails-table}/index/userId-index
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/thumbnail-jobs-table}
+            - arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${ssm:/thumbgenai/thumbnail-jobs-table}/index/status-index
+            - arn:aws:s3:::${ssm:/thumbgenai/aws-bucket-name}/*
 
 package:
   patterns:
@@ -94,3 +106,16 @@ functions:
       - httpApi:
           method: POST
           path: /s3/presigned-url
+
+      - httpApi:
+          method: GET
+          path: /thumbnail-jobs/{jobId}
+
+  thumbnailJobsWorker:
+    handler: dist/thumbnail-jobs/thumbnail-jobs.worker.handler
+    timeout: 300
+    memorySize: 1024
+    events:
+      - sqs:
+          arn: ${ssm:/thumbgenai/thumbnail-jobs-queue-arn}
+          batchSize: 1

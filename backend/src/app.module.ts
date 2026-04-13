@@ -12,9 +12,12 @@ import { ThumbnailsModule } from './thumbnails/thumbnails.module';
 import { AiModule } from './ai/ai.module';
 import { S3Module } from './s3/s3.module';
 import { ThumbnailJobsModule } from './thumbnail-jobs/thumbnail-jobs.module';
+import { ThumbnailGenerationProcessor } from './thumbnail-jobs/thumbnail-generation.processor';
+import { SqsModule } from './sqs/sqs.module';
 
 @Module({
   providers: [
+    ThumbnailGenerationProcessor,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
@@ -37,6 +40,7 @@ import { ThumbnailJobsModule } from './thumbnail-jobs/thumbnail-jobs.module';
     AiModule,
     S3Module,
     ThumbnailJobsModule,
+    SqsModule,
   ],
 })
 export class AppModule {}

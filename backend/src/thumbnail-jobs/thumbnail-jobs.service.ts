@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { generateId } from 'src/common/utils/id.util';
+import { SqsService } from 'src/sqs/sqs.service';
 import { ThumbnailJobsRepository } from 'src/thumbnail-jobs/thumbnail-jobs.repository';
 import { CreateThumbnailJobInput } from 'src/thumbnail-jobs/types/create-thumbnail-job-input.type';
 import { ThumbnailJobResponse } from 'src/thumbnail-jobs/types/thumbnail-job-response.type';
@@ -9,6 +10,7 @@ import { CreateThumbnailDto } from 'src/thumbnails/dto/create-thumbnail.dto';
 export class ThumbnailJobsService {
   constructor(
     private readonly thumbnailJobsRepository: ThumbnailJobsRepository,
+    private readonly sqsService: SqsService,
   ) {}
 
   async createJob(payload: CreateThumbnailDto, userId: string) {
@@ -19,8 +21,15 @@ export class ThumbnailJobsService {
       payload,
       status: 'QUEUED',
     };
+
     await this.thumbnailJobsRepository.createJob(job);
-    // TODO: send job to queue
+
+    await this.sqsService.sendMessage({
+      id,
+      userId,
+      payload,
+    });
+
     return {
       jobId: id,
       status: 'QUEUED',

@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { createApp } from '../src/app.factory';
 import { AccessTokenPayload } from '../src/auth/types/jwt-payload.type';
+import { ThumbnailJobsService } from '../src/thumbnail-jobs/thumbnail-jobs.service';
 import { ThumbnailsService } from '../src/thumbnails/thumbnails.service';
 import {
   setupTestEnv,
@@ -26,31 +27,40 @@ type SuccessResponse<T> = {
 describe('ThumbnailsModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
-  let createThumbnailSpy: jest.SpiedFunction<
-    typeof ThumbnailsService.prototype.createThumbnail
+  let createJobSpy: jest.SpiedFunction<
+    typeof ThumbnailJobsService.prototype.createJob
+  >;
+  let getJobSpy: jest.SpiedFunction<
+    typeof ThumbnailJobsService.prototype.getJob
   >;
   let updateThumbnailSpy: jest.SpiedFunction<
     typeof ThumbnailsService.prototype.updateThumbnail
   >;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     setupTestEnv();
-    createThumbnailSpy = jest
-      .spyOn(ThumbnailsService.prototype, 'createThumbnail')
+    app = await createApp();
+    await app.listen(0, '127.0.0.1');
+    baseUrl = await app.getUrl();
+  });
+
+  beforeEach(() => {
+    createJobSpy = jest
+      .spyOn(ThumbnailJobsService.prototype, 'createJob')
       .mockResolvedValue({
-        id: 'thumbnail-1',
-        userId: 'user-1',
-        title: 'Top smartwatch',
-        prompt: 'make it bold',
-        promptUsed: 'prompt used',
-        style: 'bold_and_graphic',
-        aspectRatio: '16:9',
-        colorScheme: 'vibrant',
-        provider: 'vertex',
-        model: 'gemini-2.5-flash-image',
-        imageUrl: 'https://cdn.example.com/generated-images/thumb.png',
-        visibility: 'private',
+        jobId: 'job-1',
+        status: 'QUEUED',
+      });
+    getJobSpy = jest
+      .spyOn(ThumbnailJobsService.prototype, 'getJob')
+      .mockResolvedValue({
+        id: 'job-1',
+        status: 'PROCESSING',
+        result: undefined,
+        error: undefined,
         createdAt: '2026-04-12T00:00:00.000Z',
+        updatedAt: '2026-04-12T00:00:05.000Z',
+        completedAt: undefined,
       });
     updateThumbnailSpy = jest
       .spyOn(ThumbnailsService.prototype, 'updateThumbnail')
@@ -60,10 +70,6 @@ describe('ThumbnailsModule (e2e)', () => {
         visibility: 'public',
         updatedAt: '2026-04-12T00:00:00.000Z',
       });
-
-    app = await createApp();
-    await app.listen(0, '127.0.0.1');
-    baseUrl = await app.getUrl();
   });
 
   const createAccessTokenCookie = () => {
@@ -104,7 +110,7 @@ describe('ThumbnailsModule (e2e)', () => {
     expect(body.message).toBe('Invalid token');
     expect(body.path).toBe('/thumbnails');
     expect(body.timestamp).toEqual(expect.any(String));
-    expect(createThumbnailSpy).not.toHaveBeenCalled();
+    expect(createJobSpy).not.toHaveBeenCalled();
   });
 
   it('POST /thumbnails validates the request body before calling the service', async () => {
@@ -128,10 +134,10 @@ describe('ThumbnailsModule (e2e)', () => {
     expect(body.statusCode).toBe(400);
     expect(body.message).toEqual(['colorScheme should not be empty']);
     expect(body.path).toBe('/thumbnails');
-    expect(createThumbnailSpy).not.toHaveBeenCalled();
+    expect(createJobSpy).not.toHaveBeenCalled();
   });
 
-  it('POST /thumbnails passes the authenticated user id to the service', async () => {
+  it('POST /thumbnails returns queued job metadata and forwards the authenticated user id', async () => {
     const payload = {
       title: 'Top smartwatch',
       prompt: 'make it bold',
@@ -149,20 +155,50 @@ describe('ThumbnailsModule (e2e)', () => {
       body: JSON.stringify(payload),
     });
     const body = (await response.json()) as SuccessResponse<{
-      id: string;
-      userId: string;
-      visibility: string;
+      jobId: string;
+      status: string;
     }>;
 
     expect(response.status).toBe(201);
     expect(body.success).toBe(true);
     expect(body.statusCode).toBe(201);
-    expect(body.data).toMatchObject({
-      id: 'thumbnail-1',
-      userId: 'user-1',
-      visibility: 'private',
+    expect(body.data).toEqual({
+      jobId: 'job-1',
+      status: 'QUEUED',
     });
-    expect(createThumbnailSpy).toHaveBeenCalledWith(payload, 'user-1');
+    expect(createJobSpy).toHaveBeenCalledWith(payload, 'user-1');
+  });
+
+  it('GET /thumbnail-jobs/:jobId returns the current job state', async () => {
+    const response = await fetch(`${baseUrl}/thumbnail-jobs/job-1`, {
+      method: 'GET',
+      headers: {
+        cookie: createAccessTokenCookie(),
+      },
+    });
+    const body = (await response.json()) as SuccessResponse<{
+      id: string;
+      status: string;
+      result?: unknown;
+      error?: unknown;
+      createdAt: string;
+      updatedAt?: string;
+      completedAt?: string;
+    }>;
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.statusCode).toBe(200);
+    expect(body.data).toEqual({
+      id: 'job-1',
+      status: 'PROCESSING',
+      result: undefined,
+      error: undefined,
+      createdAt: '2026-04-12T00:00:00.000Z',
+      updatedAt: '2026-04-12T00:00:05.000Z',
+      completedAt: undefined,
+    });
+    expect(getJobSpy).toHaveBeenCalledWith('job-1', 'user-1');
   });
 
   it('POST /thumbnails/:id validates visibility updates and forwards ownership context', async () => {
@@ -221,9 +257,11 @@ describe('ThumbnailsModule (e2e)', () => {
     expect(updateThumbnailSpy).not.toHaveBeenCalled();
   });
 
-  afterEach(async () => {
+  afterEach(() => {
     jest.restoreAllMocks();
+  });
 
+  afterAll(async () => {
     if (app) {
       await app.close();
     }

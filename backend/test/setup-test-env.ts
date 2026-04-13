@@ -26,6 +26,9 @@ export function setupTestEnv() {
   process.env.USERS_TABLE = 'users-test';
   process.env.SESSIONS_TABLE = 'sessions-test';
   process.env.THUMBNAILS_TABLE = 'thumbnails-test';
+  process.env.THUMBNAIL_JOBS_TABLE = 'thumbnail-jobs-test';
+  process.env.THUMBNAIL_JOBS_QUEUE_URL =
+    'https://sqs.ap-southeast-1.amazonaws.com/123456789012/thumbgen-thumbnail-jobs';
   process.env.ACCESS_TOKEN_SECRET = TEST_ACCESS_TOKEN_SECRET;
   process.env.REFRESH_TOKEN_SECRET = TEST_REFRESH_TOKEN_SECRET;
   process.env.ACCESS_TOKEN_TTL = TEST_ACCESS_TOKEN_TTL;
@@ -35,5 +38,4 @@ export function setupTestEnv() {
   process.env.GOOGLE_CLOUD_LOCATION = 'global';
   process.env.VERTEX_AI_TIMEOUT_MS = '20000';
   process.env.GCP_SERVICE_ACCOUNT_KEY = TEST_GCP_SERVICE_ACCOUNT_KEY;
-  delete process.env.VERTEX_AI_KEY;
 }
