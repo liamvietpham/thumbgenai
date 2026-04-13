@@ -7,89 +7,81 @@ describe('applyOpenApiPatches', () => {
       openapi: '3.0.0',
       info: {
         title: 'ThumbgenAI API',
-        version: '1.0.0',
+        version: '1.0.0'
       },
       paths: {
         '/health': {
           get: {
             responses: {
               '200': {
-                description: '',
-              },
-            },
-          },
+                description: ''
+              }
+            }
+          }
         },
         '/auth/register': {
           post: {
             responses: {
               '201': {
-                description: '',
-              },
-            },
-          },
+                description: ''
+              }
+            }
+          }
         },
         '/auth/login': {
           post: {
             responses: {
               '201': {
-                description: '',
-              },
-            },
-          },
+                description: ''
+              }
+            }
+          }
         },
         '/auth/logout': {
           post: {
             responses: {
               '200': {
-                description: '',
-              },
-            },
-          },
+                description: ''
+              }
+            }
+          }
         },
         '/auth/refresh': {
           post: {
             responses: {
               '200': {
-                description: '',
-              },
-            },
-          },
-        },
+                description: ''
+              }
+            }
+          }
+        }
       },
       components: {
-        schemas: {},
-      },
+        schemas: {}
+      }
     } as OpenAPIObject;
 
     const patchedDocument = applyOpenApiPatches(document);
 
-    expect(
-      patchedDocument.paths?.['/health']?.get?.responses?.['200'],
-    ).toMatchObject({
-      description: 'Service health status',
+    expect(patchedDocument.paths?.['/health']?.get?.responses?.['200']).toMatchObject({
+      description: 'Service health status'
     });
-    expect(
-      patchedDocument.paths?.['/auth/logout']?.post?.responses?.['200'],
-    ).toMatchObject({
+    expect(patchedDocument.paths?.['/auth/logout']?.post?.responses?.['200']).toMatchObject({
       description: 'Logout successful',
       headers: {
         'Set-Cookie': {
-          schema: { type: 'string' },
-        },
-      },
+          schema: { type: 'string' }
+        }
+      }
     });
-    expect(
-      patchedDocument.paths?.['/auth/logout']?.post?.responses?.['401'],
-    ).toBeDefined();
-    expect(
-      patchedDocument.paths?.['/auth/refresh']?.post?.responses?.['200'],
-    ).toMatchObject({
+    expect(patchedDocument.paths?.['/auth/logout']?.post?.responses?.['401']).toBeDefined();
+    expect(patchedDocument.paths?.['/auth/refresh']?.post?.responses?.['200']).toMatchObject({
       description: 'Refresh successful',
       headers: {
         'Set-Cookie': {
-          schema: { type: 'string' },
-        },
-      },
+          schema: { type: 'string' }
+        }
+      }
     });
   });
 });

@@ -3,6 +3,6 @@ import { VertexProvider } from 'src/ai/providers/vertex.provider';
 
 @Module({
   providers: [VertexProvider],
-  exports: [VertexProvider],
+  exports: [VertexProvider]
 })
 export class AiModule {}

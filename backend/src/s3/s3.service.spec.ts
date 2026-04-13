@@ -6,28 +6,23 @@ import { generateId } from 'src/common/utils/id.util';
 import { S3Service } from './s3.service';
 
 jest.mock('@aws-sdk/s3-request-presigner', () => ({
-  getSignedUrl: jest.fn(),
+  getSignedUrl: jest.fn()
 }));
 
 jest.mock('src/common/utils/id.util', () => ({
-  generateId: jest.fn(),
+  generateId: jest.fn()
 }));
 
 describe('S3Service', () => {
   let service: S3Service;
   let sendSpy: jest.SpiedFunction<S3Client['send']>;
   const mockGenerateId = generateId as jest.MockedFunction<typeof generateId>;
-  const mockGetSignedUrl = getSignedUrl as jest.MockedFunction<
-    typeof getSignedUrl
-  >;
+  const mockGetSignedUrl = getSignedUrl as jest.MockedFunction<typeof getSignedUrl>;
 
-  const getS3Client = () =>
-    (service as unknown as { s3Client: S3Client }).s3Client;
+  const getS3Client = () => (service as unknown as { s3Client: S3Client }).s3Client;
 
   const getSentCommand = () => {
-    const firstCall = sendSpy.mock.calls[0] as unknown as Parameters<
-      S3Client['send']
-    >;
+    const firstCall = sendSpy.mock.calls[0] as unknown as Parameters<S3Client['send']>;
     const command = firstCall[0];
 
     expect(command).toBeInstanceOf(PutObjectCommand);
@@ -51,14 +46,14 @@ describe('S3Service', () => {
                 AWS_ACCESS_KEY_ID: 'test-access-key',
                 AWS_SECRET_ACCESS_KEY: 'test-secret-key',
                 AWS_BUCKET_NAME: 'thumbgen-bucket',
-                AWS_CLOUDFRONT_DOMAIN: 'https://cdn.example.com',
+                AWS_CLOUDFRONT_DOMAIN: 'https://cdn.example.com'
               };
 
               return configMap[key];
-            }),
-          },
-        },
-      ],
+            })
+          }
+        }
+      ]
     }).compile();
 
     service = module.get<S3Service>(S3Service);
@@ -75,7 +70,7 @@ describe('S3Service', () => {
 
     const result = await service.createPresignedUrl({
       fileName: 'Anh dai dien.png',
-      contentType: 'image/webp',
+      contentType: 'image/webp'
     });
 
     expect(mockGetSignedUrl).toHaveBeenCalledTimes(1);
@@ -83,18 +78,18 @@ describe('S3Service', () => {
     const [, command, options] = mockGetSignedUrl.mock.calls[0] as [
       S3Client,
       PutObjectCommand,
-      { expiresIn: number },
+      { expiresIn: number }
     ];
 
     expect(command.input).toEqual({
       Bucket: 'thumbgen-bucket',
       Key: 'uploads/file-1-anh-dai-dien.webp',
-      ContentType: 'image/webp',
+      ContentType: 'image/webp'
     });
     expect(options).toEqual({ expiresIn: 60 * 5 });
     expect(result).toEqual({
       signedUrl: 'https://signed.example.com/upload',
-      url: 'https://cdn.example.com/uploads/file-1-anh-dai-dien.webp',
+      url: 'https://cdn.example.com/uploads/file-1-anh-dai-dien.webp'
     });
   });
 
@@ -104,7 +99,7 @@ describe('S3Service', () => {
     const result = await service.uploadFile({
       fileName: 'thumbnail.png',
       contentType: 'image/png',
-      file: Buffer.from('thumbnail'),
+      file: Buffer.from('thumbnail')
     });
 
     expect(sendSpy).toHaveBeenCalledTimes(1);
@@ -114,7 +109,7 @@ describe('S3Service', () => {
       Bucket: 'thumbgen-bucket',
       Key: 'file-2-thumbnail.png',
       Body: Buffer.from('thumbnail'),
-      ContentType: 'image/png',
+      ContentType: 'image/png'
     });
     expect(result).toBe('https://cdn.example.com/file-2-thumbnail.png');
   });
@@ -126,16 +121,14 @@ describe('S3Service', () => {
       fileName: 'thumbnail.png',
       contentType: 'image/png',
       file: Buffer.from('thumbnail'),
-      folderName: 'generated-images',
+      folderName: 'generated-images'
     });
 
     const command = getSentCommand();
 
     expect(command.input).toMatchObject({
-      Key: 'generated-images/file-3-thumbnail.png',
+      Key: 'generated-images/file-3-thumbnail.png'
     });
-    expect(result).toBe(
-      'https://cdn.example.com/generated-images/file-3-thumbnail.png',
-    );
+    expect(result).toBe('https://cdn.example.com/generated-images/file-3-thumbnail.png');
   });
 });

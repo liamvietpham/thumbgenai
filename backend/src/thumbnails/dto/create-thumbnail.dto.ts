@@ -9,35 +9,15 @@ export class CreateThumbnailDto {
   @IsOptional()
   prompt?: string;
 
-  @IsEnum([
-    'bold_and_graphic',
-    'tech_futuristic',
-    'minimalist',
-    'photorealistic',
-    'illustrated',
-  ])
+  @IsEnum(['bold_and_graphic', 'tech_futuristic', 'minimalist', 'photorealistic', 'illustrated'])
   @IsNotEmpty()
-  style:
-    | 'bold_and_graphic'
-    | 'tech_futuristic'
-    | 'minimalist'
-    | 'photorealistic'
-    | 'illustrated';
+  style: 'bold_and_graphic' | 'tech_futuristic' | 'minimalist' | 'photorealistic' | 'illustrated';
 
   @IsEnum(['16:9', '1:1', '9:16'])
   @IsNotEmpty()
   aspectRatio: '16:9' | '1:1' | '9:16';
 
-  @IsEnum([
-    'vibrant',
-    'sunset',
-    'forest',
-    'neon',
-    'purple',
-    'monochrome',
-    'ocean',
-    'pastel',
-  ])
+  @IsEnum(['vibrant', 'sunset', 'forest', 'neon', 'purple', 'monochrome', 'ocean', 'pastel'])
   @IsNotEmpty()
   colorScheme:
     | 'vibrant'

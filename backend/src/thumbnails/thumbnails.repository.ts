@@ -1,8 +1,4 @@
-import {
-  DynamoDBDocumentClient,
-  PutCommand,
-  UpdateCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DDB } from 'src/database/database.module';
@@ -15,7 +11,7 @@ export class ThumbnailsRepository {
 
   constructor(
     private readonly configService: ConfigService,
-    @Inject(DDB) private readonly ddb: DynamoDBDocumentClient,
+    @Inject(DDB) private readonly ddb: DynamoDBDocumentClient
   ) {
     this.tableName = this.configService.getOrThrow<string>('THUMBNAILS_TABLE');
   }
@@ -25,14 +21,14 @@ export class ThumbnailsRepository {
     const thumbnail = {
       ...input,
       visibility: 'private',
-      createdAt: now,
+      createdAt: now
     };
 
     await this.ddb.send(
       new PutCommand({
         TableName: this.tableName,
-        Item: thumbnail,
-      }),
+        Item: thumbnail
+      })
     );
 
     return thumbnail;
@@ -57,11 +53,11 @@ export class ThumbnailsRepository {
         ExpressionAttributeValues: {
           ...expressionValues,
           ':updatedAt': now,
-          ':userId': userId,
+          ':userId': userId
         },
         ConditionExpression: 'attribute_exists(id) AND userId = :userId',
-        ReturnValues: 'ALL_NEW',
-      }),
+        ReturnValues: 'ALL_NEW'
+      })
     );
 
     return result.Attributes;

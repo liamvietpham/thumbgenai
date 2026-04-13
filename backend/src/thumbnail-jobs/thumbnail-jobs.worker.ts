@@ -12,7 +12,7 @@ let appContextPromise: Promise<INestApplicationContext> | undefined;
 
 function getAppContext(): Promise<INestApplicationContext> {
   appContextPromise ??= NestFactory.createApplicationContext(AppModule, {
-    logger: ['error', 'warn', 'log'],
+    logger: ['error', 'warn', 'log']
   });
 
   return appContextPromise;
@@ -23,16 +23,14 @@ function parseMessage(record: SQSRecord): ProcessThumbnailJobInput {
 }
 
 function isConditionalWriteError(error: unknown) {
-  return (
-    error instanceof Error && error.name === 'ConditionalCheckFailedException'
-  );
+  return error instanceof Error && error.name === 'ConditionalCheckFailedException';
 }
 
 function toJobError(error: unknown): ThumbnailJobError {
   return {
     code: 'THUMBNAIL_JOB_FAILED',
     message: error instanceof Error ? error.message : 'Unknown error',
-    retryable: true,
+    retryable: true
   };
 }
 

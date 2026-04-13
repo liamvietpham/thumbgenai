@@ -20,19 +20,19 @@ import { SqsModule } from './sqs/sqs.module';
     ThumbnailGenerationProcessor,
     {
       provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
+      useClass: AllExceptionsFilter
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: ResponseInterceptor,
-    },
+      useClass: ResponseInterceptor
+    }
   ],
   imports: [
     HealthModule,
     AuthModule,
     DatabaseModule,
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true
     }),
     UsersModule,
     SessionModule,
@@ -40,7 +40,7 @@ import { SqsModule } from './sqs/sqs.module';
     AiModule,
     S3Module,
     ThumbnailJobsModule,
-    SqsModule,
-  ],
+    SqsModule
+  ]
 })
 export class AppModule {}

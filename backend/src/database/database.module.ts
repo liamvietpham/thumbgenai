@@ -16,12 +16,12 @@ export const DDB = Symbol('DDB');
         const client = new DynamoDBClient({ region });
 
         return DynamoDBDocumentClient.from(client, {
-          marshallOptions: { removeUndefinedValues: true },
+          marshallOptions: { removeUndefinedValues: true }
         });
       },
-      inject: [ConfigService],
-    },
+      inject: [ConfigService]
+    }
   ],
-  exports: [DDB],
+  exports: [DDB]
 })
 export class DatabaseModule {}

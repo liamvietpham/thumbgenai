@@ -6,7 +6,7 @@ import { createApp } from './app.factory';
 type LambdaHandler = (
   event: unknown,
   context: Context,
-  callback: Callback<unknown>,
+  callback: Callback<unknown>
 ) => void | Promise<unknown>;
 
 let cachedServer: LambdaHandler | undefined;

@@ -2,7 +2,7 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
-  UpdateCommand,
+  UpdateCommand
 } from '@aws-sdk/lib-dynamodb';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -10,7 +10,7 @@ import { DDB } from 'src/database/database.module';
 import {
   ThumbnailJob,
   ThumbnailJobError,
-  ThumbnailJobResult,
+  ThumbnailJobResult
 } from 'src/thumbnail-jobs/entities/thumbnail-job.entity';
 import { CreateThumbnailJobInput } from 'src/thumbnail-jobs/types/create-thumbnail-job-input.type';
 
@@ -20,11 +20,9 @@ export class ThumbnailJobsRepository {
 
   constructor(
     private readonly configService: ConfigService,
-    @Inject(DDB) private readonly ddb: DynamoDBDocumentClient,
+    @Inject(DDB) private readonly ddb: DynamoDBDocumentClient
   ) {
-    this.tableName = this.configService.getOrThrow<string>(
-      'THUMBNAIL_JOBS_TABLE',
-    );
+    this.tableName = this.configService.getOrThrow<string>('THUMBNAIL_JOBS_TABLE');
   }
 
   async createJob(input: CreateThumbnailJobInput) {
@@ -32,14 +30,14 @@ export class ThumbnailJobsRepository {
     const job: ThumbnailJob = {
       ...input,
       createdAt: now,
-      updatedAt: now,
+      updatedAt: now
     };
     await this.ddb.send(
       new PutCommand({
         TableName: this.tableName,
         Item: job,
-        ConditionExpression: 'attribute_not_exists(id)',
-      }),
+        ConditionExpression: 'attribute_not_exists(id)'
+      })
     );
   }
 
@@ -47,8 +45,8 @@ export class ThumbnailJobsRepository {
     const result = await this.ddb.send(
       new GetCommand({
         TableName: this.tableName,
-        Key: { id },
-      }),
+        Key: { id }
+      })
     );
 
     return result.Item as ThumbnailJob | undefined;
@@ -65,13 +63,13 @@ export class ThumbnailJobsRepository {
           ':userId': userId,
           ':currentStatus': 'QUEUED',
           ':status': 'PROCESSING',
-          ':updatedAt': now,
+          ':updatedAt': now
         },
         UpdateExpression: 'SET status = :status, updatedAt = :updatedAt',
         ConditionExpression:
           'attribute_exists(id) AND userId = :userId AND status = :currentStatus',
-        ReturnValues: 'ALL_NEW',
-      }),
+        ReturnValues: 'ALL_NEW'
+      })
     );
 
     return result.Attributes;
@@ -92,12 +90,12 @@ export class ThumbnailJobsRepository {
           ':userId': userId,
           ':result': jobResult,
           ':completedAt': now,
-          ':updatedAt': now,
+          ':updatedAt': now
         },
         ConditionExpression:
           'attribute_exists(id) AND userId = :userId AND status = :currentStatus',
-        ReturnValues: 'ALL_NEW',
-      }),
+        ReturnValues: 'ALL_NEW'
+      })
     );
 
     return result.Attributes;
@@ -118,12 +116,12 @@ export class ThumbnailJobsRepository {
           ':userId': userId,
           ':error': jobError,
           ':updatedAt': now,
-          ':completedAt': now,
+          ':completedAt': now
         },
         ConditionExpression:
           'attribute_exists(id) AND userId = :userId AND status = :currentStatus',
-        ReturnValues: 'ALL_NEW',
-      }),
+        ReturnValues: 'ALL_NEW'
+      })
     );
 
     return result.Attributes;

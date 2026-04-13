@@ -5,7 +5,7 @@ import { ThumbnailJobsRepository } from './thumbnail-jobs.repository';
 import { ThumbnailJobsService } from './thumbnail-jobs.service';
 
 jest.mock('src/common/utils/id.util', () => ({
-  generateId: jest.fn(),
+  generateId: jest.fn()
 }));
 
 describe('ThumbnailJobsService', () => {
@@ -28,16 +28,16 @@ describe('ThumbnailJobsService', () => {
           provide: ThumbnailJobsRepository,
           useValue: {
             createJob: jest.fn(),
-            findJobById: jest.fn(),
-          },
+            findJobById: jest.fn()
+          }
         },
         {
           provide: SqsService,
           useValue: {
-            sendMessage: jest.fn(),
-          },
-        },
-      ],
+            sendMessage: jest.fn()
+          }
+        }
+      ]
     }).compile();
 
     service = module.get<ThumbnailJobsService>(ThumbnailJobsService);
@@ -54,24 +54,24 @@ describe('ThumbnailJobsService', () => {
       prompt: 'make it bold',
       style: 'bold_and_graphic' as const,
       aspectRatio: '16:9' as const,
-      colorScheme: 'vibrant' as const,
+      colorScheme: 'vibrant' as const
     };
 
     await expect(service.createJob(payload, 'user-1')).resolves.toEqual({
       jobId: 'job-1',
-      status: 'QUEUED',
+      status: 'QUEUED'
     });
 
     expect(thumbnailJobsRepository.createJob).toHaveBeenCalledWith({
       id: 'job-1',
       userId: 'user-1',
       payload,
-      status: 'QUEUED',
+      status: 'QUEUED'
     });
     expect(sqsService.sendMessage).toHaveBeenCalledWith({
       id: 'job-1',
       userId: 'user-1',
-      payload,
+      payload
     });
   });
 
@@ -84,10 +84,10 @@ describe('ThumbnailJobsService', () => {
         title: 'Top smartwatch',
         style: 'bold_and_graphic',
         aspectRatio: '16:9',
-        colorScheme: 'vibrant',
+        colorScheme: 'vibrant'
       },
       createdAt: '2026-04-12T00:00:00.000Z',
-      updatedAt: '2026-04-12T00:00:05.000Z',
+      updatedAt: '2026-04-12T00:00:05.000Z'
     });
 
     await expect(service.getJob('job-1', 'user-1')).resolves.toEqual({
@@ -97,7 +97,7 @@ describe('ThumbnailJobsService', () => {
       error: undefined,
       createdAt: '2026-04-12T00:00:00.000Z',
       updatedAt: '2026-04-12T00:00:05.000Z',
-      completedAt: undefined,
+      completedAt: undefined
     });
   });
 
@@ -110,13 +110,11 @@ describe('ThumbnailJobsService', () => {
         title: 'Top smartwatch',
         style: 'bold_and_graphic',
         aspectRatio: '16:9',
-        colorScheme: 'vibrant',
+        colorScheme: 'vibrant'
       },
-      createdAt: '2026-04-12T00:00:00.000Z',
+      createdAt: '2026-04-12T00:00:00.000Z'
     });
 
-    await expect(service.getJob('job-1', 'user-1')).rejects.toThrow(
-      'Thumbnail job not found',
-    );
+    await expect(service.getJob('job-1', 'user-1')).rejects.toThrow('Thumbnail job not found');
   });
 });

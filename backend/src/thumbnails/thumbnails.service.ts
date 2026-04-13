@@ -8,22 +8,18 @@ import { ThumbnailJobsService } from 'src/thumbnail-jobs/thumbnail-jobs.service'
 export class ThumbnailsService {
   constructor(
     private readonly thumbnailsRepository: ThumbnailsRepository,
-    private readonly thumbnailJobsService: ThumbnailJobsService,
+    private readonly thumbnailJobsService: ThumbnailJobsService
   ) {}
 
   createThumbnail(payload: CreateThumbnailDto, userId: string) {
     return this.thumbnailJobsService.createJob(payload, userId);
   }
 
-  async updateThumbnail(
-    payload: UpdateThumbnailDto,
-    thumbnailId: string,
-    userId: string,
-  ) {
+  async updateThumbnail(payload: UpdateThumbnailDto, thumbnailId: string, userId: string) {
     return await this.thumbnailsRepository.updateThumbnail({
       ...payload,
       id: thumbnailId,
-      userId,
+      userId
     });
   }
 }

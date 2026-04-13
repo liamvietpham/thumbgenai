@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { hash as argonHash } from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -12,7 +8,7 @@ import { AuthService } from './auth.service';
 import { generateId } from 'src/common/utils/id.util';
 
 jest.mock('src/common/utils/id.util', () => ({
-  generateId: jest.fn(),
+  generateId: jest.fn()
 }));
 
 type MockUsersRepository = {
@@ -50,26 +46,26 @@ describe('AuthService', () => {
 
     usersRepository = {
       findByEmail: jest.fn(),
-      createUser: jest.fn(),
+      createUser: jest.fn()
     };
 
     sessionRepository = {
       createSession: jest.fn(),
       revokeSession: jest.fn(),
       findSessionById: jest.fn(),
-      rotateSession: jest.fn(),
+      rotateSession: jest.fn()
     };
 
     jwtService = {
       sign: jest.fn(),
-      verifyAsync: jest.fn(),
+      verifyAsync: jest.fn()
     };
 
     const configMap: Record<string, string> = {
       ACCESS_TOKEN_SECRET: 'access-secret',
       REFRESH_TOKEN_SECRET: 'refresh-secret',
       ACCESS_TOKEN_TTL: '15m',
-      REFRESH_TOKEN_TTL: '7d',
+      REFRESH_TOKEN_TTL: '7d'
     };
 
     configService = {
@@ -79,14 +75,14 @@ describe('AuthService', () => {
           throw new Error(`Missing config: ${key}`);
         }
         return value;
-      }),
+      })
     };
 
     service = new AuthService(
       usersRepository as unknown as UsersRepository,
       sessionRepository as unknown as SessionRepository,
       jwtService as unknown as JwtService,
-      configService as unknown as ConfigService,
+      configService as unknown as ConfigService
     );
   });
 
@@ -100,8 +96,8 @@ describe('AuthService', () => {
         name: 'John Doe',
         email: 'john@example.com',
         password: 'password-123',
-        confirmPassword: 'password-456',
-      }),
+        confirmPassword: 'password-456'
+      })
     ).rejects.toBeInstanceOf(BadRequestException);
 
     expect(usersRepository.findByEmail).not.toHaveBeenCalled();
@@ -114,7 +110,7 @@ describe('AuthService', () => {
       name: 'John Doe',
       email: 'john@example.com',
       password: 'hashed-password',
-      credits: 15,
+      credits: 15
     });
 
     await expect(
@@ -122,21 +118,17 @@ describe('AuthService', () => {
         name: 'John Doe',
         email: 'john@example.com',
         password: 'password-123',
-        confirmPassword: 'password-123',
-      }),
+        confirmPassword: 'password-123'
+      })
     ).rejects.toBeInstanceOf(ConflictException);
 
-    expect(usersRepository.findByEmail).toHaveBeenCalledWith(
-      'john@example.com',
-    );
+    expect(usersRepository.findByEmail).toHaveBeenCalledWith('john@example.com');
     expect(usersRepository.createUser).not.toHaveBeenCalled();
   });
 
   it('hashes password, creates user, and returns public user payload', async () => {
     usersRepository.findByEmail.mockResolvedValue(null);
-    let capturedCreateUserPayload:
-      | Parameters<UsersRepository['createUser']>[0]
-      | undefined;
+    let capturedCreateUserPayload: Parameters<UsersRepository['createUser']>[0] | undefined;
 
     usersRepository.createUser.mockImplementation((input) => {
       capturedCreateUserPayload = input;
@@ -149,7 +141,7 @@ describe('AuthService', () => {
         credits: 15,
         createdAt: '2026-04-07T00:00:00.000Z',
         updatedAt: '2026-04-07T00:00:00.000Z',
-        pwdUpdatedAt: '2026-04-07T00:00:00.000Z',
+        pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
       });
     });
 
@@ -157,18 +149,16 @@ describe('AuthService', () => {
       name: 'John Doe',
       email: 'john@example.com',
       password: 'password-123',
-      confirmPassword: 'password-123',
+      confirmPassword: 'password-123'
     });
 
-    expect(usersRepository.findByEmail).toHaveBeenCalledWith(
-      'john@example.com',
-    );
+    expect(usersRepository.findByEmail).toHaveBeenCalledWith('john@example.com');
     expect(usersRepository.createUser).toHaveBeenCalledTimes(1);
     expect(usersRepository.createUser).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'John Doe',
-        email: 'john@example.com',
-      }),
+        email: 'john@example.com'
+      })
     );
 
     if (!capturedCreateUserPayload) {
@@ -185,7 +175,7 @@ describe('AuthService', () => {
       credits: 15,
       createdAt: '2026-04-07T00:00:00.000Z',
       updatedAt: '2026-04-07T00:00:00.000Z',
-      pwdUpdatedAt: '2026-04-07T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
     });
     expect(result).not.toHaveProperty('password');
   });
@@ -196,8 +186,8 @@ describe('AuthService', () => {
     await expect(
       service.login({
         email: 'john@example.com',
-        password: 'password-123',
-      }),
+        password: 'password-123'
+      })
     ).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(jwtService.sign).not.toHaveBeenCalled();
@@ -211,14 +201,14 @@ describe('AuthService', () => {
       name: 'John Doe',
       email: 'john@example.com',
       password: storedHash,
-      credits: 15,
+      credits: 15
     });
 
     await expect(
       service.login({
         email: 'john@example.com',
-        password: 'password-123',
-      }),
+        password: 'password-123'
+      })
     ).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(jwtService.sign).not.toHaveBeenCalled();
@@ -239,33 +229,29 @@ describe('AuthService', () => {
       credits: 15,
       createdAt: '2026-04-08T00:00:00.000Z',
       updatedAt: '2026-04-08T00:00:00.000Z',
-      pwdUpdatedAt: '2026-04-08T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-08T00:00:00.000Z'
     });
 
-    jwtService.sign.mockImplementation(
-      (_payload: unknown, options?: { secret?: string }) => {
-        if (options?.secret === 'access-secret') return 'access-token';
-        if (options?.secret === 'refresh-secret') return 'refresh-token';
-        return 'unknown-token';
-      },
-    );
+    jwtService.sign.mockImplementation((_payload: unknown, options?: { secret?: string }) => {
+      if (options?.secret === 'access-secret') return 'access-token';
+      if (options?.secret === 'refresh-secret') return 'refresh-token';
+      return 'unknown-token';
+    });
 
     jwtService.verifyAsync.mockImplementation((token: string) => {
       if (token === 'access-token') return Promise.resolve({ exp: accessExp });
-      if (token === 'refresh-token')
-        return Promise.resolve({ exp: refreshExp });
+      if (token === 'refresh-token') return Promise.resolve({ exp: refreshExp });
 
       return Promise.reject(new Error(`Unexpected token: ${token}`));
     });
 
     const result = await service.login({
       email: 'john@example.com',
-      password: 'password-123',
+      password: 'password-123'
     });
 
     expect(sessionRepository.createSession).toHaveBeenCalledTimes(1);
-    const [createSessionPayload] =
-      sessionRepository.createSession.mock.calls[0] ?? [];
+    const [createSessionPayload] = sessionRepository.createSession.mock.calls[0] ?? [];
     if (!createSessionPayload) {
       throw new Error('Expected createSession payload');
     }
@@ -274,9 +260,7 @@ describe('AuthService', () => {
     expect(mockGenerateId).toHaveBeenCalledTimes(1);
     expect(createSessionPayload.userId).toBe('user-2');
     expect(typeof createSessionPayload.refreshToken).toBe('string');
-    expect(createSessionPayload.expiresAt).toBe(
-      new Date(refreshExp * 1000).toISOString(),
-    );
+    expect(createSessionPayload.expiresAt).toBe(new Date(refreshExp * 1000).toISOString());
     expect(createSessionPayload.ttl).toBe(refreshExp);
 
     expect(result).toEqual({
@@ -289,19 +273,17 @@ describe('AuthService', () => {
         credits: 15,
         createdAt: '2026-04-08T00:00:00.000Z',
         updatedAt: '2026-04-08T00:00:00.000Z',
-        pwdUpdatedAt: '2026-04-08T00:00:00.000Z',
+        pwdUpdatedAt: '2026-04-08T00:00:00.000Z'
       },
       accessTokenMaxAgeMs: accessExp * 1000 - now,
-      refreshTokenMaxAgeMs: refreshExp * 1000 - now,
+      refreshTokenMaxAgeMs: refreshExp * 1000 - now
     });
 
     nowSpy.mockRestore();
   });
 
   it('throws UnauthorizedException when logout refresh token is missing', async () => {
-    await expect(service.logout()).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.logout()).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(jwtService.verifyAsync).not.toHaveBeenCalled();
     expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
@@ -310,9 +292,7 @@ describe('AuthService', () => {
   it('throws UnauthorizedException when logout refresh token is invalid', async () => {
     jwtService.verifyAsync.mockRejectedValue(new Error('jwt expired'));
 
-    await expect(service.logout('invalid-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.logout('invalid-token')).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
   });
@@ -320,12 +300,10 @@ describe('AuthService', () => {
   it('throws UnauthorizedException when logout token type is not refresh', async () => {
     jwtService.verifyAsync.mockResolvedValue({
       sid: 'session-1',
-      type: 'access',
+      type: 'access'
     });
 
-    await expect(service.logout('access-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.logout('access-token')).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(sessionRepository.revokeSession).not.toHaveBeenCalled();
   });
@@ -333,21 +311,19 @@ describe('AuthService', () => {
   it('verifies refresh token and revokes the matching session on logout', async () => {
     jwtService.verifyAsync.mockResolvedValue({
       sid: 'session-1',
-      type: 'refresh',
+      type: 'refresh'
     });
 
     await expect(service.logout('refresh-token')).resolves.toBeUndefined();
 
     expect(jwtService.verifyAsync).toHaveBeenCalledWith('refresh-token', {
-      secret: 'refresh-secret',
+      secret: 'refresh-secret'
     });
     expect(sessionRepository.revokeSession).toHaveBeenCalledWith('session-1');
   });
 
   it('throws UnauthorizedException when refresh token is missing', async () => {
-    await expect(service.refresh()).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.refresh()).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(jwtService.verifyAsync).not.toHaveBeenCalled();
     expect(sessionRepository.findSessionById).not.toHaveBeenCalled();
@@ -356,9 +332,7 @@ describe('AuthService', () => {
   it('throws UnauthorizedException when refresh token verification fails', async () => {
     jwtService.verifyAsync.mockRejectedValue(new Error('jwt expired'));
 
-    await expect(service.refresh('invalid-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.refresh('invalid-token')).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(sessionRepository.findSessionById).not.toHaveBeenCalled();
   });
@@ -368,12 +342,10 @@ describe('AuthService', () => {
       sid: 'session-1',
       type: 'access',
       sub: 'user-1',
-      email: 'john@example.com',
+      email: 'john@example.com'
     });
 
-    await expect(service.refresh('access-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.refresh('access-token')).rejects.toBeInstanceOf(UnauthorizedException);
 
     expect(sessionRepository.findSessionById).not.toHaveBeenCalled();
   });
@@ -383,13 +355,11 @@ describe('AuthService', () => {
       sid: 'session-1',
       type: 'refresh',
       sub: 'user-1',
-      email: 'john@example.com',
+      email: 'john@example.com'
     });
     sessionRepository.findSessionById.mockResolvedValue(undefined);
 
-    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
   it('throws UnauthorizedException when stored refresh token does not match', async () => {
@@ -397,7 +367,7 @@ describe('AuthService', () => {
       sid: 'session-1',
       type: 'refresh',
       sub: 'user-1',
-      email: 'john@example.com',
+      email: 'john@example.com'
     });
     sessionRepository.findSessionById.mockResolvedValue({
       id: 'session-1',
@@ -406,12 +376,10 @@ describe('AuthService', () => {
       ttl: 1_700_086_400,
       expiresAt: '2026-04-09T00:00:00.000Z',
       createdAt: '2026-04-08T00:00:00.000Z',
-      updatedAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z'
     });
 
-    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
   it('throws UnauthorizedException when conditional rotate fails during refresh', async () => {
@@ -421,7 +389,7 @@ describe('AuthService', () => {
           sid: 'session-1',
           type: 'refresh',
           sub: 'user-1',
-          email: 'john@example.com',
+          email: 'john@example.com'
         });
       }
       if (token === 'next-access-token') {
@@ -432,13 +400,11 @@ describe('AuthService', () => {
       }
       return Promise.reject(new Error(`Unexpected token: ${token}`));
     });
-    jwtService.sign.mockImplementation(
-      (_payload: unknown, options?: { secret?: string }) => {
-        if (options?.secret === 'access-secret') return 'next-access-token';
-        if (options?.secret === 'refresh-secret') return 'next-refresh-token';
-        return 'unknown-token';
-      },
-    );
+    jwtService.sign.mockImplementation((_payload: unknown, options?: { secret?: string }) => {
+      if (options?.secret === 'access-secret') return 'next-access-token';
+      if (options?.secret === 'refresh-secret') return 'next-refresh-token';
+      return 'unknown-token';
+    });
     sessionRepository.findSessionById.mockResolvedValue({
       id: 'session-1',
       userId: 'user-1',
@@ -446,15 +412,13 @@ describe('AuthService', () => {
       ttl: 1_700_000_000,
       expiresAt: '2026-04-08T00:00:00.000Z',
       createdAt: '2026-04-08T00:00:00.000Z',
-      updatedAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z'
     });
     sessionRepository.rotateSession.mockRejectedValue({
-      name: 'ConditionalCheckFailedException',
+      name: 'ConditionalCheckFailedException'
     });
 
-    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
   it('rotates session and returns new tokens on refresh', async () => {
@@ -469,7 +433,7 @@ describe('AuthService', () => {
           sid: 'session-1',
           type: 'refresh',
           sub: 'user-1',
-          email: 'john@example.com',
+          email: 'john@example.com'
         });
       }
       if (token === 'next-access-token') {
@@ -480,13 +444,11 @@ describe('AuthService', () => {
       }
       return Promise.reject(new Error(`Unexpected token: ${token}`));
     });
-    jwtService.sign.mockImplementation(
-      (_payload: unknown, options?: { secret?: string }) => {
-        if (options?.secret === 'access-secret') return 'next-access-token';
-        if (options?.secret === 'refresh-secret') return 'next-refresh-token';
-        return 'unknown-token';
-      },
-    );
+    jwtService.sign.mockImplementation((_payload: unknown, options?: { secret?: string }) => {
+      if (options?.secret === 'access-secret') return 'next-access-token';
+      if (options?.secret === 'refresh-secret') return 'next-refresh-token';
+      return 'unknown-token';
+    });
     sessionRepository.findSessionById.mockResolvedValue({
       id: 'session-1',
       userId: 'user-1',
@@ -494,7 +456,7 @@ describe('AuthService', () => {
       ttl: 1_700_000_000,
       expiresAt: '2026-04-08T00:00:00.000Z',
       createdAt: '2026-04-08T00:00:00.000Z',
-      updatedAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z'
     });
     sessionRepository.rotateSession.mockResolvedValue(undefined);
 
@@ -507,13 +469,13 @@ describe('AuthService', () => {
       curRefreshToken: 'refresh-token',
       expiresAt: new Date(refreshExp * 1000).toISOString(),
       ttl: refreshExp,
-      updatedAt: new Date(now).toISOString(),
+      updatedAt: new Date(now).toISOString()
     });
     expect(result).toEqual({
       accessToken: 'next-access-token',
       refreshToken: 'next-refresh-token',
       accessTokenMaxAgeMs: accessExp * 1000 - now,
-      refreshTokenMaxAgeMs: refreshExp * 1000 - now,
+      refreshTokenMaxAgeMs: refreshExp * 1000 - now
     });
 
     nowSpy.mockRestore();

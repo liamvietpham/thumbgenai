@@ -7,6 +7,6 @@ import { AuthModule } from 'src/auth/auth.module';
   controllers: [S3Controller],
   providers: [S3Service],
   exports: [S3Service],
-  imports: [AuthModule],
+  imports: [AuthModule]
 })
 export class S3Module {}

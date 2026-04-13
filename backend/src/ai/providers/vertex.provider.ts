@@ -4,13 +4,13 @@ import {
   GenerateContentParameters,
   GenerateContentResponse,
   GoogleGenAI,
-  Modality,
+  Modality
 } from '@google/genai';
 import {
   BadGatewayException,
   Injectable,
   Logger,
-  UnprocessableEntityException,
+  UnprocessableEntityException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GenerateImageResult } from 'src/ai/types/generate-image-result.type';
@@ -25,35 +25,22 @@ export class VertexProvider {
   private readonly gcpServiceAccountKey: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.projectId = this.configService.getOrThrow<string>(
-      'GOOGLE_CLOUD_PROJECT',
-    );
-    this.location = this.configService.getOrThrow<string>(
-      'GOOGLE_CLOUD_LOCATION',
-    );
-    this.timeoutMs = Number(
-      this.configService.getOrThrow<string>('VERTEX_AI_TIMEOUT_MS'),
-    );
-    this.gcpServiceAccountKey = this.configService.getOrThrow<string>(
-      'GCP_SERVICE_ACCOUNT_KEY',
-    );
+    this.projectId = this.configService.getOrThrow<string>('GOOGLE_CLOUD_PROJECT');
+    this.location = this.configService.getOrThrow<string>('GOOGLE_CLOUD_LOCATION');
+    this.timeoutMs = Number(this.configService.getOrThrow<string>('VERTEX_AI_TIMEOUT_MS'));
+    this.gcpServiceAccountKey = this.configService.getOrThrow<string>('GCP_SERVICE_ACCOUNT_KEY');
 
     this.client = new GoogleGenAI({
       vertexai: true,
       project: this.projectId,
       location: this.location,
       googleAuthOptions: {
-        credentials: JSON.parse(this.gcpServiceAccountKey) as Record<
-          string,
-          string
-        >,
-      },
+        credentials: JSON.parse(this.gcpServiceAccountKey) as Record<string, string>
+      }
     });
   }
 
-  async generateImage(
-    params: GenerateContentParameters,
-  ): Promise<GenerateImageResult> {
+  async generateImage(params: GenerateContentParameters): Promise<GenerateImageResult> {
     try {
       const response = await this.client.models.generateContent({
         ...params,
@@ -62,9 +49,9 @@ export class VertexProvider {
           ...params.config,
           httpOptions: {
             timeout: this.timeoutMs,
-            ...params.config?.httpOptions,
-          },
-        },
+            ...params.config?.httpOptions
+          }
+        }
       });
 
       const candidate = response.candidates?.[0];
@@ -80,7 +67,7 @@ export class VertexProvider {
         .filter((part) => Boolean(part.inlineData?.data))
         .map((part) => ({
           mimeType: part.inlineData?.mimeType ?? 'image/png',
-          base64: part.inlineData?.data ?? '',
+          base64: part.inlineData?.data ?? ''
         }));
 
       if (!images.length) {
@@ -91,7 +78,7 @@ export class VertexProvider {
         provider: 'vertex',
         model: params.model,
         text,
-        images,
+        images
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -121,8 +108,8 @@ export class VertexProvider {
           blockReason,
           finishReason,
           finishMessage,
-          safetyRatings,
-        },
+          safetyRatings
+        }
       });
     }
 
@@ -132,7 +119,7 @@ export class VertexProvider {
       FinishReason.PROHIBITED_CONTENT,
       FinishReason.SPII,
       FinishReason.RECITATION,
-      FinishReason.LANGUAGE,
+      FinishReason.LANGUAGE
     ]);
 
     if (finishReason && userInputRelatedReasons.has(finishReason)) {
@@ -144,8 +131,8 @@ export class VertexProvider {
           provider: 'vertex',
           finishReason,
           finishMessage,
-          safetyRatings,
-        },
+          safetyRatings
+        }
       });
     }
 
@@ -157,8 +144,8 @@ export class VertexProvider {
         provider: 'vertex',
         finishReason,
         finishMessage,
-        safetyRatings,
-      },
+        safetyRatings
+      }
     });
   }
 }

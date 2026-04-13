@@ -3,7 +3,7 @@ import {
   buildErrorExamples,
   buildSuccessSchemaWithDataRef,
   ensureCommonSchemas,
-  PUBLIC_USER_SCHEMA,
+  PUBLIC_USER_SCHEMA
 } from 'src/common/swagger/shared';
 const LOGIN_DATA_SCHEMA = '#/components/schemas/LoginData';
 
@@ -15,8 +15,8 @@ export function patchAuthLoginOpenApi(document: OpenAPIObject): void {
     type: 'object',
     required: ['user'],
     properties: {
-      user: { $ref: PUBLIC_USER_SCHEMA },
-    },
+      user: { $ref: PUBLIC_USER_SCHEMA }
+    }
   };
 
   const loginOperation = document.paths?.['/auth/login']?.post;
@@ -34,10 +34,9 @@ export function patchAuthLoginOpenApi(document: OpenAPIObject): void {
       description: 'Login successful',
       headers: {
         'Set-Cookie': {
-          description:
-            'HttpOnly cookies for accessToken and refreshToken are returned.',
-          schema: { type: 'string' },
-        },
+          description: 'HttpOnly cookies for accessToken and refreshToken are returned.',
+          schema: { type: 'string' }
+        }
       },
       content: {
         'application/json': {
@@ -53,12 +52,12 @@ export function patchAuthLoginOpenApi(document: OpenAPIObject): void {
                 credits: 15,
                 createdAt: '2026-04-08T00:00:00.000Z',
                 updatedAt: '2026-04-08T00:00:00.000Z',
-                pwdUpdatedAt: '2026-04-08T00:00:00.000Z',
-              },
-            },
-          },
-        },
-      },
+                pwdUpdatedAt: '2026-04-08T00:00:00.000Z'
+              }
+            }
+          }
+        }
+      }
     },
     '400': {
       description: 'Bad Request',
@@ -70,10 +69,10 @@ export function patchAuthLoginOpenApi(document: OpenAPIObject): void {
             statusCode: 400,
             message: ['email must be an email'],
             timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/login',
-          },
-        },
-      }),
+            path: '/auth/login'
+          }
+        }
+      })
     },
     '401': {
       description: 'Unauthorized',
@@ -85,10 +84,10 @@ export function patchAuthLoginOpenApi(document: OpenAPIObject): void {
             statusCode: 401,
             message: 'Invalid credentials',
             timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/login',
-          },
-        },
-      }),
+            path: '/auth/login'
+          }
+        }
+      })
     },
     '500': {
       description: 'Internal Server Error',
@@ -100,10 +99,10 @@ export function patchAuthLoginOpenApi(document: OpenAPIObject): void {
             statusCode: 500,
             message: 'Internal server error',
             timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/login',
-          },
-        },
-      }),
-    },
+            path: '/auth/login'
+          }
+        }
+      })
+    }
   };
 }

@@ -10,7 +10,7 @@ import { CreateThumbnailDto } from 'src/thumbnails/dto/create-thumbnail.dto';
 export class ThumbnailJobsService {
   constructor(
     private readonly thumbnailJobsRepository: ThumbnailJobsRepository,
-    private readonly sqsService: SqsService,
+    private readonly sqsService: SqsService
   ) {}
 
   async createJob(payload: CreateThumbnailDto, userId: string) {
@@ -19,7 +19,7 @@ export class ThumbnailJobsService {
       id,
       userId,
       payload,
-      status: 'QUEUED',
+      status: 'QUEUED'
     };
 
     await this.thumbnailJobsRepository.createJob(job);
@@ -27,12 +27,12 @@ export class ThumbnailJobsService {
     await this.sqsService.sendMessage({
       id,
       userId,
-      payload,
+      payload
     });
 
     return {
       jobId: id,
-      status: 'QUEUED',
+      status: 'QUEUED'
     };
   }
 
@@ -50,7 +50,7 @@ export class ThumbnailJobsService {
       error: job.error,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,
-      completedAt: job.completedAt,
+      completedAt: job.completedAt
     };
   }
 }

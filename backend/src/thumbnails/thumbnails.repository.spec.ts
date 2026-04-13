@@ -7,10 +7,10 @@ import { ThumbnailsRepository } from './thumbnails.repository';
 describe('ThumbnailsRepository', () => {
   let repository: ThumbnailsRepository;
   const ddb = {
-    send: jest.fn(),
+    send: jest.fn()
   };
   const configService = {
-    getOrThrow: jest.fn(),
+    getOrThrow: jest.fn()
   };
 
   beforeEach(async () => {
@@ -24,13 +24,13 @@ describe('ThumbnailsRepository', () => {
         ThumbnailsRepository,
         {
           provide: ConfigService,
-          useValue: configService,
+          useValue: configService
         },
         {
           provide: DDB,
-          useValue: ddb,
-        },
-      ],
+          useValue: ddb
+        }
+      ]
     }).compile();
 
     repository = module.get(ThumbnailsRepository);
@@ -54,7 +54,7 @@ describe('ThumbnailsRepository', () => {
       colorScheme: 'vibrant',
       provider: 'vertex',
       model: 'gemini-2.5-flash-image',
-      imageUrl: 'https://cdn.example.com/generated-images/thumb.png',
+      imageUrl: 'https://cdn.example.com/generated-images/thumb.png'
     });
 
     expect(ddb.send).toHaveBeenCalledWith(expect.any(PutCommand));
@@ -75,8 +75,8 @@ describe('ThumbnailsRepository', () => {
         model: 'gemini-2.5-flash-image',
         imageUrl: 'https://cdn.example.com/generated-images/thumb.png',
         visibility: 'private',
-        createdAt: '2026-04-12T10:00:00.000Z',
-      },
+        createdAt: '2026-04-12T10:00:00.000Z'
+      }
     });
     expect(result).toEqual({
       id: 'thumbnail-1',
@@ -91,7 +91,7 @@ describe('ThumbnailsRepository', () => {
       model: 'gemini-2.5-flash-image',
       imageUrl: 'https://cdn.example.com/generated-images/thumb.png',
       visibility: 'private',
-      createdAt: '2026-04-12T10:00:00.000Z',
+      createdAt: '2026-04-12T10:00:00.000Z'
     });
   });
 
@@ -101,14 +101,14 @@ describe('ThumbnailsRepository', () => {
         id: 'thumbnail-1',
         userId: 'user-1',
         visibility: 'public',
-        updatedAt: '2026-04-12T10:00:00.000Z',
-      },
+        updatedAt: '2026-04-12T10:00:00.000Z'
+      }
     });
 
     const result = await repository.updateThumbnail({
       id: 'thumbnail-1',
       userId: 'user-1',
-      visibility: 'public',
+      visibility: 'public'
     });
 
     expect(ddb.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
@@ -121,16 +121,16 @@ describe('ThumbnailsRepository', () => {
       ExpressionAttributeValues: {
         ':visibility': 'public',
         ':updatedAt': '2026-04-12T10:00:00.000Z',
-        ':userId': 'user-1',
+        ':userId': 'user-1'
       },
       ConditionExpression: 'attribute_exists(id) AND userId = :userId',
-      ReturnValues: 'ALL_NEW',
+      ReturnValues: 'ALL_NEW'
     });
     expect(result).toEqual({
       id: 'thumbnail-1',
       userId: 'user-1',
       visibility: 'public',
-      updatedAt: '2026-04-12T10:00:00.000Z',
+      updatedAt: '2026-04-12T10:00:00.000Z'
     });
   });
 });

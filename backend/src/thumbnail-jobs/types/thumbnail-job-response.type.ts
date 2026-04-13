@@ -1,6 +1,6 @@
 import {
   ThumbnailJobError,
-  ThumbnailJobResult,
+  ThumbnailJobResult
 } from 'src/thumbnail-jobs/entities/thumbnail-job.entity';
 import { ThumbnailJobStatus } from 'src/thumbnail-jobs/types/thumbnail-job-status.type';
 

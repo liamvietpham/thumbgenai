@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ValidationPipe,
-  type INestApplication,
-} from '@nestjs/common';
+import { BadRequestException, ValidationPipe, type INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -21,13 +17,11 @@ export async function createApp(): Promise<INestApplication> {
       transform: true,
       stopAtFirstError: true,
       exceptionFactory: (errors) => {
-        const messages = errors.flatMap((error) =>
-          Object.values(error.constraints ?? {}),
-        );
+        const messages = errors.flatMap((error) => Object.values(error.constraints ?? {}));
 
         return new BadRequestException(messages);
-      },
-    }),
+      }
+    })
   );
 
   const openApiConfig = new DocumentBuilder()
@@ -50,14 +44,14 @@ export async function createApp(): Promise<INestApplication> {
         theme: 'default',
         layout: 'modern',
         authentication: { preferredSecurityScheme: 'bearerAuth' },
-        hideModels: true,
-      }),
+        hideModels: true
+      })
     );
   }
 
   app.enableCors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true,
+    credentials: true
   });
 
   return app;

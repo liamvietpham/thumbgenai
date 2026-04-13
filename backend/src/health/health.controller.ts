@@ -6,7 +6,7 @@ export class HealthController {
   getStatus() {
     return {
       status: 'ok',
-      service: 'thumbgen-ai-backend',
+      service: 'thumbgen-ai-backend'
     };
   }
 }

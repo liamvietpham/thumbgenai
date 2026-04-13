@@ -3,7 +3,7 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
-  UpdateCommand,
+  UpdateCommand
 } from '@aws-sdk/lib-dynamodb';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +18,7 @@ export class SessionRepository {
 
   constructor(
     @Inject(DDB) private readonly ddb: DynamoDBDocumentClient,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
     this.tableName = this.configService.getOrThrow<string>('SESSIONS_TABLE');
   }
@@ -33,15 +33,15 @@ export class SessionRepository {
       ttl: data.ttl,
       expiresAt: data.expiresAt,
       createdAt: now,
-      updatedAt: now,
+      updatedAt: now
     };
 
     await this.ddb.send(
       new PutCommand({
         TableName: this.tableName,
         Item: session,
-        ConditionExpression: 'attribute_not_exists(id)',
-      }),
+        ConditionExpression: 'attribute_not_exists(id)'
+      })
     );
   }
 
@@ -49,8 +49,8 @@ export class SessionRepository {
     await this.ddb.send(
       new DeleteCommand({
         TableName: this.tableName,
-        Key: { id: sid },
-      }),
+        Key: { id: sid }
+      })
     );
   }
 
@@ -58,8 +58,8 @@ export class SessionRepository {
     const result = await this.ddb.send(
       new GetCommand({
         TableName: this.tableName,
-        Key: { id: sid },
-      }),
+        Key: { id: sid }
+      })
     );
 
     return result.Item as SessionEntity | undefined;
@@ -77,11 +77,10 @@ export class SessionRepository {
           ':ttl': data.ttl,
           ':expiresAt': data.expiresAt,
           ':updatedAt': data.updatedAt,
-          ':curRefreshToken': data.curRefreshToken,
+          ':curRefreshToken': data.curRefreshToken
         },
-        ConditionExpression:
-          'attribute_exists(id) AND refreshToken = :curRefreshToken',
-      }),
+        ConditionExpression: 'attribute_exists(id) AND refreshToken = :curRefreshToken'
+      })
     );
   }
 }

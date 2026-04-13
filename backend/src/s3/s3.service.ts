@@ -20,20 +20,14 @@ export class S3Service {
       region: this.configService.getOrThrow<string>('AWS_REGION'),
       credentials: {
         accessKeyId: this.configService.getOrThrow<string>('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.getOrThrow<string>(
-          'AWS_SECRET_ACCESS_KEY',
-        ),
-      },
+        secretAccessKey: this.configService.getOrThrow<string>('AWS_SECRET_ACCESS_KEY')
+      }
     });
     this.bucketName = this.configService.getOrThrow<string>('AWS_BUCKET_NAME');
-    this.cdnDomain = this.configService.getOrThrow<string>(
-      'AWS_CLOUDFRONT_DOMAIN',
-    );
+    this.cdnDomain = this.configService.getOrThrow<string>('AWS_CLOUDFRONT_DOMAIN');
   }
 
-  async createPresignedUrl(
-    payload: CreatePresignedUrlDto,
-  ): Promise<PresignedUrlResponse> {
+  async createPresignedUrl(payload: CreatePresignedUrlDto): Promise<PresignedUrlResponse> {
     const { fileName: fileNamePayload, contentType } = payload;
     const fileName = generateFileName(fileNamePayload, contentType);
 
@@ -43,11 +37,11 @@ export class S3Service {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
-      ContentType: contentType,
+      ContentType: contentType
     });
 
     const signedUrl = await getSignedUrl(this.s3Client, command, {
-      expiresIn: 60 * 5,
+      expiresIn: 60 * 5
     });
 
     return { signedUrl, url: this.getFileUrl(key) };
@@ -57,17 +51,15 @@ export class S3Service {
     const { fileName, contentType, file, folderName } = payload;
     const fileId = await generateId();
     const folder = folderName ? `${folderName}` : '';
-    const key = folder
-      ? `${folder}/${fileId}-${fileName}`
-      : `${fileId}-${fileName}`;
+    const key = folder ? `${folder}/${fileId}-${fileName}` : `${fileId}-${fileName}`;
 
     await this.s3Client.send(
       new PutObjectCommand({
         Bucket: this.bucketName,
         Key: key,
         Body: file,
-        ContentType: contentType,
-      }),
+        ContentType: contentType
+      })
     );
 
     return this.getFileUrl(key);

@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import type { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
@@ -30,10 +26,10 @@ describe('AuthController', () => {
             register: jest.fn(),
             login: jest.fn(),
             logout: jest.fn(),
-            refresh: jest.fn(),
-          },
-        },
-      ],
+            refresh: jest.fn()
+          }
+        }
+      ]
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -53,7 +49,7 @@ describe('AuthController', () => {
       name: 'John Doe',
       email: 'john@example.com',
       password: 'password-123',
-      confirmPassword: 'password-123',
+      confirmPassword: 'password-123'
     };
     const registerResult = {
       id: 'user-2',
@@ -62,14 +58,12 @@ describe('AuthController', () => {
       credits: 15,
       createdAt: '2026-04-07T00:00:00.000Z',
       updatedAt: '2026-04-07T00:00:00.000Z',
-      pwdUpdatedAt: '2026-04-07T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
     };
 
     authService.register.mockResolvedValue(registerResult);
 
-    await expect(controller.register(registerDto)).resolves.toEqual(
-      registerResult,
-    );
+    await expect(controller.register(registerDto)).resolves.toEqual(registerResult);
     expect(authService.register).toHaveBeenCalledTimes(1);
     expect(authService.register).toHaveBeenCalledWith(registerDto);
   });
@@ -79,7 +73,7 @@ describe('AuthController', () => {
       name: 'John Doe',
       email: 'john@example.com',
       password: 'password-123',
-      confirmPassword: 'password-123',
+      confirmPassword: 'password-123'
     };
     const conflictError = new ConflictException('User already exists');
 
@@ -94,7 +88,7 @@ describe('AuthController', () => {
 
     const loginDto = {
       email: 'john@example.com',
-      password: 'password-123',
+      password: 'password-123'
     };
     const loginResult = {
       accessToken: 'access-token',
@@ -105,63 +99,51 @@ describe('AuthController', () => {
         id: 'user-1',
         name: 'John Doe',
         email: 'john@example.com',
-        credits: 15,
-      },
+        credits: 15
+      }
     };
 
     const cookieSpy = jest.fn();
     const response = {
-      cookie: cookieSpy,
+      cookie: cookieSpy
     } as unknown as Response;
 
     authService.login.mockResolvedValue(loginResult);
 
     await expect(controller.login(loginDto, response)).resolves.toEqual({
-      user: loginResult.user,
+      user: loginResult.user
     });
 
     expect(authService.login).toHaveBeenCalledWith(loginDto);
-    expect(cookieSpy).toHaveBeenNthCalledWith(
-      1,
-      'accessToken',
-      'access-token',
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 900_000,
-      },
-    );
-    expect(cookieSpy).toHaveBeenNthCalledWith(
-      2,
-      'refreshToken',
-      'refresh-token',
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 604_800_000,
-        path: '/auth',
-      },
-    );
+    expect(cookieSpy).toHaveBeenNthCalledWith(1, 'accessToken', 'access-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 900_000
+    });
+    expect(cookieSpy).toHaveBeenNthCalledWith(2, 'refreshToken', 'refresh-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 604_800_000,
+      path: '/auth'
+    });
   });
 
   it('propagates service errors from login', async () => {
     const loginDto = {
       email: 'john@example.com',
-      password: 'password-123',
+      password: 'password-123'
     };
     const cookieSpy = jest.fn();
     const response = {
-      cookie: cookieSpy,
+      cookie: cookieSpy
     } as unknown as Response;
     const unauthorizedError = new UnauthorizedException('Invalid credentials');
 
     authService.login.mockRejectedValue(unauthorizedError);
 
-    await expect(controller.login(loginDto, response)).rejects.toBe(
-      unauthorizedError,
-    );
+    await expect(controller.login(loginDto, response)).rejects.toBe(unauthorizedError);
     expect(cookieSpy).not.toHaveBeenCalled();
   });
 
@@ -170,30 +152,30 @@ describe('AuthController', () => {
 
     const clearCookieSpy = jest.fn();
     const response = {
-      clearCookie: clearCookieSpy,
+      clearCookie: clearCookieSpy
     } as unknown as Response;
     const request = {
       cookies: {
-        refreshToken: 'refresh-token',
-      },
+        refreshToken: 'refresh-token'
+      }
     } as unknown as Request;
 
     authService.logout.mockResolvedValue(undefined);
 
     await expect(controller.logout(response, request)).resolves.toEqual({
-      message: 'Logged out successfully',
+      message: 'Logged out successfully'
     });
 
     expect(clearCookieSpy).toHaveBeenNthCalledWith(1, 'accessToken', {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'strict'
     });
     expect(clearCookieSpy).toHaveBeenNthCalledWith(2, 'refreshToken', {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      path: '/auth',
+      path: '/auth'
     });
     expect(authService.logout).toHaveBeenCalledWith('refresh-token');
   });
@@ -201,20 +183,16 @@ describe('AuthController', () => {
   it('clears cookies before propagating logout service errors', async () => {
     const clearCookieSpy = jest.fn();
     const response = {
-      clearCookie: clearCookieSpy,
+      clearCookie: clearCookieSpy
     } as unknown as Response;
     const request = {
-      cookies: {},
+      cookies: {}
     } as unknown as Request;
-    const badRequestError = new BadRequestException(
-      'Refresh token is required',
-    );
+    const badRequestError = new BadRequestException('Refresh token is required');
 
     authService.logout.mockRejectedValue(badRequestError);
 
-    await expect(controller.logout(response, request)).rejects.toBe(
-      badRequestError,
-    );
+    await expect(controller.logout(response, request)).rejects.toBe(badRequestError);
 
     expect(clearCookieSpy).toHaveBeenCalledTimes(2);
     expect(authService.logout).toHaveBeenCalledWith(undefined);
@@ -225,68 +203,54 @@ describe('AuthController', () => {
 
     const cookieSpy = jest.fn();
     const response = {
-      cookie: cookieSpy,
+      cookie: cookieSpy
     } as unknown as Response;
     const request = {
       cookies: {
-        refreshToken: 'current-refresh-token',
-      },
+        refreshToken: 'current-refresh-token'
+      }
     } as unknown as Request;
 
     authService.refresh.mockResolvedValue({
       accessToken: 'next-access-token',
       refreshToken: 'next-refresh-token',
       accessTokenMaxAgeMs: 900_000,
-      refreshTokenMaxAgeMs: 604_800_000,
+      refreshTokenMaxAgeMs: 604_800_000
     });
 
     await expect(controller.refresh(response, request)).resolves.toEqual({
-      message: 'Refresh successful',
+      message: 'Refresh successful'
     });
 
-    expect(cookieSpy).toHaveBeenNthCalledWith(
-      1,
-      'accessToken',
-      'next-access-token',
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 900_000,
-      },
-    );
-    expect(cookieSpy).toHaveBeenNthCalledWith(
-      2,
-      'refreshToken',
-      'next-refresh-token',
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 604_800_000,
-        path: '/auth',
-      },
-    );
+    expect(cookieSpy).toHaveBeenNthCalledWith(1, 'accessToken', 'next-access-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 900_000
+    });
+    expect(cookieSpy).toHaveBeenNthCalledWith(2, 'refreshToken', 'next-refresh-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 604_800_000,
+      path: '/auth'
+    });
     expect(authService.refresh).toHaveBeenCalledWith('current-refresh-token');
   });
 
   it('does not set refresh cookies when refresh fails', async () => {
     const cookieSpy = jest.fn();
     const response = {
-      cookie: cookieSpy,
+      cookie: cookieSpy
     } as unknown as Response;
     const request = {
-      cookies: {},
+      cookies: {}
     } as Request;
-    const unauthorizedError = new UnauthorizedException(
-      'Invalid refresh token',
-    );
+    const unauthorizedError = new UnauthorizedException('Invalid refresh token');
 
     authService.refresh.mockRejectedValue(unauthorizedError);
 
-    await expect(controller.refresh(response, request)).rejects.toBe(
-      unauthorizedError,
-    );
+    await expect(controller.refresh(response, request)).rejects.toBe(unauthorizedError);
 
     expect(cookieSpy).not.toHaveBeenCalled();
   });

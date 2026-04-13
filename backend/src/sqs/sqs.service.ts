@@ -10,19 +10,17 @@ export class SqsService {
 
   constructor(private readonly configService: ConfigService) {
     this.sqsClient = new SQSClient({
-      region: this.configService.getOrThrow<string>('AWS_REGION'),
+      region: this.configService.getOrThrow<string>('AWS_REGION')
     });
-    this.queueUrl = this.configService.getOrThrow<string>(
-      'THUMBNAIL_JOBS_QUEUE_URL',
-    );
+    this.queueUrl = this.configService.getOrThrow<string>('THUMBNAIL_JOBS_QUEUE_URL');
   }
 
   async sendMessage(message: ThumbnailJobMessage) {
     await this.sqsClient.send(
       new SendMessageCommand({
         QueueUrl: this.queueUrl,
-        MessageBody: JSON.stringify(message),
-      }),
+        MessageBody: JSON.stringify(message)
+      })
     );
   }
 }

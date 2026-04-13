@@ -9,6 +9,6 @@ import { ThumbnailJobsModule } from 'src/thumbnail-jobs/thumbnail-jobs.module';
   imports: [AuthModule, ThumbnailJobsModule],
   providers: [ThumbnailsService, ThumbnailsRepository],
   controllers: [ThumbnailsController],
-  exports: [ThumbnailsRepository],
+  exports: [ThumbnailsRepository]
 })
 export class ThumbnailsModule {}

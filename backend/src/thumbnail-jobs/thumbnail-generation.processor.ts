@@ -7,7 +7,7 @@ import {
   COLOR_SCHEME_DESCRIPTIONS,
   STYLE_PROMPTS,
   THUMBNAIL_GENERATION_CONFIG,
-  THUMBNAIL_MODEL,
+  THUMBNAIL_MODEL
 } from 'src/thumbnails/constants/thumbnails.constant';
 import { CreateThumbnailDto } from 'src/thumbnails/dto/create-thumbnail.dto';
 import { Thumbnail } from 'src/thumbnails/entities/thumbnails.entity';
@@ -21,12 +21,10 @@ export class ThumbnailGenerationProcessor {
   constructor(
     private readonly vertexProvider: VertexProvider,
     private readonly s3Service: S3Service,
-    private readonly thumbnailsRepository: ThumbnailsRepository,
+    private readonly thumbnailsRepository: ThumbnailsRepository
   ) {}
 
-  async process(
-    input: ProcessThumbnailJobInput,
-  ): Promise<ProcessThumbnailJobOutput> {
+  async process(input: ProcessThumbnailJobInput): Promise<ProcessThumbnailJobOutput> {
     const { id, userId, payload } = input;
     const promptUsed = this.buildPrompt(payload);
 
@@ -37,17 +35,15 @@ export class ThumbnailGenerationProcessor {
         ...THUMBNAIL_GENERATION_CONFIG,
         imageConfig: {
           aspectRatio: payload.aspectRatio,
-          imageSize: '1K',
-        },
-      },
+          imageSize: '1K'
+        }
+      }
     });
 
     const image = response.images?.[0];
 
     if (!image?.base64 || !image?.mimeType) {
-      throw new BadGatewayException(
-        'Vertex AI returned an invalid image payload',
-      );
+      throw new BadGatewayException('Vertex AI returned an invalid image payload');
     }
 
     const buffer = Buffer.from(image.base64, 'base64');
@@ -56,7 +52,7 @@ export class ThumbnailGenerationProcessor {
       file: buffer,
       fileName,
       contentType: image.mimeType,
-      folderName: THUMBNAIL_UPLOAD_FOLDER,
+      folderName: THUMBNAIL_UPLOAD_FOLDER
     });
 
     const createThumbnailInput: CreateThumbnailInput = {
@@ -70,11 +66,11 @@ export class ThumbnailGenerationProcessor {
       colorScheme: payload.colorScheme,
       provider: response.provider,
       model: response.model ?? THUMBNAIL_MODEL,
-      imageUrl,
+      imageUrl
     };
 
     const thumbnail = (await this.thumbnailsRepository.createThumbnail(
-      createThumbnailInput,
+      createThumbnailInput
     )) as Thumbnail;
 
     return {
@@ -83,8 +79,8 @@ export class ThumbnailGenerationProcessor {
         thumbnailId: thumbnail.id,
         imageUrl: thumbnail.imageUrl,
         provider: thumbnail.provider,
-        model: thumbnail.model,
-      },
+        model: thumbnail.model
+      }
     };
   }
 

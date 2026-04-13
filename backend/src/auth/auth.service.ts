@@ -2,7 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { argon2id, hash, verify } from 'argon2';
@@ -17,7 +17,7 @@ import { RefreshResult } from 'src/auth/types/refresh-result.type';
 import {
   AccessTokenPayload,
   JwtExpPayload,
-  RefreshTokenPayload,
+  RefreshTokenPayload
 } from 'src/auth/types/jwt-payload.type';
 import { generateId } from 'src/common/utils/id.util';
 
@@ -30,14 +30,10 @@ export class AuthService {
     private readonly userRepository: UsersRepository,
     private readonly sessionRepository: SessionRepository,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
-    this.accessSecret = this.configService.getOrThrow<string>(
-      'ACCESS_TOKEN_SECRET',
-    );
-    this.refreshSecret = this.configService.getOrThrow<string>(
-      'REFRESH_TOKEN_SECRET',
-    );
+    this.accessSecret = this.configService.getOrThrow<string>('ACCESS_TOKEN_SECRET');
+    this.refreshSecret = this.configService.getOrThrow<string>('REFRESH_TOKEN_SECRET');
   }
 
   async register(registerDto: RegisterDto): Promise<PublicUser> {
@@ -56,13 +52,13 @@ export class AuthService {
 
     // hash password
     const hashPassword = await hash(password, {
-      type: argon2id,
+      type: argon2id
     });
 
     const createdUser = await this.userRepository.createUser({
       name,
       email,
-      password: hashPassword,
+      password: hashPassword
     });
 
     return mapUserToPublicUser(createdUser);
@@ -89,37 +85,35 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       sid,
-      type: 'access',
+      type: 'access'
     };
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.accessSecret,
-      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL'),
+      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL')
     });
     const refreshToken = this.jwtService.sign(
       { ...payload, type: 'refresh' },
       {
         secret: this.refreshSecret,
-        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL'),
-      },
+        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL')
+      }
     );
 
     const now = Date.now();
-    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(
-      accessToken,
-      { secret: this.accessSecret },
-    );
-    const { exp: refreshExp } =
-      await this.jwtService.verifyAsync<JwtExpPayload>(refreshToken, {
-        secret: this.refreshSecret,
-      });
+    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(accessToken, {
+      secret: this.accessSecret
+    });
+    const { exp: refreshExp } = await this.jwtService.verifyAsync<JwtExpPayload>(refreshToken, {
+      secret: this.refreshSecret
+    });
 
     await this.sessionRepository.createSession({
       sid,
       userId: user.id,
       refreshToken,
       expiresAt: new Date(refreshExp * 1000).toISOString(),
-      ttl: refreshExp,
+      ttl: refreshExp
     });
 
     return {
@@ -127,7 +121,7 @@ export class AuthService {
       refreshToken,
       user: mapUserToPublicUser(user),
       accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
-      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0),
+      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0)
     };
   }
 
@@ -139,12 +133,9 @@ export class AuthService {
     let payload: RefreshTokenPayload;
 
     try {
-      payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(
-        refreshToken,
-        {
-          secret: this.refreshSecret,
-        },
-      );
+      payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(refreshToken, {
+        secret: this.refreshSecret
+      });
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -164,12 +155,9 @@ export class AuthService {
     let decoded: RefreshTokenPayload;
 
     try {
-      decoded = await this.jwtService.verifyAsync<RefreshTokenPayload>(
-        refreshToken,
-        {
-          secret: this.refreshSecret,
-        },
-      );
+      decoded = await this.jwtService.verifyAsync<RefreshTokenPayload>(refreshToken, {
+        secret: this.refreshSecret
+      });
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -196,30 +184,28 @@ export class AuthService {
       sub: decoded.sub,
       email: decoded.email,
       sid: decoded.sid,
-      type: 'access',
+      type: 'access'
     };
 
     const newAccessToken = this.jwtService.sign(payload, {
       secret: this.accessSecret,
-      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL'),
+      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL')
     });
     const newRefreshToken = this.jwtService.sign(
       { ...payload, type: 'refresh' },
       {
         secret: this.refreshSecret,
-        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL'),
-      },
+        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL')
+      }
     );
 
     const now = Date.now();
-    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(
-      newAccessToken,
-      { secret: this.accessSecret },
-    );
-    const { exp: refreshExp } =
-      await this.jwtService.verifyAsync<JwtExpPayload>(newRefreshToken, {
-        secret: this.refreshSecret,
-      });
+    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(newAccessToken, {
+      secret: this.accessSecret
+    });
+    const { exp: refreshExp } = await this.jwtService.verifyAsync<JwtExpPayload>(newRefreshToken, {
+      secret: this.refreshSecret
+    });
 
     try {
       await this.sessionRepository.rotateSession({
@@ -228,7 +214,7 @@ export class AuthService {
         curRefreshToken: refreshToken,
         expiresAt: new Date(refreshExp * 1000).toISOString(),
         ttl: refreshExp,
-        updatedAt: new Date(now).toISOString(),
+        updatedAt: new Date(now).toISOString()
       });
     } catch (error) {
       const err = error as { name?: string };
@@ -244,7 +230,7 @@ export class AuthService {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
       accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
-      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0),
+      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0)
     };
   }
 }

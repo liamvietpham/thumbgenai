@@ -17,8 +17,8 @@ export function ensureCommonSchemas(document: OpenAPIObject): void {
     properties: {
       success: { type: 'boolean', example: true },
       statusCode: { type: 'integer', example: 200 },
-      data: { type: 'object', additionalProperties: true },
-    },
+      data: { type: 'object', additionalProperties: true }
+    }
   };
 
   document.components.schemas.ErrorResponse ??= {
@@ -33,17 +33,17 @@ export function ensureCommonSchemas(document: OpenAPIObject): void {
           {
             type: 'array',
             items: { type: 'string' },
-            example: ['email must be an email', 'password should not be empty'],
-          },
-        ],
+            example: ['email must be an email', 'password should not be empty']
+          }
+        ]
       },
       timestamp: {
         type: 'string',
         format: 'date-time',
-        example: '2026-04-08T00:00:00.000Z',
+        example: '2026-04-08T00:00:00.000Z'
       },
-      path: { type: 'string', example: '/auth/login' },
-    },
+      path: { type: 'string', example: '/auth/login' }
+    }
   };
 
   document.components.schemas.PublicUser ??= {
@@ -57,30 +57,28 @@ export function ensureCommonSchemas(document: OpenAPIObject): void {
       createdAt: {
         type: 'string',
         format: 'date-time',
-        example: '2026-04-08T00:00:00.000Z',
+        example: '2026-04-08T00:00:00.000Z'
       },
       updatedAt: {
         type: 'string',
         format: 'date-time',
-        example: '2026-04-08T00:00:00.000Z',
+        example: '2026-04-08T00:00:00.000Z'
       },
       lastLoginAt: {
         type: 'string',
         format: 'date-time',
-        example: '2026-04-08T00:00:00.000Z',
+        example: '2026-04-08T00:00:00.000Z'
       },
       pwdUpdatedAt: {
         type: 'string',
         format: 'date-time',
-        example: '2026-04-08T00:00:00.000Z',
-      },
-    },
+        example: '2026-04-08T00:00:00.000Z'
+      }
+    }
   };
 }
 
-export function buildSuccessSchemaWithDataRef(
-  dataSchemaRef: string,
-): OpenApiSchema {
+export function buildSuccessSchemaWithDataRef(dataSchemaRef: string): OpenApiSchema {
   return {
     allOf: [
       { $ref: SUCCESS_RESPONSE_SCHEMA },
@@ -88,10 +86,10 @@ export function buildSuccessSchemaWithDataRef(
         type: 'object',
         required: ['data'],
         properties: {
-          data: { $ref: dataSchemaRef },
-        },
-      },
-    ],
+          data: { $ref: dataSchemaRef }
+        }
+      }
+    ]
   };
 }
 
@@ -102,12 +100,12 @@ export function buildErrorExamples(
       summary: string;
       value: ExampleValue;
     }
-  >,
+  >
 ) {
   return {
     'application/json': {
       schema: { $ref: ERROR_RESPONSE_SCHEMA },
-      examples,
-    },
+      examples
+    }
   };
 }

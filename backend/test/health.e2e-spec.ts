@@ -32,8 +32,8 @@ describe('HealthController (e2e)', () => {
       statusCode: 200,
       data: {
         status: 'ok',
-        service: 'thumbgen-ai-backend',
-      },
+        service: 'thumbgen-ai-backend'
+      }
     });
   });
 

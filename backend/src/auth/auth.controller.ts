@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { LoginDto } from 'src/auth/dto/login.dto';
@@ -23,24 +15,15 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(
-    @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.login(loginDto);
-    const {
-      accessToken,
-      refreshToken,
-      user,
-      accessTokenMaxAgeMs,
-      refreshTokenMaxAgeMs,
-    } = result;
+    const { accessToken, refreshToken, user, accessTokenMaxAgeMs, refreshTokenMaxAgeMs } = result;
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
-      maxAge: accessTokenMaxAgeMs,
+      maxAge: accessTokenMaxAgeMs
     });
 
     res.cookie('refreshToken', refreshToken, {
@@ -48,7 +31,7 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
       maxAge: refreshTokenMaxAgeMs,
-      path: '/auth',
+      path: '/auth'
     });
 
     return { user };
@@ -60,43 +43,40 @@ export class AuthController {
     res.clearCookie('accessToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'prod',
-      sameSite: 'strict',
+      sameSite: 'strict'
     });
     res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
-      path: '/auth',
+      path: '/auth'
     });
 
     const refreshToken = req.cookies?.refreshToken as string | undefined;
     await this.authService.logout(refreshToken);
 
     return {
-      message: 'Logged out successfully',
+      message: 'Logged out successfully'
     };
   }
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(
-    @Res({ passthrough: true }) res: Response,
-    @Req() req: Request,
-  ) {
+  async refresh(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
     const refreshToken = req.cookies?.refreshToken as string | undefined;
     const result = await this.authService.refresh(refreshToken);
     const {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
       accessTokenMaxAgeMs,
-      refreshTokenMaxAgeMs,
+      refreshTokenMaxAgeMs
     } = result;
 
     res.cookie('accessToken', newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
-      maxAge: accessTokenMaxAgeMs,
+      maxAge: accessTokenMaxAgeMs
     });
 
     res.cookie('refreshToken', newRefreshToken, {
@@ -104,11 +84,11 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'prod',
       sameSite: 'strict',
       maxAge: refreshTokenMaxAgeMs,
-      path: '/auth',
+      path: '/auth'
     });
 
     return {
-      message: 'Refresh successful',
+      message: 'Refresh successful'
     };
   }
 }

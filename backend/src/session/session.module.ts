@@ -5,6 +5,6 @@ import { SessionRepository } from 'src/session/session.repository';
 @Module({
   providers: [SessionRepository],
   exports: [SessionRepository],
-  imports: [DatabaseModule],
+  imports: [DatabaseModule]
 })
 export class SessionModule {}

@@ -9,6 +9,6 @@ import { SqsModule } from 'src/sqs/sqs.module';
   providers: [ThumbnailJobsService, ThumbnailJobsRepository],
   controllers: [ThumbnailJobsController],
   imports: [AuthModule, SqsModule],
-  exports: [ThumbnailJobsService],
+  exports: [ThumbnailJobsService]
 })
 export class ThumbnailJobsModule {}

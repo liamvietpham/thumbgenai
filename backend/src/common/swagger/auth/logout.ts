@@ -2,7 +2,7 @@ import type { OpenAPIObject } from '@nestjs/swagger';
 import {
   buildErrorExamples,
   buildSuccessSchemaWithDataRef,
-  ensureCommonSchemas,
+  ensureCommonSchemas
 } from 'src/common/swagger/shared';
 
 const LOGOUT_DATA_SCHEMA = '#/components/schemas/LogoutData';
@@ -17,9 +17,9 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
     properties: {
       message: {
         type: 'string',
-        example: 'Logged out successfully',
-      },
-    },
+        example: 'Logged out successfully'
+      }
+    }
   };
 
   const logoutOperation = document.paths?.['/auth/logout']?.post;
@@ -37,10 +37,9 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
       description: 'Logout successful',
       headers: {
         'Set-Cookie': {
-          description:
-            'Expired accessToken and refreshToken cookies are returned.',
-          schema: { type: 'string' },
-        },
+          description: 'Expired accessToken and refreshToken cookies are returned.',
+          schema: { type: 'string' }
+        }
       },
       content: {
         'application/json': {
@@ -49,11 +48,11 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
             success: true,
             statusCode: 200,
             data: {
-              message: 'Logged out successfully',
-            },
-          },
-        },
-      },
+              message: 'Logged out successfully'
+            }
+          }
+        }
+      }
     },
     '401': {
       description: 'Unauthorized',
@@ -65,8 +64,8 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
             statusCode: 401,
             message: 'Invalid refresh token',
             timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/logout',
-          },
+            path: '/auth/logout'
+          }
         },
         invalidRefreshToken: {
           summary: 'Refresh token is invalid or expired',
@@ -75,10 +74,10 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
             statusCode: 401,
             message: 'Invalid refresh token',
             timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/logout',
-          },
-        },
-      }),
+            path: '/auth/logout'
+          }
+        }
+      })
     },
     '500': {
       description: 'Internal Server Error',
@@ -90,10 +89,10 @@ export function patchAuthLogoutOpenApi(document: OpenAPIObject): void {
             statusCode: 500,
             message: 'Internal server error',
             timestamp: '2026-04-08T00:00:00.000Z',
-            path: '/auth/logout',
-          },
-        },
-      }),
-    },
+            path: '/auth/logout'
+          }
+        }
+      })
+    }
   };
 }

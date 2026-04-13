@@ -3,7 +3,7 @@ import {
   Get,
   INestApplication,
   Module,
-  UnprocessableEntityException,
+  UnprocessableEntityException
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
@@ -29,14 +29,14 @@ class ErrorsController {
       message: 'Vertex AI blocked the prompt',
       details: {
         provider: 'vertex',
-        finishReason: 'SAFETY',
-      },
+        finishReason: 'SAFETY'
+      }
     });
   }
 }
 
 @Module({
-  controllers: [ErrorsController],
+  controllers: [ErrorsController]
 })
 class TestErrorsModule {}
 
@@ -46,7 +46,7 @@ describe('AllExceptionsFilter (e2e)', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TestErrorsModule],
+      imports: [TestErrorsModule]
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -66,7 +66,7 @@ describe('AllExceptionsFilter (e2e)', () => {
     expect(body.message).toBe('Vertex AI blocked the prompt');
     expect(body.details).toEqual({
       provider: 'vertex',
-      finishReason: 'SAFETY',
+      finishReason: 'SAFETY'
     });
     expect(body.path).toBe('/errors/details');
     expect(typeof body.timestamp).toBe('string');

@@ -4,11 +4,7 @@ import { createApp } from '../src/app.factory';
 import { AccessTokenPayload } from '../src/auth/types/jwt-payload.type';
 import { ThumbnailJobsService } from '../src/thumbnail-jobs/thumbnail-jobs.service';
 import { ThumbnailsService } from '../src/thumbnails/thumbnails.service';
-import {
-  setupTestEnv,
-  TEST_ACCESS_TOKEN_SECRET,
-  TEST_ACCESS_TOKEN_TTL,
-} from './setup-test-env';
+import { setupTestEnv, TEST_ACCESS_TOKEN_SECRET, TEST_ACCESS_TOKEN_TTL } from './setup-test-env';
 
 type ErrorResponse = {
   success: boolean;
@@ -27,15 +23,9 @@ type SuccessResponse<T> = {
 describe('ThumbnailsModule (e2e)', () => {
   let app: INestApplication;
   let baseUrl: string;
-  let createJobSpy: jest.SpiedFunction<
-    typeof ThumbnailJobsService.prototype.createJob
-  >;
-  let getJobSpy: jest.SpiedFunction<
-    typeof ThumbnailJobsService.prototype.getJob
-  >;
-  let updateThumbnailSpy: jest.SpiedFunction<
-    typeof ThumbnailsService.prototype.updateThumbnail
-  >;
+  let createJobSpy: jest.SpiedFunction<typeof ThumbnailJobsService.prototype.createJob>;
+  let getJobSpy: jest.SpiedFunction<typeof ThumbnailJobsService.prototype.getJob>;
+  let updateThumbnailSpy: jest.SpiedFunction<typeof ThumbnailsService.prototype.updateThumbnail>;
 
   beforeAll(async () => {
     setupTestEnv();
@@ -45,30 +35,26 @@ describe('ThumbnailsModule (e2e)', () => {
   });
 
   beforeEach(() => {
-    createJobSpy = jest
-      .spyOn(ThumbnailJobsService.prototype, 'createJob')
-      .mockResolvedValue({
-        jobId: 'job-1',
-        status: 'QUEUED',
-      });
-    getJobSpy = jest
-      .spyOn(ThumbnailJobsService.prototype, 'getJob')
-      .mockResolvedValue({
-        id: 'job-1',
-        status: 'PROCESSING',
-        result: undefined,
-        error: undefined,
-        createdAt: '2026-04-12T00:00:00.000Z',
-        updatedAt: '2026-04-12T00:00:05.000Z',
-        completedAt: undefined,
-      });
+    createJobSpy = jest.spyOn(ThumbnailJobsService.prototype, 'createJob').mockResolvedValue({
+      jobId: 'job-1',
+      status: 'QUEUED'
+    });
+    getJobSpy = jest.spyOn(ThumbnailJobsService.prototype, 'getJob').mockResolvedValue({
+      id: 'job-1',
+      status: 'PROCESSING',
+      result: undefined,
+      error: undefined,
+      createdAt: '2026-04-12T00:00:00.000Z',
+      updatedAt: '2026-04-12T00:00:05.000Z',
+      completedAt: undefined
+    });
     updateThumbnailSpy = jest
       .spyOn(ThumbnailsService.prototype, 'updateThumbnail')
       .mockResolvedValue({
         id: 'thumbnail-1',
         userId: 'user-1',
         visibility: 'public',
-        updatedAt: '2026-04-12T00:00:00.000Z',
+        updatedAt: '2026-04-12T00:00:00.000Z'
       });
   });
 
@@ -78,11 +64,11 @@ describe('ThumbnailsModule (e2e)', () => {
       sub: 'user-1',
       email: 'john@example.com',
       sid: 'session-1',
-      type: 'access',
+      type: 'access'
     };
     const accessToken = jwtService.sign(payload, {
       secret: TEST_ACCESS_TOKEN_SECRET,
-      expiresIn: TEST_ACCESS_TOKEN_TTL,
+      expiresIn: TEST_ACCESS_TOKEN_TTL
     });
 
     return `accessToken=${accessToken}`;
@@ -92,15 +78,15 @@ describe('ThumbnailsModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/thumbnails`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         title: 'Top smartwatch',
         prompt: 'make it bold',
         style: 'bold_and_graphic',
         aspectRatio: '16:9',
-        colorScheme: 'vibrant',
-      }),
+        colorScheme: 'vibrant'
+      })
     });
     const body = (await response.json()) as ErrorResponse;
 
@@ -118,14 +104,14 @@ describe('ThumbnailsModule (e2e)', () => {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        cookie: createAccessTokenCookie(),
+        cookie: createAccessTokenCookie()
       },
       body: JSON.stringify({
         title: 'Top smartwatch',
         prompt: 'make it bold',
         style: 'bold_and_graphic',
-        aspectRatio: '16:9',
-      }),
+        aspectRatio: '16:9'
+      })
     });
     const body = (await response.json()) as ErrorResponse;
 
@@ -143,16 +129,16 @@ describe('ThumbnailsModule (e2e)', () => {
       prompt: 'make it bold',
       style: 'bold_and_graphic',
       aspectRatio: '16:9',
-      colorScheme: 'vibrant',
+      colorScheme: 'vibrant'
     };
 
     const response = await fetch(`${baseUrl}/thumbnails`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        cookie: createAccessTokenCookie(),
+        cookie: createAccessTokenCookie()
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
     const body = (await response.json()) as SuccessResponse<{
       jobId: string;
@@ -164,7 +150,7 @@ describe('ThumbnailsModule (e2e)', () => {
     expect(body.statusCode).toBe(201);
     expect(body.data).toEqual({
       jobId: 'job-1',
-      status: 'QUEUED',
+      status: 'QUEUED'
     });
     expect(createJobSpy).toHaveBeenCalledWith(payload, 'user-1');
   });
@@ -173,8 +159,8 @@ describe('ThumbnailsModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/thumbnail-jobs/job-1`, {
       method: 'GET',
       headers: {
-        cookie: createAccessTokenCookie(),
-      },
+        cookie: createAccessTokenCookie()
+      }
     });
     const body = (await response.json()) as SuccessResponse<{
       id: string;
@@ -196,7 +182,7 @@ describe('ThumbnailsModule (e2e)', () => {
       error: undefined,
       createdAt: '2026-04-12T00:00:00.000Z',
       updatedAt: '2026-04-12T00:00:05.000Z',
-      completedAt: undefined,
+      completedAt: undefined
     });
     expect(getJobSpy).toHaveBeenCalledWith('job-1', 'user-1');
   });
@@ -206,11 +192,11 @@ describe('ThumbnailsModule (e2e)', () => {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        cookie: createAccessTokenCookie(),
+        cookie: createAccessTokenCookie()
       },
       body: JSON.stringify({
-        visibility: 'public',
-      }),
+        visibility: 'public'
+      })
     });
     const body = (await response.json()) as SuccessResponse<{
       id: string;
@@ -225,12 +211,12 @@ describe('ThumbnailsModule (e2e)', () => {
       id: 'thumbnail-1',
       userId: 'user-1',
       visibility: 'public',
-      updatedAt: '2026-04-12T00:00:00.000Z',
+      updatedAt: '2026-04-12T00:00:00.000Z'
     });
     expect(updateThumbnailSpy).toHaveBeenCalledWith(
       { visibility: 'public' },
       'thumbnail-1',
-      'user-1',
+      'user-1'
     );
   });
 
@@ -239,20 +225,18 @@ describe('ThumbnailsModule (e2e)', () => {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        cookie: createAccessTokenCookie(),
+        cookie: createAccessTokenCookie()
       },
       body: JSON.stringify({
-        visibility: 'hidden',
-      }),
+        visibility: 'hidden'
+      })
     });
     const body = (await response.json()) as ErrorResponse;
 
     expect(response.status).toBe(400);
     expect(body.success).toBe(false);
     expect(body.statusCode).toBe(400);
-    expect(body.message).toEqual([
-      'visibility must be one of the following values: ',
-    ]);
+    expect(body.message).toEqual(['visibility must be one of the following values: ']);
     expect(body.path).toBe('/thumbnails/thumbnail-1');
     expect(updateThumbnailSpy).not.toHaveBeenCalled();
   });

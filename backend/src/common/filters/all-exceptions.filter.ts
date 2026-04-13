@@ -1,10 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request, Response } from 'express';
 
@@ -49,9 +43,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
         message,
         ...(details !== undefined ? { details } : {}),
         timestamp: new Date().toISOString(),
-        path: httpAdapter.getRequestUrl(request) as string,
+        path: httpAdapter.getRequestUrl(request) as string
       },
-      statusCode,
+      statusCode
     );
   }
 }

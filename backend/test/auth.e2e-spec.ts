@@ -5,15 +5,11 @@ import { RefreshTokenPayload } from 'src/auth/types/jwt-payload.type';
 import { generateId } from 'src/common/utils/id.util';
 import { createApp } from '../src/app.factory';
 import { SessionRepository } from '../src/session/session.repository';
-import {
-  setupTestEnv,
-  TEST_REFRESH_TOKEN_SECRET,
-  TEST_REFRESH_TOKEN_TTL,
-} from './setup-test-env';
+import { setupTestEnv, TEST_REFRESH_TOKEN_SECRET, TEST_REFRESH_TOKEN_TTL } from './setup-test-env';
 import { UsersRepository } from '../src/users/users.repository';
 
 jest.mock('src/common/utils/id.util', () => ({
-  generateId: jest.fn(),
+  generateId: jest.fn()
 }));
 
 type ErrorResponse = {
@@ -71,14 +67,14 @@ describe('AuthModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/auth/register`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         name: 'John Doe',
         email: 'john@example.com',
         password: 'password-123',
-        confirmPassword: 'password-456',
-      }),
+        confirmPassword: 'password-456'
+      })
     });
     const body = (await response.json()) as ErrorResponse;
 
@@ -93,12 +89,12 @@ describe('AuthModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         email: 'not-an-email',
-        password: 'password-123',
-      }),
+        password: 'password-123'
+      })
     });
     const body = (await response.json()) as ErrorResponse;
 
@@ -111,21 +107,19 @@ describe('AuthModule (e2e)', () => {
 
   it('POST /auth/login sets auth cookies and returns public user', async () => {
     const storedHash = await hash('password-123', {
-      type: argon2id,
+      type: argon2id
     });
 
-    const findByEmailSpy = jest
-      .spyOn(UsersRepository.prototype, 'findByEmail')
-      .mockResolvedValue({
-        id: 'user-1',
-        name: 'John Doe',
-        email: 'john@example.com',
-        password: storedHash,
-        credits: 15,
-        createdAt: '2026-04-08T00:00:00.000Z',
-        updatedAt: '2026-04-08T00:00:00.000Z',
-        pwdUpdatedAt: '2026-04-08T00:00:00.000Z',
-      });
+    const findByEmailSpy = jest.spyOn(UsersRepository.prototype, 'findByEmail').mockResolvedValue({
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: storedHash,
+      credits: 15,
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-08T00:00:00.000Z'
+    });
 
     const createSessionSpy = jest
       .spyOn(SessionRepository.prototype, 'createSession')
@@ -134,12 +128,12 @@ describe('AuthModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         email: 'john@example.com',
-        password: 'password-123',
-      }),
+        password: 'password-123'
+      })
     });
     const body = (await response.json()) as LoginSuccessResponse;
     const setCookieHeader = response.headers.get('set-cookie') ?? '';
@@ -151,7 +145,7 @@ describe('AuthModule (e2e)', () => {
       id: 'user-1',
       name: 'John Doe',
       email: 'john@example.com',
-      credits: 15,
+      credits: 15
     });
 
     expect(setCookieHeader).toContain('accessToken=');
@@ -173,18 +167,18 @@ describe('AuthModule (e2e)', () => {
       sub: 'user-1',
       email: 'john@example.com',
       sid: 'session-1',
-      type: 'refresh',
+      type: 'refresh'
     };
     const refreshToken = jwtService.sign(payload, {
       secret: TEST_REFRESH_TOKEN_SECRET,
-      expiresIn: TEST_REFRESH_TOKEN_TTL,
+      expiresIn: TEST_REFRESH_TOKEN_TTL
     });
 
     const response = await fetch(`${baseUrl}/auth/logout`, {
       method: 'POST',
       headers: {
-        cookie: `refreshToken=${refreshToken}`,
-      },
+        cookie: `refreshToken=${refreshToken}`
+      }
     });
     const body = (await response.json()) as LogoutSuccessResponse;
     const setCookieHeader = response.headers.get('set-cookie') ?? '';
@@ -194,8 +188,8 @@ describe('AuthModule (e2e)', () => {
       success: true,
       statusCode: 200,
       data: {
-        message: 'Logged out successfully',
-      },
+        message: 'Logged out successfully'
+      }
     });
 
     expect(setCookieHeader).toContain('accessToken=');
@@ -206,7 +200,7 @@ describe('AuthModule (e2e)', () => {
 
   it('POST /auth/logout returns 401 when refresh token cookie is missing', async () => {
     const response = await fetch(`${baseUrl}/auth/logout`, {
-      method: 'POST',
+      method: 'POST'
     });
     const body = (await response.json()) as ErrorResponse;
     const setCookieHeader = response.headers.get('set-cookie') ?? '';
@@ -224,8 +218,8 @@ describe('AuthModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/auth/logout`, {
       method: 'POST',
       headers: {
-        cookie: 'refreshToken=invalid-token',
-      },
+        cookie: 'refreshToken=invalid-token'
+      }
     });
     const body = (await response.json()) as ErrorResponse;
 
@@ -249,18 +243,18 @@ describe('AuthModule (e2e)', () => {
         ttl: 1_700_000_000,
         expiresAt: '2026-04-08T00:00:00.000Z',
         createdAt: '2026-04-08T00:00:00.000Z',
-        updatedAt: '2026-04-08T00:00:00.000Z',
+        updatedAt: '2026-04-08T00:00:00.000Z'
       });
     const jwtService = app.get(JwtService);
     const payload: RefreshTokenPayload = {
       sub: 'user-1',
       email: 'john@example.com',
       sid: 'session-1',
-      type: 'refresh',
+      type: 'refresh'
     };
     const refreshToken = jwtService.sign(payload, {
       secret: TEST_REFRESH_TOKEN_SECRET,
-      expiresIn: TEST_REFRESH_TOKEN_TTL,
+      expiresIn: TEST_REFRESH_TOKEN_TTL
     });
 
     findSessionByIdSpy.mockResolvedValue({
@@ -270,14 +264,14 @@ describe('AuthModule (e2e)', () => {
       ttl: 1_700_000_000,
       expiresAt: '2026-04-08T00:00:00.000Z',
       createdAt: '2026-04-08T00:00:00.000Z',
-      updatedAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z'
     });
 
     const response = await fetch(`${baseUrl}/auth/refresh`, {
       method: 'POST',
       headers: {
-        cookie: `refreshToken=${refreshToken}`,
-      },
+        cookie: `refreshToken=${refreshToken}`
+      }
     });
     const body = (await response.json()) as RefreshSuccessResponse;
     const setCookieHeader = response.headers.get('set-cookie') ?? '';
@@ -287,8 +281,8 @@ describe('AuthModule (e2e)', () => {
       success: true,
       statusCode: 200,
       data: {
-        message: 'Refresh successful',
-      },
+        message: 'Refresh successful'
+      }
     });
     expect(setCookieHeader).toContain('accessToken=');
     expect(setCookieHeader).toContain('refreshToken=');
@@ -299,7 +293,7 @@ describe('AuthModule (e2e)', () => {
 
   it('POST /auth/refresh returns 401 when refresh token cookie is missing', async () => {
     const response = await fetch(`${baseUrl}/auth/refresh`, {
-      method: 'POST',
+      method: 'POST'
     });
     const body = (await response.json()) as ErrorResponse;
 
@@ -314,8 +308,8 @@ describe('AuthModule (e2e)', () => {
     const response = await fetch(`${baseUrl}/auth/refresh`, {
       method: 'POST',
       headers: {
-        cookie: 'refreshToken=invalid-token',
-      },
+        cookie: 'refreshToken=invalid-token'
+      }
     });
     const body = (await response.json()) as ErrorResponse;
 

@@ -19,22 +19,22 @@ describe('ThumbnailsController', () => {
           provide: ThumbnailsService,
           useValue: {
             createThumbnail: jest.fn(),
-            updateThumbnail: jest.fn(),
-          },
+            updateThumbnail: jest.fn()
+          }
         },
         {
           provide: JwtService,
           useValue: {
-            verifyAsync: jest.fn(),
-          },
+            verifyAsync: jest.fn()
+          }
         },
         {
           provide: ConfigService,
           useValue: {
-            getOrThrow: jest.fn().mockReturnValue('test-access-secret'),
-          },
-        },
-      ],
+            getOrThrow: jest.fn().mockReturnValue('test-access-secret')
+          }
+        }
+      ]
     }).compile();
 
     controller = module.get<ThumbnailsController>(ThumbnailsController);
@@ -51,44 +51,39 @@ describe('ThumbnailsController', () => {
       prompt: 'make it bold',
       style: 'bold_and_graphic' as const,
       aspectRatio: '16:9' as const,
-      colorScheme: 'vibrant' as const,
+      colorScheme: 'vibrant' as const
     };
     const createdThumbnail = {
       id: 'thumbnail-1',
       userId: 'user-1',
-      visibility: 'private',
+      visibility: 'private'
     };
 
     thumbnailsService.createThumbnail.mockResolvedValue(createdThumbnail);
 
-    await expect(controller.createThumbnail(payload, 'user-1')).resolves.toBe(
-      createdThumbnail,
-    );
-    expect(thumbnailsService.createThumbnail).toHaveBeenCalledWith(
-      payload,
-      'user-1',
-    );
+    await expect(controller.createThumbnail(payload, 'user-1')).resolves.toBe(createdThumbnail);
+    expect(thumbnailsService.createThumbnail).toHaveBeenCalledWith(payload, 'user-1');
   });
 
   it('forwards visibility updates to the thumbnails service', async () => {
     const payload = {
-      visibility: 'public' as const,
+      visibility: 'public' as const
     };
     const updatedThumbnail = {
       id: 'thumbnail-1',
       userId: 'user-1',
-      visibility: 'public',
+      visibility: 'public'
     };
 
     thumbnailsService.updateThumbnail.mockResolvedValue(updatedThumbnail);
 
-    await expect(
-      controller.updateThumbnail(payload, 'user-1', 'thumbnail-1'),
-    ).resolves.toBe(updatedThumbnail);
+    await expect(controller.updateThumbnail(payload, 'user-1', 'thumbnail-1')).resolves.toBe(
+      updatedThumbnail
+    );
     expect(thumbnailsService.updateThumbnail).toHaveBeenCalledWith(
       payload,
       'thumbnail-1',
-      'user-1',
+      'user-1'
     );
   });
 });

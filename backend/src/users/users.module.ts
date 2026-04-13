@@ -5,6 +5,6 @@ import { UsersRepository } from 'src/users/users.repository';
 @Module({
   providers: [UsersRepository],
   exports: [UsersRepository],
-  imports: [DatabaseModule],
+  imports: [DatabaseModule]
 })
 export class UsersModule {}

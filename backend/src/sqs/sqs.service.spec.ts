@@ -7,7 +7,7 @@ describe('SqsService', () => {
   let service: SqsService;
   let sendSpy: jest.SpyInstance | undefined;
   const configService = {
-    getOrThrow: jest.fn(),
+    getOrThrow: jest.fn()
   };
 
   beforeEach(async () => {
@@ -29,17 +29,14 @@ describe('SqsService', () => {
         SqsService,
         {
           provide: ConfigService,
-          useValue: configService,
-        },
-      ],
+          useValue: configService
+        }
+      ]
     }).compile();
 
     service = module.get<SqsService>(SqsService);
     sendSpy = jest
-      .spyOn(
-        (service as unknown as { sqsClient: { send: jest.Mock } }).sqsClient,
-        'send',
-      )
+      .spyOn((service as unknown as { sqsClient: { send: jest.Mock } }).sqsClient, 'send')
       .mockResolvedValue({} as never);
   });
 
@@ -59,22 +56,19 @@ describe('SqsService', () => {
         title: 'Top smartwatch',
         style: 'bold_and_graphic' as const,
         aspectRatio: '16:9' as const,
-        colorScheme: 'vibrant' as const,
-      },
+        colorScheme: 'vibrant' as const
+      }
     };
 
     await service.sendMessage(message);
 
     expect(sendSpy).toHaveBeenCalledTimes(1);
-    const command = (
-      sendSpy?.mock.calls[0] as unknown as [SendMessageCommand]
-    )[0];
+    const command = (sendSpy?.mock.calls[0] as unknown as [SendMessageCommand])[0];
 
     expect(command).toBeInstanceOf(SendMessageCommand);
     expect(command.input).toEqual({
-      QueueUrl:
-        'https://sqs.ap-southeast-1.amazonaws.com/123456789012/thumbgen-thumbnail-jobs',
-      MessageBody: JSON.stringify(message),
+      QueueUrl: 'https://sqs.ap-southeast-1.amazonaws.com/123456789012/thumbgen-thumbnail-jobs',
+      MessageBody: JSON.stringify(message)
     });
   });
 });

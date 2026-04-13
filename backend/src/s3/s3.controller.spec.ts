@@ -18,28 +18,28 @@ describe('S3Controller', () => {
         {
           provide: S3Service,
           useValue: {
-            createPresignedUrl: jest.fn(),
-          },
+            createPresignedUrl: jest.fn()
+          }
         },
         {
           provide: JwtService,
           useValue: {
-            verifyAsync: jest.fn(),
-          },
+            verifyAsync: jest.fn()
+          }
         },
         {
           provide: ConfigService,
           useValue: {
-            getOrThrow: jest.fn().mockReturnValue('test-access-secret'),
-          },
+            getOrThrow: jest.fn().mockReturnValue('test-access-secret')
+          }
         },
         {
           provide: AccessTokenGuard,
           useValue: {
-            canActivate: jest.fn().mockResolvedValue(true),
-          },
-        },
-      ],
+            canActivate: jest.fn().mockResolvedValue(true)
+          }
+        }
+      ]
     }).compile();
 
     controller = module.get<S3Controller>(S3Controller);
@@ -53,18 +53,16 @@ describe('S3Controller', () => {
   it('forwards presigned url requests to the s3 service', async () => {
     const payload = {
       fileName: 'thumbnail.png',
-      contentType: 'image/png',
+      contentType: 'image/png'
     };
     const response = {
       signedUrl: 'https://signed.example.com/upload',
-      url: 'https://cdn.example.com/uploads/file-1-thumbnail.png',
+      url: 'https://cdn.example.com/uploads/file-1-thumbnail.png'
     };
 
     s3Service.createPresignedUrl.mockResolvedValue(response);
 
-    await expect(controller.createPresignedUrl(payload)).resolves.toBe(
-      response,
-    );
+    await expect(controller.createPresignedUrl(payload)).resolves.toBe(response);
     expect(s3Service.createPresignedUrl).toHaveBeenCalledWith(payload);
   });
 });

@@ -1,8 +1,5 @@
 import type { OpenAPIObject } from '@nestjs/swagger';
-import {
-  buildSuccessSchemaWithDataRef,
-  ensureCommonSchemas,
-} from 'src/common/swagger/shared';
+import { buildSuccessSchemaWithDataRef, ensureCommonSchemas } from 'src/common/swagger/shared';
 
 const HEALTH_DATA_SCHEMA = '#/components/schemas/HealthData';
 
@@ -15,8 +12,8 @@ export function patchHealthStatusOpenApi(document: OpenAPIObject): void {
     required: ['status', 'service'],
     properties: {
       status: { type: 'string', example: 'ok' },
-      service: { type: 'string', example: 'thumbgen-ai-backend' },
-    },
+      service: { type: 'string', example: 'thumbgen-ai-backend' }
+    }
   };
 
   const healthOperation = document.paths?.['/health']?.get;
@@ -25,8 +22,7 @@ export function patchHealthStatusOpenApi(document: OpenAPIObject): void {
 
   healthOperation.tags ??= ['Health'];
   healthOperation.summary ??= 'Health check';
-  healthOperation.description ??=
-    'Return service metadata for liveness checks.';
+  healthOperation.description ??= 'Return service metadata for liveness checks.';
 
   healthOperation.responses = {
     ...healthOperation.responses,
@@ -40,11 +36,11 @@ export function patchHealthStatusOpenApi(document: OpenAPIObject): void {
             statusCode: 200,
             data: {
               status: 'ok',
-              service: 'thumbgen-ai-backend',
-            },
-          },
-        },
-      },
-    },
+              service: 'thumbgen-ai-backend'
+            }
+          }
+        }
+      }
+    }
   };
 }

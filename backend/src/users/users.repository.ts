@@ -1,8 +1,4 @@
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  TransactWriteCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { generateId } from 'src/common/utils/id.util';
@@ -16,7 +12,7 @@ export class UsersRepository {
 
   constructor(
     @Inject(DDB) private readonly ddb: DynamoDBDocumentClient,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
     this.tableName = this.configService.getOrThrow<string>('USERS_TABLE');
   }
@@ -28,10 +24,10 @@ export class UsersRepository {
         IndexName: 'email-index',
         KeyConditionExpression: 'email = :email',
         ExpressionAttributeValues: {
-          ':email': email,
+          ':email': email
         },
-        Limit: 1,
-      }),
+        Limit: 1
+      })
     );
 
     return (result.Items?.[0] as UserEntity | undefined) ?? null;
@@ -49,7 +45,7 @@ export class UsersRepository {
       credits: 15,
       createdAt: now,
       updatedAt: now,
-      pwdUpdatedAt: now,
+      pwdUpdatedAt: now
     };
 
     try {
@@ -60,8 +56,8 @@ export class UsersRepository {
               Put: {
                 TableName: this.tableName,
                 Item: user,
-                ConditionExpression: 'attribute_not_exists(id)',
-              },
+                ConditionExpression: 'attribute_not_exists(id)'
+              }
             },
             {
               Put: {
@@ -70,13 +66,13 @@ export class UsersRepository {
                   id: `email#${user.email}`,
                   isEmailLock: true,
                   userId: user.id,
-                  createdAt: now,
+                  createdAt: now
                 },
-                ConditionExpression: 'attribute_not_exists(id)',
-              },
-            },
-          ],
-        }),
+                ConditionExpression: 'attribute_not_exists(id)'
+              }
+            }
+          ]
+        })
       );
     } catch (error) {
       const err = error as { name?: string; message?: string };

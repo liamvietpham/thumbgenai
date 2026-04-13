@@ -23,16 +23,16 @@ describe('ThumbnailsService', () => {
         {
           provide: ThumbnailsRepository,
           useValue: {
-            updateThumbnail: jest.fn(),
-          },
+            updateThumbnail: jest.fn()
+          }
         },
         {
           provide: ThumbnailJobsService,
           useValue: {
-            createJob: jest.fn(),
-          },
-        },
-      ],
+            createJob: jest.fn()
+          }
+        }
+      ]
     }).compile();
 
     service = module.get<ThumbnailsService>(ThumbnailsService);
@@ -43,25 +43,22 @@ describe('ThumbnailsService', () => {
   it('delegates thumbnail creation to thumbnail jobs and returns queued job metadata', async () => {
     thumbnailJobsService.createJob.mockResolvedValue({
       jobId: 'job-1',
-      status: 'QUEUED',
+      status: 'QUEUED'
     });
 
     const payload = {
       title: 'Ảnh thumbnail đẹp',
       style: 'tech_futuristic' as const,
       aspectRatio: '16:9' as const,
-      colorScheme: 'neon' as const,
+      colorScheme: 'neon' as const
     };
 
     await expect(service.createThumbnail(payload, 'user-1')).resolves.toEqual({
       jobId: 'job-1',
-      status: 'QUEUED',
+      status: 'QUEUED'
     });
 
-    expect(thumbnailJobsService.createJob).toHaveBeenCalledWith(
-      payload,
-      'user-1',
-    );
+    expect(thumbnailJobsService.createJob).toHaveBeenCalledWith(payload, 'user-1');
   });
 
   it('forwards visibility updates with the current user ownership scope', async () => {
@@ -69,21 +66,21 @@ describe('ThumbnailsService', () => {
       id: 'thumbnail-1',
       userId: 'user-1',
       visibility: 'public',
-      updatedAt: '2026-04-12T00:00:00.000Z',
+      updatedAt: '2026-04-12T00:00:00.000Z'
     } as Awaited<ReturnType<ThumbnailsRepository['updateThumbnail']>>);
 
     await service.updateThumbnail(
       {
-        visibility: 'public',
+        visibility: 'public'
       },
       'thumbnail-1',
-      'user-1',
+      'user-1'
     );
 
     expect(thumbnailsRepository.updateThumbnail).toHaveBeenCalledWith({
       id: 'thumbnail-1',
       userId: 'user-1',
-      visibility: 'public',
+      visibility: 'public'
     });
   });
 });

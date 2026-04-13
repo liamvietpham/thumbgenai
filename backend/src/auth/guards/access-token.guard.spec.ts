@@ -21,7 +21,7 @@ describe('AccessTokenGuard', () => {
     verifyAsyncSpy = jest.spyOn(jwtService, 'verifyAsync');
 
     const configService = {
-      getOrThrow: jest.fn().mockReturnValue('test-access-secret'),
+      getOrThrow: jest.fn().mockReturnValue('test-access-secret')
     } as unknown as ConfigService;
 
     guard = new AccessTokenGuard(jwtService, configService);
@@ -30,36 +30,36 @@ describe('AccessTokenGuard', () => {
   const buildContext = (request: AuthenticatedRequest) =>
     ({
       switchToHttp: () => ({
-        getRequest: () => request,
-      }),
+        getRequest: () => request
+      })
     }) as ExecutionContext;
 
   it('attaches the decoded JWT payload to the request when the cookie is valid', async () => {
     const request: AuthenticatedRequest = {
       cookies: {
-        accessToken: 'valid-token',
-      },
+        accessToken: 'valid-token'
+      }
     };
     const payload = {
       sub: 'user-1',
       email: 'john@example.com',
       sid: 'session-1',
-      type: 'access' as const,
+      type: 'access' as const
     };
 
     verifyAsyncSpy.mockResolvedValue(payload);
 
     await expect(guard.canActivate(buildContext(request))).resolves.toBe(true);
     expect(verifyAsyncSpy).toHaveBeenCalledWith('valid-token', {
-      secret: 'test-access-secret',
+      secret: 'test-access-secret'
     });
     expect(request.user).toEqual(payload);
   });
 
   it('rejects requests when the access token cookie is missing', async () => {
-    await expect(
-      guard.canActivate(buildContext({ cookies: {} })),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(guard.canActivate(buildContext({ cookies: {} }))).rejects.toThrow(
+      UnauthorizedException
+    );
     expect(verifyAsyncSpy).not.toHaveBeenCalled();
   });
 
@@ -70,10 +70,10 @@ describe('AccessTokenGuard', () => {
       guard.canActivate(
         buildContext({
           cookies: {
-            accessToken: 'invalid-token',
-          },
-        }),
-      ),
+            accessToken: 'invalid-token'
+          }
+        })
+      )
     ).rejects.toThrow(UnauthorizedException);
   });
 });

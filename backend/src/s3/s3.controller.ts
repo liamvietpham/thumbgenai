@@ -10,9 +10,7 @@ export class S3Controller {
 
   @UseGuards(AccessTokenGuard)
   @Post('presigned-url')
-  createPresignedUrl(
-    @Body() payload: CreatePresignedUrlDto,
-  ): Promise<PresignedUrlResponse> {
+  createPresignedUrl(@Body() payload: CreatePresignedUrlDto): Promise<PresignedUrlResponse> {
     return this.s3Service.createPresignedUrl(payload);
   }
 }

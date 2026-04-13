@@ -6,7 +6,7 @@ describe('HealthController', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [HealthController],
+      controllers: [HealthController]
     }).compile();
 
     healthController = app.get<HealthController>(HealthController);
@@ -15,7 +15,7 @@ describe('HealthController', () => {
   it('should return backend health metadata', () => {
     expect(healthController.getStatus()).toEqual({
       status: 'ok',
-      service: 'thumbgen-ai-backend',
+      service: 'thumbgen-ai-backend'
     });
   });
 });

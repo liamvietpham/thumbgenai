@@ -2,7 +2,7 @@ import type { OpenAPIObject } from '@nestjs/swagger';
 import {
   buildErrorExamples,
   buildSuccessSchemaWithDataRef,
-  ensureCommonSchemas,
+  ensureCommonSchemas
 } from 'src/common/swagger/shared';
 
 const REFRESH_DATA_SCHEMA = '#/components/schemas/RefreshData';
@@ -17,9 +17,9 @@ export function patchAuthRefreshOpenApi(document: OpenAPIObject): void {
     properties: {
       message: {
         type: 'string',
-        example: 'Refresh successful',
-      },
-    },
+        example: 'Refresh successful'
+      }
+    }
   };
 
   const refreshOperation = document.paths?.['/auth/refresh']?.post;
@@ -39,8 +39,8 @@ export function patchAuthRefreshOpenApi(document: OpenAPIObject): void {
         'Set-Cookie': {
           description:
             'HttpOnly cookies for the rotated accessToken and refreshToken are returned.',
-          schema: { type: 'string' },
-        },
+          schema: { type: 'string' }
+        }
       },
       content: {
         'application/json': {
@@ -49,11 +49,11 @@ export function patchAuthRefreshOpenApi(document: OpenAPIObject): void {
             success: true,
             statusCode: 200,
             data: {
-              message: 'Refresh successful',
-            },
-          },
-        },
-      },
+              message: 'Refresh successful'
+            }
+          }
+        }
+      }
     },
     '401': {
       description: 'Unauthorized',
@@ -65,10 +65,10 @@ export function patchAuthRefreshOpenApi(document: OpenAPIObject): void {
             statusCode: 401,
             message: 'Invalid refresh token',
             timestamp: '2026-04-09T00:00:00.000Z',
-            path: '/auth/refresh',
-          },
-        },
-      }),
+            path: '/auth/refresh'
+          }
+        }
+      })
     },
     '500': {
       description: 'Internal Server Error',
@@ -80,10 +80,10 @@ export function patchAuthRefreshOpenApi(document: OpenAPIObject): void {
             statusCode: 500,
             message: 'Internal server error',
             timestamp: '2026-04-09T00:00:00.000Z',
-            path: '/auth/refresh',
-          },
-        },
-      }),
-    },
+            path: '/auth/refresh'
+          }
+        }
+      })
+    }
   };
 }

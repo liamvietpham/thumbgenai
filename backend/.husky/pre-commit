@@ -1,8 +1,13 @@
 #!/bin/sh
 cd backend || exit 1
 
+echo "Running format..."
+yarn format || exit 1
+
 echo "Running lint..."
 yarn lint || exit 1
+
+git add src test || exit 1
 
 echo "Running typecheck..."
 yarn typecheck || exit 1

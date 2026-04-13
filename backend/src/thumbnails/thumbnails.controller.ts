@@ -11,10 +11,7 @@ export class ThumbnailsController {
 
   @UseGuards(AccessTokenGuard)
   @Post()
-  async createThumbnail(
-    @Body() payload: CreateThumbnailDto,
-    @CurrentUser('sub') userId: string,
-  ) {
+  async createThumbnail(@Body() payload: CreateThumbnailDto, @CurrentUser('sub') userId: string) {
     return await this.thumbnailsService.createThumbnail(payload, userId);
   }
 
@@ -23,7 +20,7 @@ export class ThumbnailsController {
   async updateThumbnail(
     @Body() payload: UpdateThumbnailDto,
     @CurrentUser('sub') userId: string,
-    @Param('id') id: string,
+    @Param('id') id: string
   ) {
     return await this.thumbnailsService.updateThumbnail(payload, id, userId);
   }

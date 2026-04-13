@@ -12,15 +12,15 @@ describe('AllExceptionsFilter', () => {
     const httpAdapterHost = {
       httpAdapter: {
         reply,
-        getRequestUrl,
-      },
+        getRequestUrl
+      }
     } as unknown as HttpAdapterHost;
 
     const host = {
       switchToHttp: () => ({
         getRequest: () => request,
-        getResponse: () => response,
-      }),
+        getResponse: () => response
+      })
     } as ArgumentsHost;
 
     const filter = new AllExceptionsFilter(httpAdapterHost);
@@ -30,10 +30,10 @@ describe('AllExceptionsFilter', () => {
         message: 'Vertex AI blocked the prompt',
         details: {
           provider: 'vertex',
-          finishReason: 'SAFETY',
-        },
+          finishReason: 'SAFETY'
+        }
       }),
-      host,
+      host
     );
 
     expect(getRequestUrl).toHaveBeenCalledWith(request);
@@ -45,11 +45,11 @@ describe('AllExceptionsFilter', () => {
         message: 'Vertex AI blocked the prompt',
         details: {
           provider: 'vertex',
-          finishReason: 'SAFETY',
+          finishReason: 'SAFETY'
         },
-        path: '/images/preview',
+        path: '/images/preview'
       }),
-      422,
+      422
     );
   });
 });

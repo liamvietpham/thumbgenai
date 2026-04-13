@@ -18,28 +18,28 @@ describe('ThumbnailJobsController', () => {
         {
           provide: JwtService,
           useValue: {
-            verifyAsync: jest.fn(),
-          },
+            verifyAsync: jest.fn()
+          }
         },
         {
           provide: ConfigService,
           useValue: {
-            getOrThrow: jest.fn().mockReturnValue('test-secret'),
-          },
+            getOrThrow: jest.fn().mockReturnValue('test-secret')
+          }
         },
         {
           provide: AccessTokenGuard,
           useValue: {
-            canActivate: jest.fn().mockResolvedValue(true),
-          },
+            canActivate: jest.fn().mockResolvedValue(true)
+          }
         },
         {
           provide: ThumbnailJobsService,
           useValue: {
-            getJob: jest.fn(),
-          },
-        },
-      ],
+            getJob: jest.fn()
+          }
+        }
+      ]
     }).compile();
 
     controller = module.get<ThumbnailJobsController>(ThumbnailJobsController);
@@ -58,7 +58,7 @@ describe('ThumbnailJobsController', () => {
       error: undefined,
       createdAt: '2026-04-12T00:00:00.000Z',
       updatedAt: '2026-04-12T00:00:05.000Z',
-      completedAt: undefined,
+      completedAt: undefined
     };
 
     thumbnailJobsService.getJob.mockResolvedValue(job);
