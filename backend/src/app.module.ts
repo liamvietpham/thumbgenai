@@ -11,6 +11,7 @@ import { SessionModule } from './session/session.module';
 import { ThumbnailsModule } from './thumbnails/thumbnails.module';
 import { AiModule } from './ai/ai.module';
 import { S3Module } from './s3/s3.module';
+import { ThumbnailJobsModule } from './thumbnail-jobs/thumbnail-jobs.module';
 
 @Module({
   providers: [
@@ -35,6 +36,7 @@ import { S3Module } from './s3/s3.module';
     ThumbnailsModule,
     AiModule,
     S3Module,
+    ThumbnailJobsModule,
   ],
 })
 export class AppModule {}

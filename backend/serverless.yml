@@ -15,6 +15,7 @@ provider:
     USERS_TABLE: ${ssm:/thumbgenai/users-table}
     SESSIONS_TABLE: ${ssm:/thumbgenai/sessions-table}
     THUMBNAILS_TABLE: ${ssm:/thumbgenai/thumbnails-table}
+    THUMBNAIL_JOBS_TABLE: ${ssm:/thumbgenai/thumbnail-jobs-table}
     AWS_BUCKET_NAME: ${ssm:/thumbgenai/aws-bucket-name}
     AWS_CLOUDFRONT_DOMAIN: ${ssm:/thumbgenai/aws-cloudfront-domain}
     ACCESS_TOKEN_SECRET: ${ssm:/thumbgenai/access-token-secret}
