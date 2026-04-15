@@ -51,7 +51,7 @@ export default function ForgotPasswordPage() {
                 name="email"
                 type="email"
                 placeholder="your@studio.com"
-                className="w-full rounded-xl border-0 bg-[var(--surface-container-low)] py-3.5 pl-12 pr-4 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] outline-none transition-all focus:ring-2 focus:ring-[rgba(0,88,190,0.2)]"
+                className="w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] py-3.5 pl-12 pr-4 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]"
               />
             </div>
 

@@ -11,8 +11,8 @@ import PaletteIcon from '@/components/icons/generated/PaletteIcon';
 import SparkIcon from '@/components/icons/generated/SparkIcon';
 import SquareIcon from '@/components/icons/generated/SquareIcon';
 import UserIcon from '@/components/icons/generated/UserIcon';
-import { CopyUrlButton } from '../CopyUrlButton';
-import { COMMUNITY_ITEMS } from '../thumbnails-data';
+import { CopyUrlButton } from '@/components/thumbnails/CopyUrlButton';
+import { COMMUNITY_ITEMS } from '@/components/thumbnails/thumbnails-data';
 
 const COLOR_PALETTES: Record<string, string[]> = {
   ocean:      ['#0058be', '#2170e4', '#57dffe', '#c2c6d6'],

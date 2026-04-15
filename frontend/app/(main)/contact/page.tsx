@@ -2,7 +2,7 @@ import LocationIcon from '@/components/icons/generated/LocationIcon';
 import MailIcon from '@/components/icons/generated/MailIcon';
 
 const fieldShellClass =
-  'w-full rounded-[1rem] border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container-low)] px-4 py-3 text-[var(--on-surface)] placeholder:text-[var(--outline)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,88,190,0.16)] transition-all';
+  'w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] px-4 py-3 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]';
 
 export default function ContactPage() {
   return (

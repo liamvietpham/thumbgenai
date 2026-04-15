@@ -10,7 +10,7 @@ import UploadIcon from '@/components/icons/generated/UploadIcon';
 const sectionLabelClass =
   'block font-headline text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--outline)]';
 const fieldShellClass =
-  'w-full rounded-[1rem] border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container-low)] px-4 py-3 text-[var(--on-surface)] placeholder:text-[var(--outline)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,88,190,0.16)]';
+  'w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] px-4 py-3 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]';
 
 export default function RegeneratePage() {
   const [inputMode, setInputMode] = useState<'upload' | 'url'>('upload');
