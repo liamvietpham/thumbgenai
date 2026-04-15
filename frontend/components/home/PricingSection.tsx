@@ -34,6 +34,27 @@ export function PricingSection({ className = '' }: { className?: string }) {
             <CreditPackCard key={pack.name} pack={pack} />
           ))}
         </div>
+
+        <Link
+          href="/pricing#custom"
+          className="group mt-8 flex cursor-pointer items-center justify-between gap-6 rounded-[1.5rem] border-2 border-dashed border-[rgba(0,88,190,0.25)] bg-[var(--surface-container-low)] p-8 tonal-transition hover:border-[var(--primary)] hover:bg-[var(--surface-container)] md:p-10"
+        >
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--primary)]">Custom Amount</p>
+            <p className="mt-1 font-headline text-2xl font-bold text-[var(--on-surface)]">Top up exactly what you need</p>
+            <p className="mt-1 text-sm text-[var(--on-surface-variant)]">From $2 · Better rate the more you top up</p>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-3">
+            <div className="flex items-center gap-1 rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container-lowest)] px-4 py-2.5 text-lg font-bold text-[var(--outline)]">
+              <span>$</span>
+              <span className="w-10 border-b border-dashed border-[var(--outline)]" />
+            </div>
+            <svg aria-hidden="true" className="size-5 text-[var(--primary)] transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </Link>
       </div>
     </section>
   );

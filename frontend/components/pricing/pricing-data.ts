@@ -20,11 +20,11 @@ export const creditPacks: CreditPack[] = [
   {
     name: 'Starter',
     tagline: 'Try it out, no commitment needed.',
-    price: 2,
-    credits: 25,
+    price: 1,
+    credits: 12,
     pricePerCredit: '$0.08',
     features: [
-      '25 thumbnail generations',
+      '12 thumbnail generations',
       'High-resolution output',
       'All styles & models',
       'No watermarks',
@@ -36,11 +36,11 @@ export const creditPacks: CreditPack[] = [
   {
     name: 'Standard',
     tagline: 'Great for consistent creators.',
-    price: 8,
-    credits: 120,
+    price: 10,
+    credits: 149,
     pricePerCredit: '$0.067',
     features: [
-      '120 thumbnail generations',
+      '149 thumbnail generations',
       'High-resolution output',
       'All styles & models',
       'No watermarks',
@@ -54,11 +54,11 @@ export const creditPacks: CreditPack[] = [
   {
     name: 'Value Pack',
     tagline: 'Best rate for high-volume creators.',
-    price: 20,
-    credits: 375,
-    pricePerCredit: '$0.053',
+    price: 500,
+    credits: 12500,
+    pricePerCredit: '$0.04',
     features: [
-      '375 thumbnail generations',
+      '12,500 thumbnail generations',
       'High-resolution output',
       'All styles & models',
       'No watermarks',

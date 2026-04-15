@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { ThumbnailsClient } from './ThumbnailsClient';
-import { COMMUNITY_ITEMS, PAGE_SIZE } from './thumbnails-data';
+import { ThumbnailsClient } from '@/components/thumbnails/ThumbnailsClient';
+import { COMMUNITY_ITEMS, PAGE_SIZE } from '@/components/thumbnails/thumbnails-data';
 
 export const metadata: Metadata = {
   title: 'Thumbnails',
