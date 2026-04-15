@@ -54,7 +54,7 @@ export function ContactSection() {
 
         <button
           type="submit"
-          className="flex w-max items-center gap-2 rounded-full bg-[#2f5ea5] px-10 py-3 text-white transition-all hover:bg-[#244a82]"
+          className="flex w-max cursor-pointer items-center gap-2 rounded-full bg-[#2f5ea5] px-10 py-3 text-white transition-all hover:bg-[#244a82]"
         >
           Submit
           <ArrowRightIcon className="size-5" aria-hidden="true" />

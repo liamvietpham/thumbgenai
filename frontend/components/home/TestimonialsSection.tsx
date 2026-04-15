@@ -67,7 +67,7 @@ const testimonialsBottom = [
     handle: '@lucas_edits',
     image:
       'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=60',
-    text: "The click-through rate on my videos has increased by 40% since I started using ThumbgenAI. It's a must-have for YouTubers.",
+    text: "The click-through rate on my videos has increased by 40% since I started using ThumbnailAI. It's a must-have for YouTubers.",
   },
   {
     name: 'Aarav Mehta',
@@ -134,7 +134,6 @@ function TestimonialCard({ name, handle, image, text }: { name: string; handle: 
           width={44}
           height={44}
           sizes="44px"
-          unoptimized
           className="size-11 rounded-full object-cover"
         />
         <div className="flex flex-col">

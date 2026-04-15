@@ -1,17 +1,38 @@
+import Link from 'next/link';
+
+const logos = ['CREATOR LABS', 'TUBE INSIDER', 'VOX MEDIA', 'PIXEL GROUP'];
+
 export function CtaSection() {
   return (
-    <section className="mt-40 flex max-w-5xl flex-col items-center justify-between gap-6 rounded-2xl bg-linear-to-b from-[#3b67ab] to-[#244a82] px-6 py-16 text-left text-white md:mx-auto md:w-full md:flex-row xl:px-20">
-      <div>
-        <p className="bg-linear-to-r from-white to-[#9ec0ff] bg-clip-text text-4xl font-semibold text-transparent md:text-[46px] md:leading-15">
-          Ready to go viral?
-        </p>
-        <p className="bg-linear-to-r from-white to-[#9ec0ff] bg-clip-text text-lg text-transparent">
-          Join thousands of creators using AI to boost their CTR.
-        </p>
+    <section className="bg-gradient-to-b from-[var(--surface-container-lowest)] to-[var(--surface)] px-6 py-24 text-center md:px-8">
+      <div className="mx-auto max-w-4xl space-y-10">
+        <header className="space-y-4">
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
+            Ready to Launch
+          </p>
+          <h2 className="font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)] md:text-6xl">
+            Ready to double your CTR?
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[var(--on-surface-variant)]">
+            Iterate faster and turn every new upload into a stronger first impression.
+          </p>
+        </header>
+
+        <Link
+          href="/generate"
+          className="inline-flex cursor-pointer items-center justify-center rounded-2xl bg-[var(--primary)] px-12 py-5 text-xl font-bold text-white shadow-2xl shadow-[rgba(0,88,190,0.22)] tonal-transition hover:scale-[1.02]"
+        >
+          Start Creating Now
+        </Link>
+
+        <ul className="flex flex-wrap justify-center gap-8 opacity-45 grayscale">
+          {logos.map((logo) => (
+            <li key={logo} className="font-headline text-xl font-bold tracking-wide text-[var(--on-surface)]">
+              {logo}
+            </li>
+          ))}
+        </ul>
       </div>
-      <button className="mt-4 rounded-full bg-white px-12 py-3 text-sm text-[#1f3f75] transition hover:bg-[#d9e7fb]">
-        Get Started
-      </button>
     </section>
   );
 }
