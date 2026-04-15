@@ -20,10 +20,10 @@ export function AboutCtaSection() {
             Start Creating Now
           </Link>
           <Link
-            href="/public-gallery"
+            href="/thumbnails"
             className="inline-flex cursor-pointer items-center justify-center text-lg font-bold text-[var(--primary)] underline decoration-2 underline-offset-8 tonal-transition hover:opacity-80"
           >
-            View Community Gallery
+            View Thumbnails
           </Link>
         </div>
       </div>

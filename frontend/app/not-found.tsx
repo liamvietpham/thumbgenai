@@ -62,10 +62,10 @@ export default function NotFoundPage() {
           </Link>
 
           <Link
-            href="/public-gallery"
+            href="/thumbnails"
             className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-6 py-5 font-headline text-lg font-bold text-[var(--primary)] tonal-transition hover:bg-[rgba(0,88,190,0.05)] hover:underline hover:underline-offset-8"
           >
-            Go to Gallery
+            Go to Thumbnails
             <ArrowRightIcon className="size-5" />
           </Link>
         </div>

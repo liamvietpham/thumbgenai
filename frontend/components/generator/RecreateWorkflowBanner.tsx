@@ -11,7 +11,7 @@ export function RecreateWorkflowBanner() {
             Alternate Workflow
           </p>
           <h2 className="mt-3 font-headline text-2xl font-bold tracking-tight text-[var(--on-surface)] md:text-3xl">
-            Need to recreate an existing thumbnail instead?
+            Need to regenerate an existing thumbnail instead?
           </h2>
           <p className="mt-3 max-w-xl text-base leading-relaxed text-[var(--on-surface-variant)]">
             Upload a reference thumbnail or paste a video link, then ask AI to restyle or refine
@@ -19,10 +19,10 @@ export function RecreateWorkflowBanner() {
           </p>
         </div>
         <Link
-          href="/recreate"
+          href="/regenerate"
           className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(0,88,190,0.18)] tonal-transition hover:scale-[1.01]"
         >
-          Open Recreate
+          Open Regenerate
           <ArrowRightIcon className="size-4.5" aria-hidden="true" />
         </Link>
       </div>

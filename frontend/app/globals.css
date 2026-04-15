@@ -131,7 +131,7 @@ h6,
 }
 
 /* Header — override hardcoded bg-white/70 */
-.dark header {
+.dark .site-header {
   background-color: rgba(13, 15, 20, 0.85) !important;
   border-color: rgba(255, 255, 255, 0.06) !important;
 }
@@ -150,7 +150,7 @@ h6,
 }
 
 /* Footer */
-.dark footer {
+.dark .site-footer {
   background-color: var(--surface-container-low) !important;
 }
 

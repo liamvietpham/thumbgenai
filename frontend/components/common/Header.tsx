@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 const navItems = [
   { label: 'Home', href: '/', matches: ['/'] },
-  { label: 'Public Gallery', href: '/public-gallery', matches: ['/public-gallery'] },
+  { label: 'Thumbnails', href: '/thumbnails', matches: ['/thumbnails'] },
   { label: 'Pricing', href: '/pricing', matches: ['/pricing'] },
   { label: 'About', href: '/about', matches: ['/about'] },
   {
@@ -55,7 +55,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/40 bg-white/70 shadow-[0_8px_32px_rgba(0,88,190,0.04)] backdrop-blur-xl">
+    <header className="site-header fixed inset-x-0 top-0 z-50 border-b border-white/40 bg-white/70 shadow-[0_8px_32px_rgba(0,88,190,0.04)] backdrop-blur-xl">
       <div className="relative mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"

@@ -12,7 +12,7 @@ const sectionLabelClass =
 const fieldShellClass =
   'w-full rounded-[1rem] border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container-low)] px-4 py-3 text-[var(--on-surface)] placeholder:text-[var(--outline)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,88,190,0.16)]';
 
-export default function RecreatePage() {
+export default function RegeneratePage() {
   const [inputMode, setInputMode] = useState<'upload' | 'url'>('upload');
   const [aspect, setAspect] = useState<AspectValue>('16 / 9');
   const [imageUrl, setImageUrl] = useState('');
@@ -20,7 +20,7 @@ export default function RecreatePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
 
-  const handleRecreate = async () => {
+  const handleRegenerate = async () => {
     setGeneratedImageUrl(null);
     setIsGenerating(true);
     try {
@@ -35,7 +35,7 @@ export default function RecreatePage() {
     if (!generatedImageUrl) return;
     const link = document.createElement('a');
     link.href = generatedImageUrl;
-    link.download = 'thumbnail-ai-recreate.webp';
+    link.download = 'thumbnail-ai-regenerate.webp';
     link.click();
   };
 
@@ -44,7 +44,7 @@ export default function RecreatePage() {
       {/* Page header — full width above both columns */}
       <div className="mb-8">
         <h1 className="font-headline text-3xl font-bold tracking-tight text-[var(--on-surface)]">
-          Recreate Studio
+          Regenerate Studio
         </h1>
         <p className="mt-1 text-lg leading-relaxed text-[var(--on-surface-variant)]">
           Upload a reference thumbnail or paste a URL, then describe how you&apos;d like it restyled.
@@ -123,16 +123,16 @@ export default function RecreatePage() {
                 />
               </div>
 
-              {/* Recreate button */}
+              {/* Regenerate button */}
               <div className="space-y-3 border-t border-[var(--surface-container)] pt-5">
                 <button
                   type="button"
-                  onClick={handleRecreate}
+                  onClick={handleRegenerate}
                   disabled={isGenerating}
                   className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-[1rem] bg-gradient-to-br from-[#0058be] to-[#2170e4] px-6 py-4 font-bold text-white shadow-[0_16px_32px_-16px_rgba(0,88,190,0.42)] tonal-transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <SparkIcon className="size-5" aria-hidden="true" />
-                  {isGenerating ? 'Recreating…' : 'Recreate Thumbnail'}
+                  {isGenerating ? 'Regenerating…' : 'Regenerate Thumbnail'}
                 </button>
                 <p className="text-center text-xs text-[var(--outline)]">
                   <span className="font-semibold text-[var(--on-surface-variant)]">1 Credit</span>{' '}

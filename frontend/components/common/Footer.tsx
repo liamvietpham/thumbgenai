@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="border-t border-[rgba(114,119,133,0.14)] bg-slate-50">
+    <footer className="site-footer border-t border-[rgba(114,119,133,0.14)] bg-slate-50">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12 md:flex-row md:items-start md:justify-between lg:px-8">
         <div className="max-w-sm space-y-3">
           <Link href="/" className="cursor-pointer font-headline text-xl font-bold text-[var(--on-surface)]">
@@ -25,8 +25,8 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/public-gallery" className="cursor-pointer tonal-transition hover:text-[var(--primary)]">
-                Public Gallery
+              <Link href="/thumbnails" className="cursor-pointer tonal-transition hover:text-[var(--primary)]">
+                Thumbnails
               </Link>
             </li>
             <li>
@@ -106,8 +106,8 @@ export function Footer() {
             >
               Privacy
             </Link>
-            <Link href="/public-gallery" className="cursor-pointer tonal-transition hover:text-[var(--primary)]">
-              Gallery
+            <Link href="/thumbnails" className="cursor-pointer tonal-transition hover:text-[var(--primary)]">
+              Thumbnails
             </Link>
           </div>
         </div>

@@ -54,10 +54,10 @@ export function GallerySection() {
         </div>
 
         <Link
-          href="/public-gallery"
+          href="/thumbnails"
           className="inline-flex cursor-pointer items-center gap-2 font-bold text-[var(--primary)] tonal-transition hover:gap-3"
         >
-          View Public Gallery
+          View Thumbnails
           <ArrowRightIcon className="size-5" aria-hidden="true" />
         </Link>
       </div>
