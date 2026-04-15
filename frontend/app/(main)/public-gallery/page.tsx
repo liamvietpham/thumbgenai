@@ -17,7 +17,7 @@ export default function CommunityPage() {
   const remainingItems = COMMUNITY_ITEMS.slice(PAGE_SIZE);
 
   return (
-    <div className="pt-10 md:pt-20">
+    <div className="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 md:pb-24 md:pt-20 lg:px-8">
       <div className="mb-10 space-y-2">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)]">
           Community Gallery

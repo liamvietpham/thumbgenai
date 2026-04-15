@@ -4,7 +4,7 @@ import { type CreditPack, creditPacks } from '@/components/pricing/pricing-data'
 
 export function PricingPlansSection() {
   return (
-    <section className="px-6 py-8 md:px-8">
+    <section className="px-6 pb-8 pt-16 md:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 mt-4 text-center">
           <p className="text-base text-[var(--on-surface-variant)]">
@@ -25,14 +25,14 @@ export function PricingPlansSection() {
 function CreditPackCard({ pack }: { pack: CreditPack }) {
   return (
     <article
-      className={`flex h-full flex-col rounded-[1.5rem] p-10 tonal-transition ${
+      className={`relative flex h-full flex-col rounded-[1.5rem] p-10 tonal-transition ${
         pack.highlighted
-          ? 'relative border-2 border-[var(--primary)] bg-[var(--surface-container-lowest)] shadow-2xl shadow-[rgba(0,88,190,0.10)] md:-translate-y-4'
+          ? 'border-2 border-[var(--primary)] bg-[var(--surface-container-lowest)] shadow-2xl shadow-[rgba(0,88,190,0.10)] md:-translate-y-4'
           : 'bg-[var(--surface-container-low)] hover:bg-[var(--surface-container)]'
       }`}
     >
       {pack.badge ? (
-        <p className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--primary)] px-4 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+        <p className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#0058be] px-4 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
           {pack.badge}
         </p>
       ) : null}

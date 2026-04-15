@@ -77,10 +77,10 @@ export function AboutOptimizationSection() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
                     CTR Probability Score
                   </p>
-                  <p className="font-bold text-[var(--primary)]">94.8%</p>
+                  <p className="font-bold text-[#0058be]">94.8%</p>
                 </div>
                 <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
-                  <div className="h-full w-[94.8%] rounded-full bg-[var(--primary)]" />
+                  <div className="h-full w-[94.8%] rounded-full bg-gradient-to-r from-[#0058be] to-[#2170e4]" />
                 </div>
               </figcaption>
             </div>

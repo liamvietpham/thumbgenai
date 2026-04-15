@@ -18,7 +18,7 @@ export function PricingCtaSection() {
 
             <Link
               href="/generate"
-              className="inline-flex cursor-pointer items-center justify-center rounded-full bg-[var(--primary)] px-10 py-5 text-sm font-bold text-white shadow-2xl shadow-[rgba(0,88,190,0.30)] tonal-transition hover:scale-105"
+              className="inline-flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-[#0058be] to-[#2170e4] px-10 py-5 text-sm font-bold text-white shadow-2xl shadow-[rgba(0,88,190,0.30)] tonal-transition hover:scale-105"
             >
               Start Creating
             </Link>

@@ -68,7 +68,7 @@ export default function GeneratePage() {
   };
 
   return (
-    <div className="py-8 md:py-12">
+    <div className="mx-auto max-w-6xl px-4 py-8 pb-16 sm:px-6 md:py-12 md:pb-24 lg:px-8">
       {/* Alternate workflow banner — top of page */}
       <div className="mb-6">
         <RecreateWorkflowBanner />
@@ -133,7 +133,7 @@ export default function GeneratePage() {
                 <div className="relative size-32 overflow-hidden rounded-[1rem]">
                   {/* Upload state */}
                   <label className={`absolute rounded-[1rem] inset-0 flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed border-[rgba(194,198,214,0.7)] bg-[var(--surface-container-low)] tonal-transition hover:bg-[var(--surface-container)] ${userPhotoPreview ? 'pointer-events-none opacity-0' : 'opacity-100'}`}>
-                    <div className="grid size-10 place-items-center rounded-xl bg-white text-[var(--primary)] shadow-sm">
+                    <div className="grid size-10 place-items-center rounded-xl bg-[var(--surface-container-highest)] text-[var(--primary)] shadow-sm">
                       <UploadIcon className="size-5" aria-hidden="true" />
                     </div>
                     <p className="text-sm font-medium text-[var(--on-surface)]">Upload photo</p>

@@ -9,8 +9,7 @@ export function PricingIntro() {
           Simple, transparent pricing
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-[var(--on-surface-variant)]">
-          Choose the plan that fits your publishing rhythm, from solo experiments to full-scale
-          team workflows.
+          Buy credits once, use them at your own pace. No subscriptions, no monthly fees.
         </p>
       </div>
     </section>

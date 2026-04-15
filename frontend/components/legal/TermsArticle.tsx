@@ -207,7 +207,7 @@ export function TermsArticle() {
         </p>
         <Link
           href="/generate"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-10 py-3 font-bold text-white shadow-xl shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.03]"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[#0058be] to-[#2170e4] px-10 py-3 font-bold text-white shadow-xl shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.03]"
         >
           <SparkIcon className="size-4" />
           Get Started Now

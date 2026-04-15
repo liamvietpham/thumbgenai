@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import CloseIcon from '@/components/icons/generated/CloseIcon';
 import MenuIcon from '@/components/icons/generated/MenuIcon';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 const navItems = [
   { label: 'Home', href: '/', matches: ['/'] },
@@ -20,7 +21,7 @@ const navItems = [
 ];
 
 // Mock auth state — replace with real auth context when available
-const isLoggedIn = false;
+const isLoggedIn = true;
 const CREDITS = 42;
 
 const currentUser = {
@@ -88,6 +89,8 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-3">
+          <ThemeToggle />
+
           {!isLoggedIn && (
             <Link
               href="/login"
@@ -152,7 +155,7 @@ export function Header() {
                     <CreditIcon className="size-4 text-[var(--primary)]" />
                     <span className="text-sm font-semibold text-[var(--on-surface)]">Credits</span>
                   </div>
-                  <span className="rounded-full bg-[var(--primary)] px-2.5 py-0.5 text-xs font-bold text-white">
+                  <span className="rounded-full bg-[#0058be] px-2.5 py-0.5 text-xs font-bold text-white">
                     {CREDITS} left
                   </span>
                 </div>
@@ -186,7 +189,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setOpen((value) => !value)}
-              className="inline-flex size-11 cursor-pointer items-center justify-center rounded-2xl border border-[var(--outline-variant)] bg-white/80 text-[var(--primary)] shadow-sm tonal-transition hover:bg-white md:hidden"
+              className="mobile-menu-btn inline-flex size-11 cursor-pointer items-center justify-center rounded-2xl border border-[var(--outline-variant)] bg-white/80 text-[var(--primary)] shadow-sm tonal-transition hover:bg-white md:hidden"
               aria-label="Toggle menu"
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -251,7 +254,7 @@ export function Header() {
                         <CreditIcon className="size-4 text-[var(--primary)]" />
                         Credits
                       </div>
-                      <span className="rounded-full bg-[var(--primary)] px-2.5 py-0.5 text-xs font-bold text-white">
+                      <span className="rounded-full bg-[#0058be] px-2.5 py-0.5 text-xs font-bold text-white">
                         {CREDITS} left
                       </span>
                     </div>

@@ -102,7 +102,7 @@ export function PrivacyPolicyArticle() {
             </Link>
             <Link
               href="/terms"
-              className="inline-flex cursor-pointer items-center justify-center rounded-full bg-[var(--primary)] px-6 py-2 text-sm font-semibold text-white shadow-md tonal-transition hover:opacity-90"
+              className="inline-flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-[#0058be] to-[#2170e4] px-6 py-2 text-sm font-semibold text-white shadow-md tonal-transition hover:opacity-90"
             >
               View Terms
             </Link>

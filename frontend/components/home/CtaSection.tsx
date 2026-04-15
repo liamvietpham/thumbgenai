@@ -20,7 +20,7 @@ export function CtaSection() {
 
         <Link
           href="/generate"
-          className="inline-flex cursor-pointer items-center justify-center rounded-2xl bg-[var(--primary)] px-12 py-5 text-xl font-bold text-white shadow-2xl shadow-[rgba(0,88,190,0.22)] tonal-transition hover:scale-[1.02]"
+          className="inline-flex cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-12 py-5 text-xl font-bold text-white shadow-2xl shadow-[rgba(0,88,190,0.22)] tonal-transition hover:scale-[1.02]"
         >
           Start Creating Now
         </Link>

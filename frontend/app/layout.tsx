@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import { cookies } from 'next/headers';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,9 +33,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const theme = (await cookies()).get('theme')?.value;
+  const isDark = theme === 'dark';
+
   return (
-    <html lang="en">
+    <html lang="en" className={isDark ? 'dark' : ''}>
       <head>
         <link rel="preconnect" href="https://images.thumbnailgo.com" />
         <link rel="preconnect" href="https://lh3.googleusercontent.com" />

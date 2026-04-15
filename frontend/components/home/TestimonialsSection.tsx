@@ -126,7 +126,7 @@ function VerifyBadge() {
 
 function TestimonialCard({ name, handle, image, text }: { name: string; handle: string; image: string; text: string }) {
   return (
-    <div className="mx-4 w-72 shrink-0 rounded-lg border border-[#8eaedf] bg-[#dbe8fb]/80 p-4 shadow-[0_10px_24px_rgba(58,94,148,0.12)] backdrop-blur-sm">
+    <div className="testimonial-card mx-4 w-72 shrink-0 rounded-lg border border-[#8eaedf] bg-[#dbe8fb]/80 p-4 shadow-[0_10px_24px_rgba(58,94,148,0.12)] backdrop-blur-sm">
       <div className="flex gap-2">
         <Image
           src={image}
@@ -138,13 +138,13 @@ function TestimonialCard({ name, handle, image, text }: { name: string; handle: 
         />
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
-            <p className="text-[#1f3f75]">{name}</p>
+            <p className="text-[var(--primary)]">{name}</p>
             <VerifyBadge />
           </div>
-          <span className="text-xs text-[#5272a2]">{handle}</span>
+          <span className="text-xs text-[var(--on-surface-variant)]">{handle}</span>
         </div>
       </div>
-      <p className="pt-4 text-sm text-[#4b6690] line-clamp-2">{text}</p>
+      <p className="pt-4 text-sm text-[var(--on-surface-variant)] line-clamp-2">{text}</p>
     </div>
   );
 }
@@ -170,11 +170,11 @@ function MarqueeRow({ items, reverse = false }: { items: typeof testimonialsTop;
 export function TestimonialsSection() {
   return (
     <section id="testimonials">
-      <p className="mx-auto mt-28 w-max rounded-full border border-[#5d83bf] bg-[#d5e4fb] px-10 py-2 text-center font-medium text-[#2f5ea5]">
+      <p className="mx-auto mt-28 w-max rounded-full border border-[var(--outline-variant)] bg-[var(--primary-fixed)] px-10 py-2 text-center font-medium text-[var(--primary)]">
         Testimonials
       </p>
-      <h2 className="mx-auto mt-4 text-center text-3xl font-semibold text-[#1d447f]">Loved by creators</h2>
-      <p className="mx-auto mt-2 max-w-xl text-center text-[#4f6f9f]">
+      <h2 className="mx-auto mt-4 text-center text-3xl font-semibold text-[var(--on-surface)]">Loved by creators</h2>
+      <p className="mx-auto mt-2 max-w-xl text-center text-[var(--on-surface-variant)]">
         See how our AI thumbnails generator are helping channels explode their views.
       </p>
 

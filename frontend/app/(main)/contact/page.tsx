@@ -6,7 +6,7 @@ const fieldShellClass =
 
 export default function ContactPage() {
   return (
-    <div className="grid gap-12 pt-10 md:grid-cols-2 md:gap-16 md:pt-20">
+    <div className="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-10 sm:px-6 md:grid-cols-2 md:gap-16 md:pb-24 md:pt-20 lg:px-8">
       <div className="space-y-10">
         <div className="space-y-4">
           <h1 className="font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)] md:text-5xl">

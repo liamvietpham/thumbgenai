@@ -64,7 +64,7 @@ export function StyleDropdown({
       </button>
 
       {open && (
-        <div className="absolute z-20 w-full rounded-[1.25rem] border border-[rgba(194,198,214,0.65)] bg-white/95 p-2 shadow-[0_20px_40px_rgba(25,28,30,0.12)] backdrop-blur-xl">
+        <div className="absolute z-20 w-full rounded-[1.25rem] border border-[rgba(194,198,214,0.35)] bg-[var(--surface-container-lowest)] p-2 shadow-[0_20px_40px_rgba(25,28,30,0.18)]">
           {styleOptions.map((option) => (
             <button
               key={option.label}

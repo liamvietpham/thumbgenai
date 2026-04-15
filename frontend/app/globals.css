@@ -28,6 +28,34 @@
   --on-secondary-container: #006172;
 }
 
+.dark {
+  color-scheme: dark;
+  --background: #111318;
+  --surface: #111318;
+  --surface-container-lowest: #0d0f14;
+  --surface-container-low: #191c22;
+  --surface-container: #1e2128;
+  --surface-container-high: #282b33;
+  --surface-container-highest: #333640;
+  --surface-variant: #42474e;
+  --primary: #adc6ff;
+  --primary-strong: #adc6ff;
+  --primary-fixed: #1a2d5e;
+  --secondary: #4cd7f6;
+  --secondary-container: #003640;
+  --tertiary: #91db2a;
+  --tertiary-fixed: #1e3800;
+  --tertiary-fixed-dim: #91db2a;
+  --outline: #8c909f;
+  --outline-variant: #42474e;
+  --inverse-surface: #e2e3ea;
+  --inverse-on-surface: #2d3133;
+  --on-surface: #e2e3ea;
+  --on-surface-variant: #c2c6d6;
+  --on-primary: #002e6b;
+  --on-secondary-container: #a2eeff;
+}
+
 body {
   @apply text-sm antialiased;
   margin: 0;
@@ -59,7 +87,7 @@ h6,
   background-image:
     radial-gradient(circle at 18% 10%, rgba(87, 223, 254, 0.18) 0%, rgba(87, 223, 254, 0) 32%),
     radial-gradient(circle at 82% 12%, rgba(33, 112, 228, 0.16) 0%, rgba(33, 112, 228, 0) 28%),
-    linear-gradient(180deg, #fbfcfe 0%, #f7f9fb 46%, #eef2f7 100%);
+    linear-gradient(180deg, var(--surface-container-lowest) 0%, var(--surface) 46%, var(--surface-container-low) 100%);
   background-attachment: fixed;
 }
 
@@ -85,6 +113,52 @@ h6,
   to {
     transform: translateX(-50%);
   }
+}
+
+/* ── Dark mode overrides for hardcoded non-CSS-var values ── */
+
+/* Tone down glow radials in dark mode */
+.dark .app-bg {
+  background-image:
+    radial-gradient(circle at 18% 10%, rgba(87, 223, 254, 0.05) 0%, rgba(87, 223, 254, 0) 32%),
+    radial-gradient(circle at 82% 12%, rgba(173, 198, 255, 0.06) 0%, rgba(173, 198, 255, 0) 28%),
+    linear-gradient(180deg, var(--surface-container-lowest) 0%, var(--surface) 46%, var(--surface-container-low) 100%);
+}
+
+.dark .glass-card {
+  background: rgba(25, 30, 42, 0.72);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+/* Header — override hardcoded bg-white/70 */
+.dark header {
+  background-color: rgba(13, 15, 20, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Mobile menu panel */
+.dark #mobile-menu {
+  background-color: rgba(19, 22, 30, 0.97) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Mobile menu toggle button */
+.dark .mobile-menu-btn {
+  background-color: var(--surface-container) !important;
+  border-color: var(--outline-variant) !important;
+  color: var(--primary) !important;
+}
+
+/* Footer */
+.dark footer {
+  background-color: var(--surface-container-low) !important;
+}
+
+/* Testimonial cards */
+.dark .testimonial-card {
+  background-color: rgba(26, 36, 58, 0.85) !important;
+  border-color: rgba(60, 90, 150, 0.35) !important;
+  box-shadow: 0 10px 24px rgba(0, 10, 30, 0.35) !important;
 }
 
 /* Slim scrollbar */

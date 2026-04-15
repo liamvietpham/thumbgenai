@@ -3,7 +3,7 @@ import ArrowRightIcon from '@/components/icons/generated/ArrowRightIcon';
 
 export function RecreateWorkflowBanner() {
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] border border-[rgba(194,198,214,0.5)] bg-white/72 p-6 shadow-[0_12px_36px_rgba(0,88,190,0.08)] backdrop-blur-xl sm:p-8">
+    <section className="relative overflow-hidden rounded-[1.75rem] border border-[rgba(194,198,214,0.5)] bg-[var(--surface-container-lowest)] p-6 shadow-[0_12px_36px_rgba(0,88,190,0.08)] sm:p-8">
       <div className="pointer-events-none absolute inset-y-0 right-[-12%] w-1/2 rounded-full bg-[radial-gradient(circle,_rgba(87,223,254,0.18),_rgba(87,223,254,0)_70%)]" />
       <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
@@ -20,7 +20,7 @@ export function RecreateWorkflowBanner() {
         </div>
         <Link
           href="/recreate"
-          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(0,88,190,0.18)] tonal-transition hover:scale-[1.01] hover:opacity-95"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(0,88,190,0.18)] tonal-transition hover:scale-[1.01]"
         >
           Open Recreate
           <ArrowRightIcon className="size-4.5" aria-hidden="true" />

@@ -40,7 +40,7 @@ export default function RecreatePage() {
   };
 
   return (
-    <div className="py-8 md:py-12">
+    <div className="mx-auto max-w-6xl px-4 py-8 pb-16 sm:px-6 md:py-12 md:pb-24 lg:px-8">
       {/* Page header — full width above both columns */}
       <div className="mb-8">
         <h1 className="font-headline text-3xl font-bold tracking-tight text-[var(--on-surface)]">
@@ -68,7 +68,7 @@ export default function RecreatePage() {
                     onClick={() => setInputMode(mode)}
                     className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-[0.625rem] px-4 py-2 text-sm font-medium tonal-transition ${
                       inputMode === mode
-                        ? 'bg-white text-[var(--on-surface)] shadow-sm'
+                        ? 'bg-[var(--surface-container-lowest)] text-[var(--on-surface)] shadow-sm'
                         : 'text-[var(--on-surface-variant)] hover:text-[var(--on-surface)]'
                     }`}
                   >
@@ -85,7 +85,7 @@ export default function RecreatePage() {
               {/* Image input */}
               {inputMode === 'upload' ? (
                 <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-[1rem] border border-dashed border-[rgba(194,198,214,0.7)] bg-[var(--surface-container-low)] py-10 tonal-transition hover:bg-[var(--surface-container)]">
-                  <div className="grid size-12 place-items-center rounded-2xl bg-white text-[var(--primary)] shadow-sm">
+                  <div className="grid size-12 place-items-center rounded-2xl bg-[var(--surface-container-highest)] text-[var(--primary)] shadow-sm">
                     <UploadIcon className="size-5" aria-hidden="true" />
                   </div>
                   <div className="text-center">
@@ -135,7 +135,7 @@ export default function RecreatePage() {
                   {isGenerating ? 'Recreating…' : 'Recreate Thumbnail'}
                 </button>
                 <p className="text-center text-xs text-[var(--outline)]">
-                  <span className="font-semibold text-[var(--on-surface-variant)]">5 Credits</span>{' '}
+                  <span className="font-semibold text-[var(--on-surface-variant)]">1 Credit</span>{' '}
                   per generation
                 </p>
               </div>

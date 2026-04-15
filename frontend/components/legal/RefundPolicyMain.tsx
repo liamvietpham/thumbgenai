@@ -22,7 +22,7 @@ export function RefundPolicyMain() {
         </p>
 
         <div className="flex flex-wrap items-center gap-4 pt-2">
-          <div className="flex items-center gap-2 rounded-full bg-white/80 px-3 py-1.5 shadow-sm">
+          <div className="flex items-center gap-2 rounded-full bg-[var(--surface-container-low)] px-3 py-1.5 shadow-sm">
             <VerifyBadgeIcon className="size-4 text-[var(--primary)]" />
             <span className="text-sm font-medium text-[var(--on-surface-variant)]">
               Last updated: 06-01-2026

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function NotFoundPage() {
   return (
-    <section className="relative left-1/2 flex min-h-[calc(100vh-10rem)] w-screen -translate-x-1/2 items-center justify-center overflow-hidden px-6 py-12 md:px-8">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-12 md:px-8">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-[-5rem] top-1/4 h-96 w-96 rounded-full bg-[rgba(87,223,254,0.18)] blur-[120px]" />
         <div className="absolute bottom-1/4 right-[-6rem] h-[30rem] w-[30rem] rounded-full bg-[rgba(33,112,228,0.12)] blur-[150px]" />

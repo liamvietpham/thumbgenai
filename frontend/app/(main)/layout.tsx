@@ -13,7 +13,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <Header />
       <main
         id="content"
-        className="mx-auto max-w-6xl px-4 pb-10 pt-20 sm:px-6 md:pt-24 md:pb-24 lg:px-8"
+        className="pt-20 md:pt-24"
       >
         {children}
       </main>
