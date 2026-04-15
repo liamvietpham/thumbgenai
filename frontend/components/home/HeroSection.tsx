@@ -54,7 +54,7 @@ export function HeroSection() {
         <div className="glass-card overflow-hidden rounded-2xl border border-white/40 p-4 shadow-2xl">
           <Image
             alt="Modern minimalist aesthetic software interface showing thumbnail generation progress with soft blue and cyan lighting effects"
-            className="aspect-video w-full rounded-xl object-cover shadow-inner"
+            className="aspect-[3/4] md:aspect-[16/10] w-full rounded-xl object-cover shadow-inner"
             height={1080}
             priority
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAZoBKZcFmqHKgTnSaVsw01p4bOmCZHdEUzjB6iTC5kTx6mIt4d4D6SYiANBzS7mf9Gcy8bl81h-7FofUDzF_UUxCv7i45E9LzisfdQ6KZM-srMN91OVnrczsv_Scjvj4H4peK0q2G8tgGh75uvUnQ85zbgD7Be1PSaKhffARQGOpqM9b9CVn2cqOILuuCfRELioZs9lC-QrRciDHGSgGuIZlNagkZPWQNXuhrO1iav0Ii2ez2590HODKViLKKlYzEOxzBTzByOkAP"

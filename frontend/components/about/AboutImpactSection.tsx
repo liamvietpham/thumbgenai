@@ -13,9 +13,9 @@ const icons = [ImageIcon, SparkIcon, UserIcon];
 
 export function AboutImpactSection() {
   return (
-    <section className="px-6 py-20 md:px-8 md:py-28">
+    <section className="px-6 py-12 md:px-8 md:py-28">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-16 flex flex-col gap-8 md:flex-row md:items-end">
+        <header className="mb-10 flex flex-col gap-4 md:mb-16 md:flex-row md:items-end">
           <h2 className="font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)]">
             Community impact
           </h2>
@@ -32,14 +32,14 @@ export function AboutImpactSection() {
             return (
               <article
                 key={item.title}
-                className={`rounded-[1.5rem] p-10 tonal-transition hover:-translate-y-1.5 ${
+                className={`rounded-[1.5rem] p-6 tonal-transition hover:-translate-y-1.5 md:p-10 ${
                   item.tone === 'primary'
                     ? 'border border-[rgba(194,198,214,0.25)] bg-[var(--surface-container-lowest)] shadow-[0_28px_56px_-24px_rgba(0,88,190,0.12)]'
                     : 'bg-[var(--surface-container-low)] shadow-[0_28px_56px_-24px_rgba(0,88,190,0.08)]'
                 }`}
               >
                 <div
-                  className={`mb-8 grid size-14 place-items-center rounded-full ${toneClasses[item.tone]}`}
+                  className={`mb-5 grid size-12 place-items-center rounded-full md:mb-8 md:size-14 ${toneClasses[item.tone]}`}
                 >
                   <Icon className="size-7" aria-hidden="true" />
                 </div>

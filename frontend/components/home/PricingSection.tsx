@@ -37,11 +37,11 @@ export function PricingSection({ className = '' }: { className?: string }) {
 
         <Link
           href="/pricing#custom"
-          className="group mt-8 flex cursor-pointer items-center justify-between gap-6 rounded-[1.5rem] border-2 border-dashed border-[rgba(0,88,190,0.25)] bg-[var(--surface-container-low)] p-8 tonal-transition hover:border-[var(--primary)] hover:bg-[var(--surface-container)] md:p-10"
+          className="group mt-8 flex cursor-pointer flex-col gap-5 rounded-[1.5rem] border-2 border-dashed border-[rgba(0,88,190,0.25)] bg-[var(--surface-container-low)] p-6 tonal-transition hover:border-[var(--primary)] hover:bg-[var(--surface-container)] sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-8 md:p-10"
         >
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--primary)]">Custom Amount</p>
-            <p className="mt-1 font-headline text-2xl font-bold text-[var(--on-surface)]">Top up exactly what you need</p>
+            <p className="mt-1 font-headline text-xl font-bold text-[var(--on-surface)] sm:text-2xl">Top up exactly what you need</p>
             <p className="mt-1 text-sm text-[var(--on-surface-variant)]">From $2 · Better rate the more you top up</p>
           </div>
 

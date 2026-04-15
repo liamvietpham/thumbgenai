@@ -55,58 +55,50 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ── Step 1 ── */}
-      <section className="mx-auto mb-48 max-w-7xl px-6 md:px-8">
-        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
+      <section className="mx-auto mb-20 max-w-7xl px-6 md:mb-32 md:px-8">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
 
-          {/* Left */}
-          <div className="order-2 lg:order-1 lg:col-span-5">
-            <div className="mb-6 flex items-center gap-4">
+          {/* Text — order-1 on mobile (top), order-2 on desktop (right) */}
+          <div className="lg:order-2 lg:col-span-5">
+            <div className="mb-4 flex items-center gap-4">
               <StepBadge n="01" />
-              <h2 className="font-headline text-3xl font-bold text-[var(--on-surface)]">Input Context</h2>
+              <h2 className="font-headline text-2xl font-bold text-[var(--on-surface)] md:text-3xl">Input Context</h2>
             </div>
-            <p className="mb-8 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+            <p className="mb-6 text-base leading-relaxed text-[var(--on-surface-variant)] md:text-lg">
               Begin by defining the core narrative of your content. Our interface allows you to dictate the mood, artistic direction, and platform specifics with surgical precision.
             </p>
-            <ul className="mb-8 space-y-4">
+            <ul className="mb-6 space-y-3">
               <CheckItem text="Define Topic & Intent" />
               <CheckItem text="Select 'Bold & Graphic' or 'Minimalist'" />
               <CheckItem text="Adaptive Aspect Ratios (16:9, 9:16, 1:1)" />
             </ul>
           </div>
 
-          {/* Right — UI mockup */}
-          <div className="order-1 lg:order-2 lg:col-span-7">
-            <div className="relative rounded-xl bg-[var(--surface-container-low)] p-8">
-              <div className="space-y-6 rounded-lg border border-[var(--outline-variant)]/15 bg-[var(--surface-container-lowest)] p-6 shadow-sm">
-                <div>
-                  <p className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--outline)]">Content Topic</p>
-                  <div className="rounded-lg bg-[var(--surface-container-low)] p-4 text-[var(--on-surface-variant)]">
-                    The Future of Generative Architecture
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--outline)]">Visual Style</p>
-                    <div className="flex items-center gap-2 rounded-lg border border-[var(--primary)]/20 bg-[var(--primary-container)]/10 p-3 font-semibold text-[var(--primary)]">
-                      <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
-                        <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                      </svg>
-                      Bold &amp; Graphic
-                    </div>
-                  </div>
-                  <div>
-                    <p className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--outline)]">Aspect Ratio</p>
-                    <div className="rounded-lg bg-[var(--surface-container-low)] p-3 text-center text-[var(--on-surface-variant)]">
-                      16:9 Landscape
-                    </div>
-                  </div>
+          {/* Form mockup — order-2 on mobile (bottom), order-1 on desktop (left) */}
+          <div className="lg:order-1 lg:col-span-7">
+            <div className="space-y-4 rounded-lg border border-[var(--outline-variant)]/15 bg-[var(--surface-container-lowest)] p-4 shadow-sm md:space-y-6 md:p-6">
+              <div>
+                <p className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--outline)]">Content Topic</p>
+                <div className="rounded-lg bg-[var(--surface-container-low)] p-3 text-sm text-[var(--on-surface-variant)] md:p-4 md:text-base">
+                  The Future of Generative Architecture
                 </div>
               </div>
-              {/* Floating decoration */}
-              <div className="absolute -bottom-6 -right-6 flex size-32 rotate-3 items-center justify-center rounded-xl bg-[var(--secondary-container)] shadow-xl">
-                <svg aria-hidden="true" className="size-10 text-[var(--on-secondary-container)]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4ZM15 5l3 3" />
-                </svg>
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <p className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--outline)]">Visual Style</p>
+                  <div className="flex items-center gap-1.5 rounded-lg border border-[var(--primary)]/20 bg-[var(--primary-container)]/10 p-2.5 text-sm font-semibold text-[var(--primary)] md:gap-2 md:p-3">
+                    <svg aria-hidden="true" className="size-3.5 shrink-0" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
+                      <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                    </svg>
+                    Bold &amp; Graphic
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--outline)]">Aspect Ratio</p>
+                  <div className="rounded-lg bg-[var(--surface-container-low)] p-2.5 text-center text-sm text-[var(--on-surface-variant)] md:p-3">
+                    16:9 Landscape
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -140,8 +132,12 @@ export default function HowItWorksPage() {
                 <div className="mb-12 flex items-start justify-between">
                   <h3 className="font-headline text-xl font-bold text-[var(--on-surface)]">Neural Insight Mapping</h3>
                   {/* Hub icon */}
-                  <svg aria-hidden="true" className="size-6 text-[var(--secondary)]" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M10 2a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm2 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM4 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm16 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.01-4.23 5.66 3.27M6.35 13l5.66 3.26M6.34 11 12 7.73M17.65 13 12 16.27" />
+                  <svg aria-hidden="true" className="size-6 text-[var(--secondary)]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
+                    <circle cx={12} cy={5} r={2} />
+                    <circle cx={5} cy={12} r={2} />
+                    <circle cx={19} cy={12} r={2} />
+                    <circle cx={12} cy={19} r={2} />
+                    <path d="M12 7v5M12 17v-1M7 12h5M17 12h-1M6.7 6.7l3.6 3.6M17.3 17.3l-3.6-3.6M17.3 6.7l-3.6 3.6M6.7 17.3l3.6-3.6" />
                   </svg>
                 </div>
                 {/* Image */}
@@ -223,32 +219,32 @@ export default function HowItWorksPage() {
 
       {/* ── Final CTA ── */}
       <section className="mx-auto mb-24 max-w-5xl px-6 text-center md:px-8">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-[var(--outline-variant)]/10 bg-[var(--surface-container-lowest)] p-16 shadow-sm">
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-[var(--outline-variant)]/10 bg-[var(--surface-container-lowest)] p-8 shadow-sm md:p-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute right-0 top-0 size-64 opacity-30"
             style={{ background: 'radial-gradient(circle at 50% 50%, rgba(87,223,254,0.15) 0%, transparent 70%)' }}
           />
-          <h2 className="font-headline mb-6 text-4xl font-bold text-[var(--on-surface)] md:text-5xl">
+          <h2 className="font-headline mb-4 text-3xl font-bold text-[var(--on-surface)] md:mb-6 md:text-5xl">
             Ready to{' '}
             <span style={{ background: 'linear-gradient(135deg, #0058be 0%, #2170e4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Amplify
             </span>{' '}
             Your Content?
           </h2>
-          <p className="mx-auto mb-10 max-w-xl text-lg text-[var(--on-surface-variant)]">
+          <p className="mx-auto mb-8 max-w-xl text-base text-[var(--on-surface-variant)] md:mb-10 md:text-lg">
             Join over 15,000 creators using ThumbnailAI to redefine visual storytelling.
           </p>
-          <div className="flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
             <Link
               href="/generate"
-              className="cursor-pointer rounded-full bg-gradient-to-br from-[#0058be] to-[#2170e4] px-10 py-5 text-lg font-bold text-white shadow-xl tonal-transition hover:scale-[1.02] active:scale-95"
+              className="cursor-pointer rounded-full bg-gradient-to-br from-[#0058be] to-[#2170e4] px-8 py-3.5 text-base font-bold text-white shadow-xl tonal-transition hover:scale-[1.02] active:scale-95 md:px-10 md:py-5 md:text-lg"
             >
               Get Started
             </Link>
             <Link
               href="/thumbnails"
-              className="cursor-pointer rounded-full bg-[var(--surface-container-high)] px-10 py-5 text-lg font-bold text-[var(--on-surface)] tonal-transition hover:bg-[var(--surface-container-highest)]"
+              className="cursor-pointer rounded-full bg-[var(--surface-container-high)] px-8 py-3.5 text-base font-bold text-[var(--on-surface)] tonal-transition hover:bg-[var(--surface-container-highest)] md:px-10 md:py-5 md:text-lg"
             >
               View Showcase
             </Link>

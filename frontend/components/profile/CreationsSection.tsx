@@ -95,7 +95,7 @@ export function CreationsSection({ items }: { items: CommunityItem[] }) {
       </div>
 
       {filteredItems.length > 0 ? (
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {filteredItems.map((item) => (
             <div
               key={item.id}
@@ -107,7 +107,7 @@ export function CreationsSection({ items }: { items: CommunityItem[] }) {
                   alt={item.title}
                   fill
                   className="object-cover object-top"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 flex items-center justify-center gap-3 bg-[rgba(0,88,190,0.2)] opacity-0 transition-opacity group-hover:opacity-100">
                   <Link

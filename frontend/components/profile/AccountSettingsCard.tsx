@@ -80,7 +80,7 @@ export function AccountSettingsCard() {
   const passwordMismatch = confirmPw.length > 0 && newPw !== confirmPw;
 
   return (
-    <div className="rounded-3xl border border-[rgba(194,198,214,0.4)] bg-[var(--surface-container-lowest)] p-8 shadow-sm">
+    <div className="rounded-3xl border border-[rgba(194,198,214,0.4)] bg-[var(--surface-container-lowest)] p-5 shadow-sm md:p-8">
       <div className="mb-8 flex items-center gap-2 font-bold text-[var(--primary)]">
         <svg aria-hidden="true" className="size-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx={12} cy={7} r={4} />

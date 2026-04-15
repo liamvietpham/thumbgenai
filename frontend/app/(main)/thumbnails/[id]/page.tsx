@@ -117,27 +117,27 @@ export default async function ThumbnailDetailPage({ params }: Props) {
           </div>
 
           {/* Action bar */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3">
             <a
               href={item.imageUrl}
               download
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.02]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.02] sm:py-2.5"
             >
               <DownloadIcon className="size-4" />
               Download
             </a>
             <Link
               href="/regenerate"
-              className="inline-flex items-center gap-2 rounded-xl bg-[var(--surface-container-high)] px-5 py-2.5 text-sm font-semibold text-[var(--primary)] tonal-transition hover:bg-[var(--surface-container-highest)]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--surface-container-high)] px-5 py-3 text-sm font-semibold text-[var(--primary)] tonal-transition hover:bg-[var(--surface-container-highest)] sm:py-2.5"
             >
               <SparkIcon className="size-4" />
               Regenerate
             </Link>
             <Link
               href="/generate"
-              className="inline-flex items-center gap-2 rounded-xl bg-[var(--surface-container-high)] px-5 py-2.5 text-sm font-semibold text-[var(--on-surface-variant)] tonal-transition hover:bg-[var(--surface-container-highest)]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--surface-container-high)] px-5 py-3 text-sm font-semibold text-[var(--on-surface-variant)] tonal-transition hover:bg-[var(--surface-container-highest)] sm:py-2.5"
             >
               Generate New
               <ArrowRightIcon className="size-4" />

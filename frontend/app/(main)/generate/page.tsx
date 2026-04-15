@@ -86,6 +86,17 @@ export default function GeneratePage() {
 
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
 
+        {/* ─── Canvas — top on mobile, right on desktop ─── */}
+        <section className="order-first min-w-0 flex-1 lg:order-last">
+          <StudioPreviewPanel
+            aspect={aspect}
+            hasResult={Boolean(generatedImageUrl)}
+            imageUrl={generatedImageUrl ?? undefined}
+            isLoading={isGenerating}
+            onExport={handleExport}
+          />
+        </section>
+
         {/* ─── Left: Config Panel ─── */}
         <aside className="w-full shrink-0 lg:w-[420px]">
           <div className="rounded-[1.75rem] border border-[rgba(194,198,214,0.5)] bg-[var(--surface-container-lowest)] p-6 shadow-[0_12px_36px_rgba(0,88,190,0.06)]">
@@ -219,17 +230,6 @@ export default function GeneratePage() {
             </div>
           </div>
         </aside>
-
-        {/* ─── Right: Canvas ─── */}
-        <section className="min-w-0 flex-1">
-          <StudioPreviewPanel
-            aspect={aspect}
-            hasResult={Boolean(generatedImageUrl)}
-            imageUrl={generatedImageUrl ?? undefined}
-            isLoading={isGenerating}
-            onExport={handleExport}
-          />
-        </section>
 
       </div>
     </div>

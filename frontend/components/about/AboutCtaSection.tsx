@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function AboutCtaSection() {
   return (
-    <section className="px-6 pb-24 text-center md:px-8">
+    <section className="px-6 pb-14 text-center md:px-8 md:pb-24">
       <div className="mx-auto max-w-4xl">
         <h2 className="font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)] md:text-5xl">
           Ready to evolve your content?

@@ -16,9 +16,9 @@ const cardIconColors = {
 
 export function AboutOptimizationSection() {
   return (
-    <section className="px-6 py-24 md:px-8 md:py-40">
-      <div className="mx-auto max-w-7xl rounded-[2.5rem] border border-[rgba(194,198,214,0.16)] bg-[var(--surface-container-lowest)] p-12 shadow-[0_32px_64px_-12px_rgba(0,88,190,0.04)] md:p-20">
-        <div className="grid gap-16 lg:grid-cols-12 lg:items-center">
+    <section className="px-6 py-12 md:px-8 md:py-40">
+      <div className="mx-auto max-w-7xl rounded-[2rem] border border-[rgba(194,198,214,0.16)] bg-[var(--surface-container-lowest)] p-6 shadow-[0_32px_64px_-12px_rgba(0,88,190,0.04)] md:rounded-[2.5rem] md:p-20">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
           <div className="lg:col-span-7">
             <div className="mb-6 flex items-center gap-4">
               <div className="grid size-10 place-items-center rounded-full bg-[rgba(0,88,190,0.10)] text-[var(--primary)]">

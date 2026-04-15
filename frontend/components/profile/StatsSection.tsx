@@ -47,7 +47,7 @@ export function StatsSection() {
       {STATS.map((stat) => (
         <div
           key={stat.label}
-          className={`rounded-xl border-l-4 bg-[var(--surface-container-low)] p-8 shadow-sm ${stat.accent}`}
+          className={`rounded-xl border-l-4 bg-[var(--surface-container-low)] p-5 shadow-sm md:p-8 ${stat.accent}`}
         >
           <div className="mb-4 flex items-start justify-between">
             <span className={`rounded-lg p-2 ${stat.iconBg}`}>{stat.icon}</span>

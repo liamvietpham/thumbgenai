@@ -3,14 +3,7 @@
 import { useEffect, useState } from 'react';
 import { BILLING, BILLING_PREVIEW_COUNT } from './profile-data';
 
-function ReceiptIcon({ className = '' }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
-      <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
-      <path d="M14 8H8M16 12H8M13 16H8" />
-    </svg>
-  );
-}
+
 function XIcon({ className = '' }) {
   return (
     <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
@@ -21,16 +14,8 @@ function XIcon({ className = '' }) {
 
 function BillingRow({ b }: { b: typeof BILLING[number] }) {
   return (
-    <div className="group flex items-center justify-between rounded-lg bg-[var(--surface-container-lowest)] p-4 tonal-transition hover:bg-[var(--surface-container-lowest)]/80">
-      <div className="flex items-center gap-4">
-        <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-container-high)] tonal-transition group-hover:bg-[rgba(0,88,190,0.10)]">
-          <ReceiptIcon className="size-5 text-[var(--outline)] group-hover:text-[var(--primary)]" />
-        </div>
-        <div>
-          <p className="text-sm font-bold text-[var(--on-surface)]">{b.label}</p>
-          <p className="text-[11px] font-medium uppercase tracking-tight text-[var(--outline)]">{b.date}</p>
-        </div>
-      </div>
+    <div className="flex items-center justify-between rounded-lg bg-[var(--surface-container-lowest)] px-4 py-3">
+      <p className="text-[11px] font-medium uppercase tracking-tight text-[var(--outline)]">{b.date}</p>
       <div className="text-right">
         <p className="text-sm font-bold text-[var(--tertiary)]">{b.credits}</p>
         <p className="text-xs font-medium text-[var(--on-surface-variant)]">{b.amount}</p>
@@ -53,7 +38,7 @@ export function BillingHistory() {
 
   return (
     <>
-      <div className="rounded-xl bg-[var(--surface-container-low)] p-8">
+      <div className="rounded-xl bg-[var(--surface-container-low)] p-5 md:p-8">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="font-headline text-2xl font-bold tracking-tight text-[var(--on-surface)]">
             Billing History

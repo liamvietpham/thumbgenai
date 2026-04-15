@@ -8,7 +8,7 @@ const galleryItems = [
     showTitle: true,
     alt: 'High-energy e-sports gaming thumbnail with vibrant purple neon lighting and dramatic central character silhouette',
     src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCyVsowerNCOWdpLAK9iknbnAsQAe8jlXg-wduPPWZRl59o34rarIZSI5VurNs5NwnFjwSIyyyRptYgw2UcrAYMsICBgYsfL0bC4L7Kyb7StiK4JyDajFpebQCGvGqQvWNFgFanxgVhuqpCMYjRsFIDoKjfVNgw52I8i382htEkgAFkK8zL1Z-G3B4eN_LvkB96aUZXRTXPAOp26N0B2vaNR_4bzvlZlRuLKKd19RKNc7OhLBQ2j1UF0dfsuSGlmYE7GqvolO89MuJA',
-    className: 'col-span-2 row-span-2',
+    className: 'col-span-2 aspect-video md:aspect-auto md:row-span-2',
     sizes: '(max-width: 768px) 100vw, 50vw',
   },
   {
@@ -70,7 +70,7 @@ export function GallerySection() {
           >
             <Image
               alt={item.alt}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
               fill
               src={item.src}
               sizes={item.sizes}

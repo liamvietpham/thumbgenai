@@ -53,6 +53,17 @@ export default function RegeneratePage() {
 
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
 
+        {/* ─── Canvas — top on mobile, right on desktop ─── */}
+        <section className="order-first min-w-0 flex-1 lg:order-last">
+          <StudioPreviewPanel
+            aspect={aspect}
+            hasResult={Boolean(generatedImageUrl)}
+            imageUrl={generatedImageUrl ?? undefined}
+            isLoading={isGenerating}
+            onExport={handleExport}
+          />
+        </section>
+
         {/* ─── Left: Config Panel ─── */}
         <aside className="w-full shrink-0 lg:w-[420px]">
           {/* Form */}
@@ -77,7 +88,7 @@ export default function RegeneratePage() {
                     ) : (
                       <LinkIcon className="size-4" aria-hidden="true" />
                     )}
-                    {mode === 'upload' ? 'Upload Image' : 'Image URL'}
+                    {mode === 'upload' ? 'Upload' : 'Image URL'}
                   </button>
                 ))}
               </div>
@@ -143,17 +154,6 @@ export default function RegeneratePage() {
             </div>
           </div>
         </aside>
-
-        {/* ─── Right: Canvas ─── */}
-        <section className="min-w-0 flex-1">
-          <StudioPreviewPanel
-            aspect={aspect}
-            hasResult={Boolean(generatedImageUrl)}
-            imageUrl={generatedImageUrl ?? undefined}
-            isLoading={isGenerating}
-            onExport={handleExport}
-          />
-        </section>
 
       </div>
     </div>

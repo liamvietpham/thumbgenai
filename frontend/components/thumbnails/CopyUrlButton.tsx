@@ -39,7 +39,7 @@ export function CopyUrlButton({
     <button
       type="button"
       onClick={handleCopy}
-      className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold tonal-transition ${
+      className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold tonal-transition sm:py-2.5 ${
         copied
           ? 'bg-[var(--surface-container-high)] text-[var(--tertiary)]'
           : 'bg-[var(--surface-container-high)] text-[var(--on-surface-variant)] hover:bg-[var(--surface-container-highest)]'

@@ -57,7 +57,7 @@ export function PreferencesCard() {
   };
 
   return (
-    <div className="flex flex-col rounded-3xl border border-[rgba(194,198,214,0.4)] bg-[var(--surface-container-lowest)] p-8 shadow-sm">
+    <div className="flex flex-col rounded-3xl border border-[rgba(194,198,214,0.4)] bg-[var(--surface-container-lowest)] p-5 shadow-sm md:p-8">
       <div className="mb-8 flex items-center gap-2 font-bold text-[var(--primary)]">
         <svg aria-hidden="true" className="size-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
           <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" /><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />

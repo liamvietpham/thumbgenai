@@ -84,18 +84,16 @@ export function StudioPreviewPanel({
           ) : null}
 
           {!hasResult && !isLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-[var(--surface-container-high)] p-4">
-              <div className="flex w-full max-w-md flex-col items-center justify-center rounded-[1.5rem] border-2 border-dashed border-[rgba(194,198,214,0.4)] bg-[var(--surface-container-highest)]/60 px-6 py-4 text-center">
-                <div className="grid size-14 shrink-0 place-items-center rounded-full bg-[var(--surface-container-highest)] text-[var(--outline)] shadow-sm">
-                  <PlaceholderImageIcon className="size-7" aria-hidden="true" />
-                </div>
-                <p className="mt-3 font-headline text-lg font-semibold text-[var(--on-surface)]">
-                  Your canvas is ready
-                </p>
-                <p className="mt-1 text-sm leading-relaxed text-[var(--outline)]">
-                  Fill out the form on the left, then hit Generate.
-                </p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center">
+              <div className="grid size-14 shrink-0 place-items-center rounded-full bg-[var(--surface-container-highest)] text-[var(--outline)] shadow-sm">
+                <PlaceholderImageIcon className="size-7" aria-hidden="true" />
               </div>
+              <p className="font-headline text-lg font-semibold text-[var(--on-surface)]">
+                Your canvas is ready
+              </p>
+              <p className="text-sm leading-relaxed text-[var(--outline)]">
+                Fill out the form below, then hit Generate.
+              </p>
             </div>
           ) : null}
 
