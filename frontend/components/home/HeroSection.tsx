@@ -41,7 +41,7 @@ export function HeroSection() {
             <ArrowRightIcon className="size-5" aria-hidden="true" />
           </Link>
           <Link
-            href="/thumbnails"
+            href="/how-it-works"
             className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--surface-container-low)] px-10 py-4 text-lg font-semibold text-[var(--on-surface)] tonal-transition hover:bg-[var(--surface-container)] sm:w-auto"
           >
             <EyeIcon className="size-5 text-[var(--primary)]" aria-hidden="true" />
