@@ -12,11 +12,11 @@ function ThumbnailCard({ item }: { item: CommunityItem }) {
   return (
     <article
       key={`${item.title}-${item.imageUrl}`}
-      className="group relative overflow-hidden rounded-[1.25rem] border border-[rgba(194,198,214,0.5)] bg-[var(--surface-container-lowest)] shadow-[0_4px_16px_rgba(0,88,190,0.06)] tonal-transition hover:shadow-[0_8px_28px_rgba(0,88,190,0.12)]"
+      className="group relative overflow-hidden rounded-[1.25rem] border border-[rgba(194,198,214,0.5)] bg-(--surface-container-lowest) shadow-[0_4px_16px_rgba(0,88,190,0.06)] tonal-transition hover:shadow-[0_8px_28px_rgba(0,88,190,0.12)]"
       title={item.title}
     >
       <Link href={`/thumbnails/${item.id}`} className="block">
-        <div className="relative aspect-video overflow-hidden bg-[var(--surface-container-highest)]">
+        <div className="relative aspect-video overflow-hidden bg-(--surface-container-highest)">
           <Image
             src={item.imageUrl}
             alt={item.title}
@@ -31,26 +31,26 @@ function ThumbnailCard({ item }: { item: CommunityItem }) {
       </Link>
 
       <div className="space-y-2.5 p-4">
-        <h3 className="truncate text-sm font-semibold text-[var(--on-surface)]">
+        <h3 className="truncate text-sm font-semibold text-(--on-surface)">
           {item.title}
         </h3>
         <div className="flex flex-wrap gap-1.5 text-xs">
           {[item.style, item.color, item.aspect].map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-[var(--surface-container)] px-2 py-0.5 text-[var(--on-surface-variant)]"
+              className="rounded-full bg-(--surface-container) px-2 py-0.5 text-(--on-surface-variant)"
             >
               {tag}
             </span>
           ))}
         </div>
-        <p className="text-xs text-[var(--outline)]">{item.date}</p>
+        <p className="text-xs text-(--outline)">{item.date}</p>
       </div>
 
       <div className="absolute bottom-[3.5rem] right-2 flex gap-1.5 opacity-0 tonal-transition group-hover:opacity-100 max-sm:opacity-100">
         <button
           type="button"
-          className="grid size-7 cursor-pointer place-items-center rounded-lg bg-black/55 text-white backdrop-blur-sm tonal-transition hover:bg-[var(--primary)]"
+          className="grid size-7 cursor-pointer place-items-center rounded-lg bg-black/55 text-white backdrop-blur-sm tonal-transition hover:bg-(--primary)"
           onClick={async () => {
             const response = await fetch(item.imageUrl);
             const blob = await response.blob();
@@ -68,7 +68,7 @@ function ThumbnailCard({ item }: { item: CommunityItem }) {
         <Link
           target="_blank"
           href={item.imageUrl}
-          className="grid size-7 cursor-pointer place-items-center rounded-lg bg-black/55 text-white backdrop-blur-sm tonal-transition hover:bg-[var(--primary)]"
+          className="grid size-7 cursor-pointer place-items-center rounded-lg bg-black/55 text-white backdrop-blur-sm tonal-transition hover:bg-(--primary)"
           aria-label="Open image"
         >
           <ExternalLinkIcon className="size-3.5" />
@@ -110,7 +110,7 @@ export function ThumbnailsClient({
             type="button"
             onClick={() => setExtraCount((prev) => prev + PAGE_SIZE)}
             disabled={!hasMore}
-            className="cursor-pointer rounded-full border border-[rgba(194,198,214,0.5)] bg-[var(--surface-container-lowest)] px-8 py-3 text-sm font-medium text-[var(--on-surface-variant)] tonal-transition hover:bg-[var(--surface-container-low)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer rounded-full border border-[rgba(194,198,214,0.5)] bg-(--surface-container-lowest) px-8 py-3 text-sm font-medium text-(--on-surface-variant) tonal-transition hover:bg-(--surface-container-low) disabled:cursor-not-allowed disabled:opacity-50"
           >
             {hasMore ? 'Load More' : 'No More Items'}
           </button>

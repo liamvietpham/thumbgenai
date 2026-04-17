@@ -17,15 +17,15 @@ function downloadCsv() {
 
 export function UsageHistory() {
   return (
-    <div className="rounded-xl bg-[var(--surface-container-low)] p-5 md:p-8">
+    <div className="rounded-xl bg-(--surface-container-low) p-5 md:p-8">
       <div className="mb-8 flex items-center justify-between">
-        <h2 className="font-headline text-2xl font-bold tracking-tight text-[var(--on-surface)]">
+        <h2 className="font-headline text-2xl font-bold tracking-tight text-(--on-surface)">
           Usage History
         </h2>
         <button
           type="button"
           onClick={downloadCsv}
-          className="cursor-pointer text-sm font-bold text-[var(--primary)] hover:underline"
+          className="cursor-pointer text-sm font-bold text-(--primary) hover:underline"
         >
           Download CSV
         </button>
@@ -34,13 +34,13 @@ export function UsageHistory() {
         {USAGE.map((u) => (
           <div
             key={u.time + u.label}
-            className="flex items-center justify-between border-b border-[var(--surface-container-highest)]/50 py-3 last:border-0"
+            className="flex items-center justify-between border-b border-(--surface-container-highest)/50 py-3 last:border-0"
           >
             <div className="flex min-w-0 flex-1 items-center gap-4">
-              <span className="w-16 shrink-0 text-xs font-bold text-[var(--outline)]">{u.time}</span>
-              <p className="truncate text-sm font-medium text-[var(--on-surface)]">{u.label}</p>
+              <span className="w-16 shrink-0 text-xs font-bold text-(--outline)">{u.time}</span>
+              <p className="truncate text-sm font-medium text-(--on-surface)">{u.label}</p>
             </div>
-            <p className="ml-4 shrink-0 text-sm font-bold text-[var(--error)]">{u.cost}</p>
+            <p className="ml-4 shrink-0 text-sm font-bold text-(--error)">{u.cost}</p>
           </div>
         ))}
       </div>

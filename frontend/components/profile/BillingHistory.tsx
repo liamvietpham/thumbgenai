@@ -14,11 +14,11 @@ function XIcon({ className = '' }) {
 
 function BillingRow({ b }: { b: typeof BILLING[number] }) {
   return (
-    <div className="flex items-center justify-between rounded-lg bg-[var(--surface-container-lowest)] px-4 py-3">
-      <p className="text-[11px] font-medium uppercase tracking-tight text-[var(--outline)]">{b.date}</p>
+    <div className="flex items-center justify-between rounded-lg bg-(--surface-container-lowest) px-4 py-3">
+      <p className="text-[11px] font-medium uppercase tracking-tight text-(--outline)">{b.date}</p>
       <div className="text-right">
-        <p className="text-sm font-bold text-[var(--tertiary)]">{b.credits}</p>
-        <p className="text-xs font-medium text-[var(--on-surface-variant)]">{b.amount}</p>
+        <p className="text-sm font-bold text-(--tertiary)">{b.credits}</p>
+        <p className="text-xs font-medium text-(--on-surface-variant)">{b.amount}</p>
       </div>
     </div>
   );
@@ -38,15 +38,15 @@ export function BillingHistory() {
 
   return (
     <>
-      <div className="rounded-xl bg-[var(--surface-container-low)] p-5 md:p-8">
+      <div className="rounded-xl bg-(--surface-container-low) p-5 md:p-8">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="font-headline text-2xl font-bold tracking-tight text-[var(--on-surface)]">
+          <h2 className="font-headline text-2xl font-bold tracking-tight text-(--on-surface)">
             Billing History
           </h2>
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="cursor-pointer text-sm font-bold text-[var(--primary)] hover:underline"
+            className="cursor-pointer text-sm font-bold text-(--primary) hover:underline"
           >
             View All
           </button>
@@ -71,14 +71,14 @@ export function BillingHistory() {
           />
 
           {/* Panel */}
-          <div className="relative z-10 w-full max-w-lg rounded-2xl bg-[var(--surface-container-lowest)] shadow-2xl">
+          <div className="relative z-10 w-full max-w-lg rounded-2xl bg-(--surface-container-lowest) shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[var(--surface-container-high)] px-6 py-5">
-              <h3 className="font-headline text-lg font-bold text-[var(--on-surface)]">Billing History</h3>
+            <div className="flex items-center justify-between border-b border-(--surface-container-high) px-6 py-5">
+              <h3 className="font-headline text-lg font-bold text-(--on-surface)">Billing History</h3>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="grid size-8 cursor-pointer place-items-center rounded-lg text-[var(--outline)] tonal-transition hover:bg-[var(--surface-container-high)] hover:text-[var(--on-surface)]"
+                className="grid size-8 cursor-pointer place-items-center rounded-lg text-(--outline) tonal-transition hover:bg-(--surface-container-high) hover:text-(--on-surface)"
                 aria-label="Close"
               >
                 <XIcon className="size-4" />
@@ -91,8 +91,8 @@ export function BillingHistory() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-[var(--surface-container-high)] px-6 py-4 text-right">
-              <p className="text-xs text-[var(--outline)]">{BILLING.length} transactions</p>
+            <div className="border-t border-(--surface-container-high) px-6 py-4 text-right">
+              <p className="text-xs text-(--outline)">{BILLING.length} transactions</p>
             </div>
           </div>
         </div>

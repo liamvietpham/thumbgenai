@@ -15,7 +15,7 @@ type LegalTableOfContentsProps = {
   sections: PrivacySection[];
 };
 
-const iconClasses = 'size-5 text-[var(--primary)]';
+const iconClasses = 'size-5 text-(--primary)';
 
 export function LegalTableOfContents({ sections }: LegalTableOfContentsProps) {
   const [activeId, setActiveId] = useState<PrivacySectionId>(sections[0]?.id ?? 'data-collection');
@@ -117,7 +117,7 @@ export function LegalTableOfContents({ sections }: LegalTableOfContentsProps) {
   return (
     <aside className="md:w-72 md:flex-shrink-0">
       <nav aria-label="Privacy policy table of contents" className="sticky top-32 space-y-2">
-        <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-[var(--outline)]">
+        <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-(--outline)">
           Table of Contents
         </p>
 
@@ -132,8 +132,8 @@ export function LegalTableOfContents({ sections }: LegalTableOfContentsProps) {
               onClick={() => setActiveId(section.id)}
               className={`flex items-center gap-3 rounded-xl px-4 py-3 tonal-transition ${
                 active
-                  ? 'bg-[var(--surface-container-lowest)] font-semibold text-[var(--primary)] shadow-sm'
-                  : 'font-medium text-[var(--on-surface-variant)] hover:bg-[var(--surface-container-low)]'
+                  ? 'bg-(--surface-container-lowest) font-semibold text-(--primary) shadow-sm'
+                  : 'font-medium text-(--on-surface-variant) hover:bg-(--surface-container-low)'
               }`}
             >
               <SectionIcon id={section.id} className={iconClasses} />
@@ -143,14 +143,14 @@ export function LegalTableOfContents({ sections }: LegalTableOfContentsProps) {
         })}
 
         <div className="mt-12 rounded-[1.5rem] border border-[rgba(87,223,254,0.35)] bg-[rgba(87,223,254,0.20)] p-6">
-          <h2 className="font-bold text-[var(--on-secondary-container)]">Need clarity?</h2>
+          <h2 className="font-bold text-(--on-secondary-container)">Need clarity?</h2>
           <p className="mt-2 text-sm leading-relaxed text-[rgba(0,97,114,0.84)]">
             If you have questions about data handling, retention, or account requests, our support
             flow can point you to the right team.
           </p>
           <Link
             href="/contact"
-            className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--secondary)] tonal-transition hover:gap-2"
+            className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-(--secondary) tonal-transition hover:gap-2"
           >
             Contact support
             <ArrowNarrowIcon className="size-4" />

@@ -11,8 +11,8 @@ function CreditPackCard({ pack }: { pack: CreditPack }) {
     <article
       className={`relative flex h-full flex-col rounded-[1.5rem] p-10 tonal-transition ${
         pack.highlighted
-          ? 'border-2 border-[var(--primary)] bg-[var(--surface-container-lowest)] shadow-2xl shadow-[rgba(0,88,190,0.10)] md:-translate-y-4'
-          : 'bg-[var(--surface-container-low)] hover:bg-[var(--surface-container)]'
+          ? 'border-2 border-(--primary) bg-(--surface-container-lowest) shadow-2xl shadow-[rgba(0,88,190,0.10)] md:-translate-y-4'
+          : 'bg-(--surface-container-low) hover:bg-(--surface-container)'
       }`}
     >
       {pack.badge && (
@@ -21,21 +21,21 @@ function CreditPackCard({ pack }: { pack: CreditPack }) {
         </p>
       )}
       <header className="mb-8">
-        <h2 className="font-headline text-2xl font-bold text-[var(--on-surface)]">{pack.name}</h2>
-        <p className="mt-2 text-base text-[var(--on-surface-variant)]">{pack.tagline}</p>
+        <h2 className="font-headline text-2xl font-bold text-(--on-surface)">{pack.name}</h2>
+        <p className="mt-2 text-base text-(--on-surface-variant)">{pack.tagline}</p>
       </header>
       <div className="mb-8">
-        <p className="font-headline text-5xl font-bold text-[var(--on-surface)]">${pack.price}</p>
-        <p className="mt-2 text-[var(--on-surface-variant)]">
-          <span className="text-2xl font-bold text-[var(--primary)]">{pack.credits}</span>
+        <p className="font-headline text-5xl font-bold text-(--on-surface)">${pack.price}</p>
+        <p className="mt-2 text-(--on-surface-variant)">
+          <span className="text-2xl font-bold text-(--primary)">{pack.credits}</span>
           {' '}credits
           <span className="ml-2 text-sm opacity-70">({pack.pricePerCredit}/credit)</span>
         </p>
       </div>
-      <ul className="mb-10 flex-grow space-y-4">
+      <ul className="mb-10 grow space-y-4">
         {pack.features.map((feature) => (
-          <li key={feature} className="flex items-center gap-3 text-base text-[var(--on-surface)]">
-            <CheckCircleIcon className="size-5 shrink-0 text-[var(--primary)]" />
+          <li key={feature} className="flex items-center gap-3 text-base text-(--on-surface)">
+            <CheckCircleIcon className="size-5 shrink-0 text-(--primary)" />
             {feature}
           </li>
         ))}
@@ -44,8 +44,8 @@ function CreditPackCard({ pack }: { pack: CreditPack }) {
         href={pack.href}
         className={`inline-flex cursor-pointer items-center justify-center rounded-xl py-4 text-sm font-bold tonal-transition ${
           pack.highlighted
-            ? 'bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white shadow-lg shadow-[rgba(0,88,190,0.18)] hover:scale-[1.02]'
-            : 'bg-[var(--surface-container-highest)] text-[var(--primary)] hover:bg-[var(--surface-container-high)]'
+            ? 'bg-linear-to-br from-[#0058be] to-[#2170e4] text-white shadow-lg shadow-[rgba(0,88,190,0.18)] hover:scale-[1.02]'
+            : 'bg-(--surface-container-highest) text-(--primary) hover:bg-(--surface-container-high)'
         }`}
       >
         {pack.cta}
@@ -83,51 +83,51 @@ function CustomCreditCard() {
   };
 
   return (
-    <div className="rounded-[1.5rem] border border-[rgba(194,198,214,0.4)] bg-[var(--surface-container-lowest)] p-8 md:p-10">
+    <div className="rounded-[1.5rem] border border-[rgba(194,198,214,0.4)] bg-(--surface-container-lowest) p-8 md:p-10">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto_1fr] md:items-center">
 
         {/* Left: input */}
         <div>
-          <p className="mb-1 text-lg font-bold text-[var(--on-surface)]">Custom Amount</p>
-          <p className="mb-6 text-sm text-[var(--on-surface-variant)]">Top up exactly what you need.</p>
+          <p className="mb-1 text-lg font-bold text-(--on-surface)">Custom Amount</p>
+          <p className="mb-6 text-sm text-(--on-surface-variant)">Top up exactly what you need.</p>
 
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => nudge(-1)}
               disabled={amount <= 2}
-              className="grid size-10 shrink-0 cursor-pointer place-items-center rounded-xl bg-[var(--surface-container-low)] text-lg font-bold text-[var(--on-surface-variant)] tonal-transition hover:bg-[var(--surface-container-high)] disabled:cursor-not-allowed disabled:opacity-30"
+              className="grid size-10 shrink-0 cursor-pointer place-items-center rounded-xl bg-(--surface-container-low) text-lg font-bold text-(--on-surface-variant) tonal-transition hover:bg-(--surface-container-high) disabled:cursor-not-allowed disabled:opacity-30"
             >−</button>
 
             <div className="relative flex-1">
-              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-[var(--outline)]">$</span>
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-(--outline)">$</span>
               <input
                 type="text"
                 inputMode="numeric"
                 value={raw}
                 onChange={(e) => { if (/^\d*$/.test(e.target.value)) setRaw(e.target.value); }}
-                className="w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] py-3 pl-8 pr-3 text-center text-xl font-bold text-[var(--on-surface)] transition-all focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]"
+                className="form-field w-full py-3 pl-8 pr-3 text-center text-xl font-bold"
               />
             </div>
 
             <button
               type="button"
               onClick={() => nudge(1)}
-              className="grid size-10 shrink-0 cursor-pointer place-items-center rounded-xl bg-[var(--surface-container-low)] text-lg font-bold text-[var(--on-surface-variant)] tonal-transition hover:bg-[var(--surface-container-high)]"
+              className="grid size-10 shrink-0 cursor-pointer place-items-center rounded-xl bg-(--surface-container-low) text-lg font-bold text-(--on-surface-variant) tonal-transition hover:bg-(--surface-container-high)"
             >+</button>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="hidden h-24 w-px bg-[var(--surface-container-high)] md:block" />
+        <div className="hidden h-24 w-px bg-(--surface-container-high) md:block" />
 
         {/* Right: credits + CTA */}
         <div>
-          <div className="mb-4 rounded-2xl bg-[var(--surface-container-low)] p-4 text-center">
-            <p className="font-headline text-4xl font-bold text-[var(--primary)]">
+          <div className="mb-4 rounded-2xl bg-(--surface-container-low) p-4 text-center">
+            <p className="font-headline text-4xl font-bold text-(--primary)">
               {valid ? credits.toLocaleString() : '—'}
             </p>
-            <p className="mt-1 text-sm font-medium text-[var(--on-surface-variant)]">
+            <p className="mt-1 text-sm font-medium text-(--on-surface-variant)">
               credits
               {valid && <span className="ml-2 opacity-60">{pricePerCredit(amount)}/credit</span>}
             </p>
@@ -136,7 +136,7 @@ function CustomCreditCard() {
           <button
             type="button"
             disabled={!valid}
-            className="w-full cursor-pointer rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] py-3.5 text-sm font-bold text-white shadow-lg shadow-[rgba(0,88,190,0.18)] tonal-transition hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            className="w-full cursor-pointer rounded-xl bg-linear-to-br from-[#0058be] to-[#2170e4] py-3.5 text-sm font-bold text-white shadow-lg shadow-[rgba(0,88,190,0.18)] tonal-transition hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {valid ? `Get ${credits.toLocaleString()} credits for $${amount}` : 'Enter an amount'}
           </button>

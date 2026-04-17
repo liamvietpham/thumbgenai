@@ -5,7 +5,7 @@ import PlaceholderImageIcon from '@/components/icons/generated/PlaceholderImageI
 import SpinnerIcon from '@/components/icons/generated/SpinnerIcon';
 
 const sectionLabelClass =
-  'block font-headline text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--outline)]';
+  'block font-headline text-[11px] font-semibold uppercase tracking-[0.2em] text-(--outline)';
 
 export function StudioAspectRatioSelector({
   value,
@@ -30,8 +30,8 @@ export function StudioAspectRatioSelector({
               onClick={() => onChange(item.value)}
               className={`cursor-pointer rounded-full px-4 py-2 text-sm tracking-[0.18em] tonal-transition ${
                 active
-                  ? 'bg-[var(--primary)] text-white shadow-lg shadow-[rgba(0,88,190,0.18)]'
-                  : 'bg-[var(--surface-container-low)] text-[var(--on-surface-variant)] hover:bg-[var(--surface-container)]'
+                  ? 'bg-(--primary) text-white shadow-lg shadow-[rgba(0,88,190,0.18)]'
+                  : 'bg-(--surface-container-low) text-(--on-surface-variant) hover:bg-(--surface-container)'
               }`}
             >
               {item.label}
@@ -58,9 +58,9 @@ export function StudioPreviewPanel({
 }) {
   return (
     <section>
-      <div className="rounded-[1.75rem] border border-[rgba(194,198,214,0.5)] bg-[var(--surface-container-lowest)] p-4 shadow-[0_18px_42px_rgba(0,88,190,0.08)]">
+      <div className="rounded-[1.75rem] border border-[rgba(194,198,214,0.5)] bg-(--surface-container-lowest) p-4 shadow-[0_18px_42px_rgba(0,88,190,0.08)]">
         <div
-          className="group relative overflow-hidden rounded-[1.35rem] bg-[var(--surface-container-highest)]"
+          className="group relative overflow-hidden rounded-[1.35rem] bg-(--surface-container-highest)"
           style={{ aspectRatio: aspect }}
         >
           {hasResult && imageUrl ? (
@@ -85,13 +85,13 @@ export function StudioPreviewPanel({
 
           {!hasResult && !isLoading ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center">
-              <div className="grid size-14 shrink-0 place-items-center rounded-full bg-[var(--surface-container-highest)] text-[var(--outline)] shadow-sm">
+              <div className="grid size-14 shrink-0 place-items-center rounded-full bg-(--surface-container-highest) text-(--outline) shadow-sm">
                 <PlaceholderImageIcon className="size-7" aria-hidden="true" />
               </div>
-              <p className="font-headline text-lg font-semibold text-[var(--on-surface)]">
+              <p className="font-headline text-lg font-semibold text-(--on-surface)">
                 Your canvas is ready
               </p>
-              <p className="text-sm leading-relaxed text-[var(--outline)]">
+              <p className="text-sm leading-relaxed text-(--outline)">
                 Fill out the form below, then hit Generate.
               </p>
             </div>
@@ -100,7 +100,7 @@ export function StudioPreviewPanel({
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-[rgba(25,28,30,0.48)] backdrop-blur-[2px]">
               <div className="text-center text-white">
-                <div className="mx-auto mb-5 grid size-16 place-items-center rounded-full border-4 border-white/18 border-t-[var(--secondary-container)] bg-white/8">
+                <div className="mx-auto mb-5 grid size-16 place-items-center rounded-full border-4 border-white/18 border-t-(--secondary-container) bg-white/8">
                   <SpinnerIcon className="size-7 animate-spin text-white" aria-hidden="true" />
                 </div>
                 <p className="font-headline text-xl font-semibold tracking-wide">
@@ -119,7 +119,7 @@ export function StudioPreviewPanel({
               <button
                 type="button"
                 onClick={onExport}
-                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white/90 px-4 py-2.5 text-sm font-semibold text-[var(--on-surface)] shadow-lg backdrop-blur-sm tonal-transition hover:bg-white"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white/90 px-4 py-2.5 text-sm font-semibold text-(--on-surface) shadow-lg backdrop-blur-sm tonal-transition hover:bg-white"
               >
                 <DownloadIcon className="size-4" aria-hidden="true" />
                 Download
@@ -134,7 +134,7 @@ export function StudioPreviewPanel({
 
 export function PreviewTile({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[0.75rem] bg-[var(--surface-container)] shadow-sm">
+    <div className="relative h-full w-full overflow-hidden rounded-[0.75rem] bg-(--surface-container) shadow-sm">
       <Image src={src} alt={alt} fill unoptimized sizes="120px" className="object-cover grayscale tonal-transition hover:grayscale-0" />
     </div>
   );

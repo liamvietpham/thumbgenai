@@ -9,9 +9,9 @@ export function TermsArticle() {
       {/* 1. Introduction */}
       <section className="space-y-4">
         <SectionHeading number="1" title="Introduction" />
-        <div className="rounded-2xl bg-[var(--surface-container-low)] p-6 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="rounded-2xl bg-(--surface-container-low) p-6 text-lg leading-relaxed text-(--on-surface-variant)">
           <p>
-            Welcome to <strong className="font-semibold text-[var(--on-surface)]">ThumbnailAI</strong>{' '}
+            Welcome to <strong className="font-semibold text-(--on-surface)">ThumbnailAI</strong>{' '}
             (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). These Terms of Service
             (&ldquo;Terms&rdquo;) govern your access to and use of our website, tools, and services
             (the &ldquo;Service&rdquo;). By creating an account or using the Service, you agree to
@@ -23,7 +23,7 @@ export function TermsArticle() {
       {/* 2. Eligibility */}
       <section className="space-y-4">
         <SectionHeading number="2" title="Eligibility" />
-        <div className="space-y-4 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="space-y-4 text-lg leading-relaxed text-(--on-surface-variant)">
           <p>To use the Service, you must:</p>
           <NumberedList
             items={[
@@ -39,7 +39,7 @@ export function TermsArticle() {
       {/* 3. Description of the Service */}
       <section className="space-y-4">
         <SectionHeading number="3" title="Description of the Service" />
-        <p className="text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <p className="text-lg leading-relaxed text-(--on-surface-variant)">
           ThumbnailAI allows users to enter prompts, select configuration options, and generate
           AI-powered thumbnails (&ldquo;Generated Content&rdquo;). Credits are required to generate
           thumbnails.
@@ -53,9 +53,9 @@ export function TermsArticle() {
           ].map((item) => (
             <div
               key={item}
-              className="rounded-xl bg-[var(--surface-container-low)] p-4 text-sm leading-relaxed text-[var(--on-surface-variant)]"
+              className="rounded-xl bg-(--surface-container-low) p-4 text-sm leading-relaxed text-(--on-surface-variant)"
             >
-              <SparkIcon className="mb-2 size-4 text-[var(--primary)]" />
+              <SparkIcon className="mb-2 size-4 text-(--primary)" />
               {item}
             </div>
           ))}
@@ -65,7 +65,7 @@ export function TermsArticle() {
       {/* 4. Use of the Service */}
       <section className="space-y-4">
         <SectionHeading number="4" title="Use of the Service" />
-        <div className="space-y-4 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="space-y-4 text-lg leading-relaxed text-(--on-surface-variant)">
           <p>You agree not to use the Service to:</p>
           <NumberedList
             items={[
@@ -83,23 +83,23 @@ export function TermsArticle() {
       <section className="space-y-4">
         <SectionHeading number="5" title="Generated Content & Intellectual Property" />
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-2xl bg-[var(--surface-container-low)] p-6">
-            <h4 className="mb-3 flex items-center gap-2 font-semibold text-[var(--on-surface)]">
-              <SparkIcon className="size-4 text-[var(--primary)]" />
+          <div className="rounded-2xl bg-(--surface-container-low) p-6">
+            <h4 className="mb-3 flex items-center gap-2 font-semibold text-(--on-surface)">
+              <SparkIcon className="size-4 text-(--primary)" />
               Your Rights
             </h4>
-            <p className="text-base leading-relaxed text-[var(--on-surface-variant)]">
+            <p className="text-base leading-relaxed text-(--on-surface-variant)">
               You own the rights to the thumbnails you generate, subject to applicable copyright
               laws, compliance with these Terms, and limitations imposed by AI training data or
               licensing rules.
             </p>
           </div>
-          <div className="rounded-2xl bg-[var(--surface-container-low)] p-6">
-            <h4 className="mb-3 flex items-center gap-2 font-semibold text-[var(--on-surface)]">
-              <LockIcon className="size-4 text-[var(--primary)]" />
+          <div className="rounded-2xl bg-(--surface-container-low) p-6">
+            <h4 className="mb-3 flex items-center gap-2 font-semibold text-(--on-surface)">
+              <LockIcon className="size-4 text-(--primary)" />
               Our Policy
             </h4>
-            <p className="text-base leading-relaxed text-[var(--on-surface-variant)]">
+            <p className="text-base leading-relaxed text-(--on-surface-variant)">
               You are responsible for ensuring your Generated Content does not infringe any laws or
               third-party rights. We may temporarily store content to improve performance, but we do
               not sell your content.
@@ -111,7 +111,7 @@ export function TermsArticle() {
       {/* 6. Payments & Credits */}
       <section className="space-y-4">
         <SectionHeading number="6" title="Payments & Credits" />
-        <div className="space-y-4 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="space-y-4 text-lg leading-relaxed text-(--on-surface-variant)">
           <p>
             All payments are processed securely through third-party payment providers. Prices may
             change at any time.
@@ -129,8 +129,8 @@ export function TermsArticle() {
       {/* 7. No Warranty */}
       <section className="space-y-4">
         <SectionHeading number="7" title="No Warranty" />
-        <div className="rounded-2xl bg-[var(--surface-container)] p-8 text-lg leading-relaxed text-[var(--on-surface-variant)]">
-          <p className="mb-4 font-medium italic text-[var(--on-surface)]">
+        <div className="rounded-2xl bg-(--surface-container) p-8 text-lg leading-relaxed text-(--on-surface-variant)">
+          <p className="mb-4 font-medium italic text-(--on-surface)">
             &ldquo;The Service is provided &lsquo;as is&rsquo; and &lsquo;as
             available&rsquo;&mdash;without any warranties of any kind.&rdquo;
           </p>
@@ -144,7 +144,7 @@ export function TermsArticle() {
       {/* 8. Limitation of Liability */}
       <section className="space-y-4">
         <SectionHeading number="8" title="Limitation of Liability" />
-        <div className="rounded-2xl border-l-4 border-[var(--primary)] bg-[var(--surface-container-low)] p-8 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="rounded-2xl border-l-4 border-(--primary) bg-(--surface-container-low) p-8 text-lg leading-relaxed text-(--on-surface-variant)">
           To the fullest extent permitted by law, we are not liable for lost profits, loss of data,
           indirect or consequential damages, or issues caused by misuse or third-party services. Our
           total liability will not exceed the amount you paid to us in the last three (3) months.
@@ -154,7 +154,7 @@ export function TermsArticle() {
       {/* 9. Account Termination */}
       <section className="space-y-4">
         <SectionHeading number="9" title="Account Termination" />
-        <div className="space-y-4 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="space-y-4 text-lg leading-relaxed text-(--on-surface-variant)">
           <p>
             We may suspend or terminate your account if you violate these Terms, misuse the Service,
             or engage in fraud or abuse. You may stop using the Service at any time by closing your
@@ -164,7 +164,7 @@ export function TermsArticle() {
             <VerifyBadgeIcon className="mt-1 size-5 shrink-0 text-[#ba1a1a]" />
             <div>
               <p className="mb-1 text-sm font-semibold text-[#ba1a1a]">Account Deletion Policy</p>
-              <p className="text-sm leading-relaxed text-[var(--on-surface-variant)]">
+              <p className="text-sm leading-relaxed text-(--on-surface-variant)">
                 Upon termination, your right to use the Service will immediately cease. All data
                 associated with your account will be archived for 30 days before permanent deletion.
               </p>
@@ -176,7 +176,7 @@ export function TermsArticle() {
       {/* 10. Changes */}
       <section className="space-y-4">
         <SectionHeading number="10" title="Changes to These Terms" />
-        <div className="rounded-2xl bg-[var(--surface-container-low)] p-6 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="rounded-2xl bg-(--surface-container-low) p-6 text-lg leading-relaxed text-(--on-surface-variant)">
           We may update these Terms from time to time. Continued use of the Service after changes
           take effect constitutes acceptance of the updated Terms.
         </div>
@@ -185,11 +185,11 @@ export function TermsArticle() {
       {/* 11. Contact */}
       <section className="space-y-4">
         <SectionHeading number="11" title="Contact" />
-        <div className="rounded-2xl bg-[var(--surface-container-low)] p-6 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <div className="rounded-2xl bg-(--surface-container-low) p-6 text-lg leading-relaxed text-(--on-surface-variant)">
           If you have questions about these Terms, please contact us at{' '}
           <a
             href="mailto:support@thumbnailai.com"
-            className="font-semibold text-[var(--primary)] hover:underline"
+            className="font-semibold text-(--primary) hover:underline"
           >
             support@thumbnailai.com
           </a>
@@ -198,16 +198,16 @@ export function TermsArticle() {
       </section>
 
       {/* Footer CTA */}
-      <footer className="rounded-2xl bg-gradient-to-br from-[var(--surface-container-low)] to-[var(--surface-container-high,var(--surface-container))] p-10 text-center">
-        <p className="font-headline text-xl font-bold text-[var(--on-surface)]">
+      <footer className="rounded-2xl bg-linear-to-br from-(--surface-container-low) to-(--surface-container-high,var(--surface-container)) p-10 text-center">
+        <p className="font-headline text-xl font-bold text-(--on-surface)">
           Ready to start creating?
         </p>
-        <p className="mt-2 text-sm text-[var(--on-surface-variant)]">
+        <p className="mt-2 text-sm text-(--on-surface-variant)">
           Join 50,000+ creators building the future of video content.
         </p>
         <Link
           href="/generate"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[#0058be] to-[#2170e4] px-10 py-3 font-bold text-white shadow-xl shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.03]"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-br from-[#0058be] to-[#2170e4] px-10 py-3 font-bold text-white shadow-xl shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.03]"
         >
           <SparkIcon className="size-4" />
           Get Started Now
@@ -219,8 +219,8 @@ export function TermsArticle() {
 
 function SectionHeading({ number, title }: { number: string; title: string }) {
   return (
-    <h2 className="flex items-center gap-3 font-headline text-3xl font-bold tracking-tight text-[var(--on-surface)]">
-      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[var(--secondary-container)] text-sm font-bold text-[var(--on-secondary-container)]">
+    <h2 className="flex items-center gap-3 font-headline text-3xl font-bold tracking-tight text-(--on-surface)">
+      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-(--secondary-container) text-sm font-bold text-(--on-secondary-container)">
         {number}
       </span>
       {title}
@@ -234,12 +234,12 @@ function NumberedList({ items }: { items: string[] }) {
       {items.map((item, i) => (
         <li
           key={item}
-          className="flex items-start gap-4 rounded-xl p-4 tonal-transition hover:bg-[var(--surface-container-lowest)]"
+          className="flex items-start gap-4 rounded-xl p-4 tonal-transition hover:bg-(--surface-container-lowest)"
         >
-          <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--secondary-container)] text-sm font-bold text-[var(--on-secondary-container)]">
+          <div className="grid size-8 shrink-0 place-items-center rounded-full bg-(--secondary-container) text-sm font-bold text-(--on-secondary-container)">
             {String(i + 1).padStart(2, '0')}
           </div>
-          <p className="mt-1 text-base leading-relaxed text-[var(--on-surface-variant)]">{item}</p>
+          <p className="mt-1 text-base leading-relaxed text-(--on-surface-variant)">{item}</p>
         </li>
       ))}
     </ul>

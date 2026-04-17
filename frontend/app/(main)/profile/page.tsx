@@ -12,10 +12,10 @@ export default function ProfilePage() {
 
       {/* Header */}
       <section className="mb-12 pt-10">
-        <h1 className="font-headline mb-3 text-5xl font-bold tracking-tight text-[var(--on-surface)]">
+        <h1 className="font-headline mb-3 text-5xl font-bold tracking-tight text-(--on-surface)">
           Account Studio
         </h1>
-        <p className="max-w-2xl text-lg font-medium text-[var(--on-surface-variant)]">
+        <p className="max-w-2xl text-lg font-medium text-(--on-surface-variant)">
           Manage your preferences, security, and AI integrations in your private creator workspace.
         </p>
       </section>

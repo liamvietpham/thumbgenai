@@ -7,25 +7,25 @@ export function PricingSection({ className = '' }: { className?: string }) {
     <section
       id="pricing"
       aria-labelledby="pricing-title"
-      className={`relative scroll-mt-24 bg-[var(--surface-container-lowest)] px-6 py-32 md:px-8 ${className}`}
+      className={`relative scroll-mt-24 bg-(--surface-container-lowest) px-6 py-32 md:px-8 ${className}`}
     >
       <div className="mx-auto max-w-7xl">
         <header className="mx-auto mb-4 max-w-3xl text-center">
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-(--primary)">
             Pricing
           </p>
           <h2
             id="pricing-title"
-            className="mt-4 font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)] md:text-5xl"
+            className="mt-4 font-headline text-4xl font-bold tracking-tight text-(--on-surface) md:text-5xl"
           >
             Pay as you go
           </h2>
-          <p className="mt-4 text-lg leading-relaxed text-[var(--on-surface-variant)]">
+          <p className="mt-4 text-lg leading-relaxed text-(--on-surface-variant)">
             Buy credits once, use them at your own pace. No subscriptions, no monthly fees.
           </p>
         </header>
 
-        <p className="mb-16 mt-2 text-center text-base text-[var(--on-surface-variant)]">
+        <p className="mb-16 mt-2 text-center text-base text-(--on-surface-variant)">
           1 image = 1 credit &nbsp;·&nbsp; Credits never expire
         </p>
 
@@ -37,20 +37,20 @@ export function PricingSection({ className = '' }: { className?: string }) {
 
         <Link
           href="/pricing#custom"
-          className="group mt-8 flex cursor-pointer flex-col gap-5 rounded-[1.5rem] border-2 border-dashed border-[rgba(0,88,190,0.25)] bg-[var(--surface-container-low)] p-6 tonal-transition hover:border-[var(--primary)] hover:bg-[var(--surface-container)] sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-8 md:p-10"
+          className="group mt-8 flex cursor-pointer flex-col gap-5 rounded-[1.5rem] border-2 border-dashed border-[rgba(0,88,190,0.25)] bg-(--surface-container-low) p-6 tonal-transition hover:border-(--primary) hover:bg-(--surface-container) sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-8 md:p-10"
         >
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--primary)]">Custom Amount</p>
-            <p className="mt-1 font-headline text-xl font-bold text-[var(--on-surface)] sm:text-2xl">Top up exactly what you need</p>
-            <p className="mt-1 text-sm text-[var(--on-surface-variant)]">From $2 · Better rate the more you top up</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-(--primary)">Custom Amount</p>
+            <p className="mt-1 font-headline text-xl font-bold text-(--on-surface) sm:text-2xl">Top up exactly what you need</p>
+            <p className="mt-1 text-sm text-(--on-surface-variant)">From $2 · Better rate the more you top up</p>
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
-            <div className="flex items-center gap-1 rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container-lowest)] px-4 py-2.5 text-lg font-bold text-[var(--outline)]">
+            <div className="flex items-center gap-1 rounded-xl border border-[rgba(194,198,214,0.55)] bg-(--surface-container-lowest) px-4 py-2.5 text-lg font-bold text-(--outline)">
               <span>$</span>
-              <span className="w-10 border-b border-dashed border-[var(--outline)]" />
+              <span className="w-10 border-b border-dashed border-(--outline)" />
             </div>
-            <svg aria-hidden="true" className="size-5 text-[var(--primary)] transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="size-5 text-(--primary) transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </div>
@@ -65,8 +65,8 @@ function CreditPackCard({ pack }: { pack: CreditPack }) {
     <article
       className={`relative flex h-full flex-col rounded-[1.5rem] p-10 tonal-transition ${
         pack.highlighted
-          ? 'border-2 border-[var(--primary)] bg-[var(--surface-container-lowest)] shadow-2xl shadow-[rgba(0,88,190,0.10)] md:-translate-y-4'
-          : 'bg-[var(--surface-container-low)] hover:bg-[var(--surface-container)]'
+          ? 'border-2 border-(--primary) bg-(--surface-container-lowest) shadow-2xl shadow-[rgba(0,88,190,0.10)] md:-translate-y-4'
+          : 'bg-(--surface-container-low) hover:bg-(--surface-container)'
       }`}
     >
       {pack.badge ? (
@@ -76,27 +76,27 @@ function CreditPackCard({ pack }: { pack: CreditPack }) {
       ) : null}
 
       <header className="mb-8">
-        <h3 className="font-headline text-2xl font-bold text-[var(--on-surface)]">
+        <h3 className="font-headline text-2xl font-bold text-(--on-surface)">
           {pack.name}
         </h3>
-        <p className="mt-2 text-base text-[var(--on-surface-variant)]">{pack.tagline}</p>
+        <p className="mt-2 text-base text-(--on-surface-variant)">{pack.tagline}</p>
       </header>
 
       <div className="mb-8">
-        <p className="font-headline text-5xl font-bold text-[var(--on-surface)]">
+        <p className="font-headline text-5xl font-bold text-(--on-surface)">
           ${pack.price}
         </p>
-        <p className="mt-2 text-[var(--on-surface-variant)]">
-          <span className="text-2xl font-bold text-[var(--primary)]">{pack.credits}</span>
+        <p className="mt-2 text-(--on-surface-variant)">
+          <span className="text-2xl font-bold text-(--primary)">{pack.credits}</span>
           {' '}credits
           <span className="ml-2 text-sm opacity-70">({pack.pricePerCredit}/credit)</span>
         </p>
       </div>
 
-      <ul className="mb-10 flex-grow space-y-4">
+      <ul className="mb-10 grow space-y-4">
         {pack.features.map((feature) => (
-          <li key={feature} className="flex items-center gap-3 text-base text-[var(--on-surface)]">
-            <CheckCircleIcon className="size-5 shrink-0 text-[var(--primary)]" />
+          <li key={feature} className="flex items-center gap-3 text-base text-(--on-surface)">
+            <CheckCircleIcon className="size-5 shrink-0 text-(--primary)" />
             {feature}
           </li>
         ))}
@@ -106,8 +106,8 @@ function CreditPackCard({ pack }: { pack: CreditPack }) {
         href={pack.href}
         className={`inline-flex cursor-pointer items-center justify-center rounded-xl py-4 text-sm font-bold tonal-transition ${
           pack.highlighted
-            ? 'bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white shadow-lg shadow-[rgba(0,88,190,0.18)] hover:scale-[1.02]'
-            : 'bg-[var(--surface-container-highest)] text-[var(--primary)] hover:bg-[var(--surface-container-high)]'
+            ? 'bg-linear-to-br from-[#0058be] to-[#2170e4] text-white shadow-lg shadow-[rgba(0,88,190,0.18)] hover:scale-[1.02]'
+            : 'bg-(--surface-container-highest) text-(--primary) hover:bg-(--surface-container-high)'
         }`}
       >
         {pack.cta}

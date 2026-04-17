@@ -19,10 +19,10 @@ export default function ThumbnailsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 md:pb-24 md:pt-20 lg:px-8">
       <div className="mb-10 space-y-2">
-        <h1 className="font-headline text-4xl font-bold tracking-tight text-[var(--on-surface)]">
+        <h1 className="font-headline text-4xl font-bold tracking-tight text-(--on-surface)">
           Thumbnails
         </h1>
-        <p className="max-w-md text-lg leading-relaxed text-[var(--on-surface-variant)]">
+        <p className="max-w-md text-lg leading-relaxed text-(--on-surface-variant)">
           Browse AI-generated thumbnails created by the community and share your own.
         </p>
       </div>

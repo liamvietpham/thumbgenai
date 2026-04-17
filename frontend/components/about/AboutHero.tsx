@@ -11,14 +11,14 @@ export function AboutHero() {
 
       <div className="mx-auto max-w-7xl">
         <header className="max-w-4xl">
-          <h1 className="font-headline text-5xl font-bold tracking-tight text-[var(--on-surface)] md:text-[5rem] md:leading-[1.05]">
+          <h1 className="font-headline text-5xl font-bold tracking-tight text-(--on-surface) md:text-[5rem] md:leading-[1.05]">
             Empowering creators with the
-            <span className="block bg-gradient-to-r from-[var(--primary)] to-[var(--secondary-container)] bg-clip-text text-transparent">
+            <span className="block bg-linear-to-r from-(--primary) to-(--secondary-container) bg-clip-text text-transparent">
               intelligence of Gemini.
             </span>
           </h1>
 
-          <p className="mt-8 max-w-2xl text-lg font-light leading-relaxed text-[var(--on-surface-variant)] md:text-xl">
+          <p className="mt-8 max-w-2xl text-lg font-light leading-relaxed text-(--on-surface-variant) md:text-xl">
             Thumbnail AI bridges the gap between raw creative instinct and data-aware execution.
             We build tools that help creators spend less time wrestling with layouts and more time
             shaping ideas that deserve attention.
@@ -37,12 +37,12 @@ export function AboutHero() {
                   width={48}
                 />
               ))}
-              <div className="grid size-12 place-items-center rounded-full border-2 border-white bg-[var(--primary-fixed)] text-sm font-bold text-[var(--primary)] shadow-sm">
+              <div className="grid size-12 place-items-center rounded-full border-2 border-white bg-(--primary-fixed) text-sm font-bold text-(--primary) shadow-sm">
                 +2k
               </div>
             </div>
 
-            <p className="text-sm font-medium uppercase tracking-[0.22em] text-[var(--on-surface-variant)]">
+            <p className="text-sm font-medium uppercase tracking-[0.22em] text-(--on-surface-variant)">
               Trusted by leading visionaries
             </p>
           </div>

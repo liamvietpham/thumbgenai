@@ -11,7 +11,7 @@ export function PricingLogoCloud() {
           {pricingLogos.map((logo) => (
             <li
               key={logo}
-              className="font-headline text-xl font-bold tracking-wide text-[var(--on-surface)]"
+              className="font-headline text-xl font-bold tracking-wide text-(--on-surface)"
             >
               {logo}
             </li>

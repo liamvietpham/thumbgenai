@@ -20,19 +20,19 @@ export default function ForgotPasswordPage() {
       </div>
 
       <div className="w-full max-w-md">
-        <div className="flex flex-col items-center rounded-[2rem] bg-[var(--surface-container-lowest)] p-8 shadow-[0_32px_64px_-16px_rgba(0,88,190,0.08)]">
+        <div className="flex flex-col items-center rounded-[2rem] bg-(--surface-container-lowest) p-8 shadow-[0_32px_64px_-16px_rgba(0,88,190,0.08)]">
 
           {/* Icon */}
-          <div className="mb-6 grid size-16 place-items-center rounded-2xl bg-[var(--surface-container-low)] text-[var(--primary)]">
+          <div className="mb-6 grid size-16 place-items-center rounded-2xl bg-(--surface-container-low) text-(--primary)">
             <LockOpenIcon className="size-8" />
           </div>
 
           {/* Header */}
           <div className="mb-8 text-center">
-            <h1 className="mb-3 font-headline text-2xl font-bold tracking-tight text-[var(--on-surface)]">
+            <h1 className="mb-3 font-headline text-2xl font-bold tracking-tight text-(--on-surface)">
               Lost your way?
             </h1>
-            <p className="max-w-[280px] text-sm leading-relaxed text-[var(--on-surface-variant)]">
+            <p className="max-w-[280px] text-sm leading-relaxed text-(--on-surface-variant)">
               Enter your email and we&apos;ll send you a link to reset your password and get back to
               the studio.
             </p>
@@ -44,20 +44,20 @@ export default function ForgotPasswordPage() {
               <label className="sr-only" htmlFor="email">
                 Email Address
               </label>
-              <MailIcon className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[var(--outline)]" />
+              <MailIcon className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-(--outline)" />
               <input
                 required
                 id="email"
                 name="email"
                 type="email"
                 placeholder="your@studio.com"
-                className="w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] py-3.5 pl-12 pr-4 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]"
+                className="form-field w-full py-3.5 pl-12 pr-4 text-sm"
               />
             </div>
 
             <button
               type="submit"
-              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] py-3.5 font-bold text-white shadow-lg shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[0.98] active:scale-95"
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-br from-[#0058be] to-[#2170e4] py-3.5 font-bold text-white shadow-lg shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[0.98] active:scale-95"
             >
               Send Reset Link
               <ArrowRightIcon className="size-5" aria-hidden="true" />
@@ -65,10 +65,10 @@ export default function ForgotPasswordPage() {
           </form>
 
           {/* Back to Login */}
-          <div className="mt-6 w-full border-t border-[var(--surface-container)] pt-6 text-center">
+          <div className="mt-6 w-full border-t border-(--surface-container) pt-6 text-center">
             <Link
               href="/login"
-              className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-[var(--on-surface-variant)] tonal-transition hover:text-[var(--primary)]"
+              className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-(--on-surface-variant) tonal-transition hover:text-(--primary)"
             >
               <ArrowLeftIcon className="size-4" />
               Back to Login
@@ -79,7 +79,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-5 text-center">
           <Link
             href="/"
-            className="cursor-pointer text-sm text-[var(--on-surface-variant)] tonal-transition hover:text-[var(--primary)]"
+            className="cursor-pointer text-sm text-(--on-surface-variant) tonal-transition hover:text-(--primary)"
           >
             ← Back to Home
           </Link>

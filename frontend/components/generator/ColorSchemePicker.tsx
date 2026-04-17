@@ -14,7 +14,7 @@ const colorOptions = [
 export type ColorSchemeLabel = (typeof colorOptions)[number]['label'];
 
 const sectionLabelClass =
-  'block font-headline text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--outline)]';
+  'block font-headline text-[11px] font-semibold uppercase tracking-[0.2em] text-(--outline)';
 
 export function ColorSchemePicker({
   value,
@@ -38,7 +38,7 @@ export function ColorSchemePicker({
               onClick={() => onChange(option.label)}
               className={`relative cursor-pointer overflow-hidden rounded-[1rem] p-1 tonal-transition ${
                 active
-                  ? 'bg-white shadow-[0_10px_24px_rgba(0,88,190,0.16)] ring-2 ring-[var(--primary)]'
+                  ? 'bg-white shadow-[0_10px_24px_rgba(0,88,190,0.16)] ring-2 ring-(--primary)'
                   : 'bg-transparent hover:bg-white/70'
               }`}
             >
@@ -51,7 +51,7 @@ export function ColorSchemePicker({
           );
         })}
       </div>
-      <p className="text-xs text-[var(--outline)]">Selected palette: {value}</p>
+      <p className="text-xs text-(--outline)">Selected palette: {value}</p>
     </div>
   );
 }

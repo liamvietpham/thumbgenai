@@ -29,24 +29,24 @@ export default function NotFoundPage() {
             />
 
             <div className="glass-card absolute -right-4 -top-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-2xl">
-              <WarningIcon className="size-6 text-[var(--secondary)]" />
+              <WarningIcon className="size-6 text-(--secondary)" />
             </div>
 
             <div className="glass-card absolute bottom-8 -left-8 flex h-16 w-16 items-center justify-center rounded-[1.25rem] shadow-2xl">
-              <RocketIcon className="size-8 text-[var(--primary)]" />
+              <RocketIcon className="size-8 text-(--primary)" />
             </div>
           </div>
         </figure>
 
         <header className="max-w-2xl">
-          <p className="mb-4 font-headline text-sm font-semibold uppercase tracking-[0.28em] text-[var(--outline)]">
+          <p className="mb-4 font-headline text-sm font-semibold uppercase tracking-[0.28em] text-(--outline)">
             Status: Error_404
           </p>
-          <h1 className="font-headline text-5xl font-bold leading-tight tracking-tight text-[var(--on-surface)] [text-shadow:0_0_20px_rgba(0,88,190,0.14)] md:text-7xl">
+          <h1 className="font-headline text-5xl font-bold leading-tight tracking-tight text-(--on-surface) [text-shadow:0_0_20px_rgba(0,88,190,0.14)] md:text-7xl">
             This page drifted
-            <span className="block text-[var(--primary)]">out of frame.</span>
+            <span className="block text-(--primary)">out of frame.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-[var(--outline)] md:text-xl">
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-(--outline) md:text-xl">
             The link may be outdated, the page may have moved, or it never made it into the final
             cut. Let&apos;s get you back to the studio and into something useful.
           </p>
@@ -55,7 +55,7 @@ export default function NotFoundPage() {
         <div className="mt-12 flex flex-col items-center gap-5 sm:flex-row">
           <Link
             href="/"
-            className="inline-flex cursor-pointer items-center gap-3 rounded-xl bg-gradient-to-r from-[#0058be] to-[#2170e4] px-10 py-5 font-headline text-lg font-bold text-[var(--on-primary)] shadow-xl shadow-[rgba(0,88,190,0.24)] tonal-transition hover:opacity-95"
+            className="inline-flex cursor-pointer items-center gap-3 rounded-xl bg-linear-to-r from-[#0058be] to-[#2170e4] px-10 py-5 font-headline text-lg font-bold text-(--on-primary) shadow-xl shadow-[rgba(0,88,190,0.24)] tonal-transition hover:opacity-95"
           >
             <SparklesIcon className="size-5" />
             Back to Home
@@ -63,14 +63,14 @@ export default function NotFoundPage() {
 
           <Link
             href="/thumbnails"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-6 py-5 font-headline text-lg font-bold text-[var(--primary)] tonal-transition hover:bg-[rgba(0,88,190,0.05)] hover:underline hover:underline-offset-8"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-6 py-5 font-headline text-lg font-bold text-(--primary) tonal-transition hover:bg-[rgba(0,88,190,0.05)] hover:underline hover:underline-offset-8"
           >
             Go to Thumbnails
             <ArrowRightIcon className="size-5" />
           </Link>
         </div>
 
-        <p className="mt-24 font-headline text-sm font-medium uppercase tracking-[0.3em] text-[var(--outline-variant)]">
+        <p className="mt-24 font-headline text-sm font-medium uppercase tracking-[0.3em] text-(--outline-variant)">
           Connection lost. Route unavailable.
         </p>
       </div>

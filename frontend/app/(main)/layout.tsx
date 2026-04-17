@@ -6,7 +6,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <>
       <a
         href="#content"
-        className="sr-only absolute left-4 top-4 z-[60] rounded-full bg-white px-4 py-2 text-sm font-medium text-[var(--primary)] shadow-lg focus:not-sr-only"
+        className="sr-only absolute left-4 top-4 z-60 rounded-full bg-white px-4 py-2 text-sm font-medium text-(--primary) shadow-lg focus:not-sr-only"
       >
         Skip to content
       </a>

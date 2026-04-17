@@ -138,13 +138,13 @@ function TestimonialCard({ name, handle, image, text }: { name: string; handle: 
         />
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
-            <p className="text-[var(--primary)]">{name}</p>
+            <p className="text-(--primary)">{name}</p>
             <VerifyBadge />
           </div>
-          <span className="text-xs text-[var(--on-surface-variant)]">{handle}</span>
+          <span className="text-xs text-(--on-surface-variant)">{handle}</span>
         </div>
       </div>
-      <p className="pt-4 text-sm text-[var(--on-surface-variant)] line-clamp-2">{text}</p>
+      <p className="pt-4 text-sm text-(--on-surface-variant) line-clamp-2">{text}</p>
     </div>
   );
 }
@@ -170,11 +170,11 @@ function MarqueeRow({ items, reverse = false }: { items: typeof testimonialsTop;
 export function TestimonialsSection() {
   return (
     <section id="testimonials">
-      <p className="mx-auto mt-28 w-max rounded-full border border-[var(--outline-variant)] bg-[var(--primary-fixed)] px-10 py-2 text-center font-medium text-[var(--primary)]">
+      <p className="mx-auto mt-28 w-max rounded-full border border-(--outline-variant) bg-(--primary-fixed) px-10 py-2 text-center font-medium text-(--primary)">
         Testimonials
       </p>
-      <h2 className="mx-auto mt-4 text-center text-3xl font-semibold text-[var(--on-surface)]">Loved by creators</h2>
-      <p className="mx-auto mt-2 max-w-xl text-center text-[var(--on-surface-variant)]">
+      <h2 className="mx-auto mt-4 text-center text-3xl font-semibold text-(--on-surface)">Loved by creators</h2>
+      <p className="mx-auto mt-2 max-w-xl text-center text-(--on-surface-variant)">
         See how our AI thumbnails generator are helping channels explode their views.
       </p>
 

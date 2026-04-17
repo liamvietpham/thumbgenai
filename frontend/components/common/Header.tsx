@@ -59,7 +59,7 @@ export function Header() {
       <div className="relative mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="cursor-pointer font-headline text-2xl font-bold tracking-tight text-[var(--primary)]"
+          className="cursor-pointer font-headline text-2xl font-bold tracking-tight text-(--primary)"
         >
           Thumbnail AI
         </Link>
@@ -78,8 +78,8 @@ export function Header() {
                 aria-current={active ? 'page' : undefined}
                 className={`cursor-pointer border-b-2 py-1 text-sm font-semibold tonal-transition ${
                   active
-                    ? 'border-[var(--primary)] text-[var(--primary)]'
-                    : 'border-transparent text-[var(--on-surface-variant)] hover:text-[var(--primary)]'
+                    ? 'border-(--primary) text-(--primary)'
+                    : 'border-transparent text-(--on-surface-variant) hover:text-(--primary)'
                 }`}
               >
                 {item.label}
@@ -94,7 +94,7 @@ export function Header() {
           {!isLoggedIn && (
             <Link
               href="/login"
-              className="hidden cursor-pointer text-sm font-semibold text-[var(--on-surface-variant)] tonal-transition hover:text-[var(--primary)] md:inline-block"
+              className="hidden cursor-pointer text-sm font-semibold text-(--on-surface-variant) tonal-transition hover:text-(--primary) md:inline-block"
             >
               Log in
             </Link>
@@ -102,7 +102,7 @@ export function Header() {
 
           <Link
             href="/generate"
-            className="hidden cursor-pointer rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.02] md:inline-block"
+            className="hidden cursor-pointer rounded-xl bg-linear-to-br from-[#0058be] to-[#2170e4] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[1.02] md:inline-block"
           >
             Start Creating
           </Link>
@@ -128,14 +128,14 @@ export function Header() {
               <div
                 role="menu"
                 aria-label="Account menu"
-                className={`absolute right-0 top-[calc(100%+0.75rem)] w-64 rounded-2xl border border-[rgba(194,198,214,0.5)] bg-[var(--surface-container-lowest)] p-2 shadow-[0_20px_40px_rgba(25,28,30,0.12)] tonal-transition ${
+                className={`absolute right-0 top-[calc(100%+0.75rem)] w-64 rounded-2xl border border-[rgba(194,198,214,0.5)] bg-(--surface-container-lowest) p-2 shadow-[0_20px_40px_rgba(25,28,30,0.12)] tonal-transition ${
                   accountOpen
                     ? 'translate-y-0 opacity-100'
                     : 'pointer-events-none -translate-y-2 opacity-0'
                 }`}
               >
                 {/* User info */}
-                <div className="mb-2 flex items-center gap-3 border-b border-[var(--surface-container-high)] px-3 pb-3 pt-2">
+                <div className="mb-2 flex items-center gap-3 border-b border-(--surface-container-high) px-3 pb-3 pt-2">
                   <Image
                     alt={currentUser.name}
                     className="size-9 rounded-full object-cover"
@@ -144,16 +144,16 @@ export function Header() {
                     width={36}
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-bold text-[var(--on-surface)]">{currentUser.name}</p>
-                    <p className="text-xs text-[var(--outline)]">Pro Plan</p>
+                    <p className="truncate text-sm font-bold text-(--on-surface)">{currentUser.name}</p>
+                    <p className="text-xs text-(--outline)">Pro Plan</p>
                   </div>
                 </div>
 
                 {/* Credits */}
-                <div className="mx-1 mb-2 flex items-center justify-between rounded-xl bg-[var(--surface-container-low)] px-3 py-2.5">
+                <div className="mx-1 mb-2 flex items-center justify-between rounded-xl bg-(--surface-container-low) px-3 py-2.5">
                   <div className="flex items-center gap-2">
-                    <CreditIcon className="size-4 text-[var(--primary)]" />
-                    <span className="text-sm font-semibold text-[var(--on-surface)]">Credits</span>
+                    <CreditIcon className="size-4 text-(--primary)" />
+                    <span className="text-sm font-semibold text-(--on-surface)">Credits</span>
                   </div>
                   <span className="rounded-full bg-[#0058be] px-2.5 py-0.5 text-xs font-bold text-white">
                     {CREDITS} left
@@ -164,10 +164,10 @@ export function Header() {
                 <Link
                   href="/profile"
                   role="menuitem"
-                  className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[var(--on-surface)] tonal-transition hover:bg-[var(--surface-container-low)]"
+                  className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-(--on-surface) tonal-transition hover:bg-(--surface-container-low)"
                   onClick={() => setAccountOpen(false)}
                 >
-                  <ProfileIcon className="size-4 text-[var(--on-surface-variant)]" />
+                  <ProfileIcon className="size-4 text-(--on-surface-variant)" />
                   Profile
                 </Link>
 
@@ -175,7 +175,7 @@ export function Header() {
                 <button
                   type="button"
                   role="menuitem"
-                  className="mt-1 flex w-full cursor-pointer items-center gap-3 rounded-xl border-t border-[var(--surface-container-high)] px-3 py-2.5 pt-3 text-sm font-medium text-[#ba1a1a] tonal-transition hover:bg-[rgba(186,26,26,0.06)]"
+                  className="mt-1 flex w-full cursor-pointer items-center gap-3 rounded-xl border-t border-(--surface-container-high) px-3 py-2.5 pt-3 text-sm font-medium text-[#ba1a1a] tonal-transition hover:bg-[rgba(186,26,26,0.06)]"
                   onClick={() => setAccountOpen(false)}
                 >
                   <LogoutIcon className="size-4" />
@@ -189,7 +189,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setOpen((value) => !value)}
-              className="mobile-menu-btn inline-flex size-11 cursor-pointer items-center justify-center rounded-2xl border border-[var(--outline-variant)] bg-white/80 text-[var(--primary)] shadow-sm tonal-transition hover:bg-white md:hidden"
+              className="mobile-menu-btn inline-flex size-11 cursor-pointer items-center justify-center rounded-2xl border border-(--outline-variant) bg-white/80 text-(--primary) shadow-sm tonal-transition hover:bg-white md:hidden"
               aria-label="Toggle menu"
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -204,7 +204,7 @@ export function Header() {
               }`}
             >
               {isLoggedIn && (
-                <div className="mb-3 rounded-2xl bg-[var(--surface-container-low)] p-4">
+                <div className="mb-3 rounded-2xl bg-(--surface-container-low) p-4">
                   <div className="flex items-center gap-3">
                     <Image
                       alt={`${currentUser.name} avatar`}
@@ -214,10 +214,10 @@ export function Header() {
                       width={44}
                     />
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--outline)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-(--outline)">
                         Account
                       </p>
-                      <p className="text-sm font-bold text-[var(--on-surface)]">
+                      <p className="text-sm font-bold text-(--on-surface)">
                         {currentUser.name}
                       </p>
                     </div>
@@ -235,8 +235,8 @@ export function Header() {
                       href={item.href}
                       className={`cursor-pointer rounded-2xl px-4 py-3 text-sm font-medium tonal-transition ${
                         active
-                          ? 'bg-[rgba(33,112,228,0.12)] text-[var(--primary)]'
-                          : 'text-[var(--on-surface-variant)] hover:bg-[var(--surface-container-low)] hover:text-[var(--primary)]'
+                          ? 'bg-[rgba(33,112,228,0.12)] text-(--primary)'
+                          : 'text-(--on-surface-variant) hover:bg-(--surface-container-low) hover:text-(--primary)'
                       }`}
                       onClick={() => setOpen(false)}
                     >
@@ -246,12 +246,12 @@ export function Header() {
                 })}
               </nav>
 
-              <div className="mt-3 space-y-1 border-t border-[var(--surface-container-high)] pt-3">
+              <div className="mt-3 space-y-1 border-t border-(--surface-container-high) pt-3">
                 {isLoggedIn ? (
                   <>
-                    <div className="flex items-center justify-between rounded-2xl bg-[var(--surface-container-low)] px-4 py-3">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-[var(--on-surface)]">
-                        <CreditIcon className="size-4 text-[var(--primary)]" />
+                    <div className="flex items-center justify-between rounded-2xl bg-(--surface-container-low) px-4 py-3">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-(--on-surface)">
+                        <CreditIcon className="size-4 text-(--primary)" />
                         Credits
                       </div>
                       <span className="rounded-full bg-[#0058be] px-2.5 py-0.5 text-xs font-bold text-white">
@@ -260,10 +260,10 @@ export function Header() {
                     </div>
                     <Link
                       href="/profile"
-                      className="flex cursor-pointer items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-[var(--on-surface)] tonal-transition hover:bg-[var(--surface-container-low)]"
+                      className="flex cursor-pointer items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-(--on-surface) tonal-transition hover:bg-(--surface-container-low)"
                       onClick={() => setOpen(false)}
                     >
-                      <ProfileIcon className="size-4 text-[var(--on-surface-variant)]" />
+                      <ProfileIcon className="size-4 text-(--on-surface-variant)" />
                       Profile
                     </Link>
                     <button
@@ -279,14 +279,14 @@ export function Header() {
                   <>
                     <Link
                       href="/login"
-                      className="flex cursor-pointer items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold text-[var(--on-surface)] tonal-transition hover:bg-[var(--surface-container-low)]"
+                      className="flex cursor-pointer items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold text-(--on-surface) tonal-transition hover:bg-(--surface-container-low)"
                       onClick={() => setOpen(false)}
                     >
                       Log in
                     </Link>
                     <Link
                       href="/generate"
-                      className="flex cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-br from-[#0058be] to-[#2170e4] px-4 py-3 text-sm font-bold text-white shadow-md tonal-transition hover:scale-[1.02]"
+                      className="flex cursor-pointer items-center justify-center rounded-2xl bg-linear-to-br from-[#0058be] to-[#2170e4] px-4 py-3 text-sm font-bold text-white shadow-md tonal-transition hover:scale-[1.02]"
                       onClick={() => setOpen(false)}
                     >
                       Start Creating

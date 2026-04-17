@@ -25,7 +25,7 @@ export function CopyUrlButton({
       <button
         type="button"
         onClick={handleCopy}
-        className="grid size-7 cursor-pointer place-items-center rounded-lg bg-black/55 text-white backdrop-blur-sm tonal-transition hover:bg-[var(--primary)]"
+        className="grid size-7 cursor-pointer place-items-center rounded-lg bg-black/55 text-white backdrop-blur-sm tonal-transition hover:bg-(--primary)"
         aria-label={copied ? 'Link copied' : 'Copy link'}
       >
         {copied
@@ -41,8 +41,8 @@ export function CopyUrlButton({
       onClick={handleCopy}
       className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold tonal-transition sm:py-2.5 ${
         copied
-          ? 'bg-[var(--surface-container-high)] text-[var(--tertiary)]'
-          : 'bg-[var(--surface-container-high)] text-[var(--on-surface-variant)] hover:bg-[var(--surface-container-highest)]'
+          ? 'bg-(--surface-container-high) text-(--tertiary)'
+          : 'bg-(--surface-container-high) text-(--on-surface-variant) hover:bg-(--surface-container-highest)'
       }`}
     >
       {copied

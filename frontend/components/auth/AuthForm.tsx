@@ -30,12 +30,12 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
       <div className="relative z-10 w-full max-w-md">
         {/* Card */}
-        <div className="rounded-[2rem] bg-[var(--surface-container-lowest)] p-8 shadow-[0_32px_64px_-16px_rgba(0,88,190,0.08)]">
+        <div className="rounded-[2rem] bg-(--surface-container-lowest) p-8 shadow-[0_32px_64px_-16px_rgba(0,88,190,0.08)]">
           <div className="mb-6 text-center">
-            <h1 className="mb-1 font-headline text-2xl font-bold tracking-tight text-[var(--on-surface)]">
+            <h1 className="mb-1 font-headline text-2xl font-bold tracking-tight text-(--on-surface)">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h1>
-            <p className="text-sm text-[var(--on-surface-variant)]">
+            <p className="text-sm text-(--on-surface-variant)">
               {isLogin
                 ? 'Enter your credentials to access your studio.'
                 : 'Sign up to start generating thumbnails.'}
@@ -46,7 +46,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             {/* Name (register only) */}
             {!isLogin && (
               <div className="space-y-1">
-                <label className="ml-1 block text-xs font-bold uppercase tracking-widest text-[var(--outline)]">
+                <label className="ml-1 block text-xs font-bold uppercase tracking-widest text-(--outline)">
                   Full Name
                 </label>
                 <div className="relative">
@@ -55,16 +55,16 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
                     name="name"
                     type="text"
                     placeholder="Your name"
-                    className="w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] px-4 py-3 pr-12 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]"
+                    className="form-field w-full px-4 py-3 pr-12 text-sm"
                   />
-                  <UserIcon className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-[var(--outline)]" />
+                  <UserIcon className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-(--outline)" />
                 </div>
               </div>
             )}
 
             {/* Email */}
             <div className="space-y-1">
-              <label className="ml-1 block text-xs font-bold uppercase tracking-widest text-[var(--outline)]">
+              <label className="ml-1 block text-xs font-bold uppercase tracking-widest text-(--outline)">
                 Email Address
               </label>
               <div className="relative">
@@ -73,22 +73,22 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
                   name="email"
                   type="email"
                   placeholder="name@example.com"
-                  className="w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] px-4 py-3 pr-12 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]"
+                  className="form-field w-full px-4 py-3 pr-12 text-sm"
                 />
-                <MailIcon className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-[var(--outline)]" />
+                <MailIcon className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-(--outline)" />
               </div>
             </div>
 
             {/* Password */}
             <div className="space-y-1">
               <div className="flex items-center justify-between px-1">
-                <label className="block text-xs font-bold uppercase tracking-widest text-[var(--outline)]">
+                <label className="block text-xs font-bold uppercase tracking-widest text-(--outline)">
                   Password
                 </label>
                 {isLogin && (
                   <Link
                     href="/forgot-password"
-                    className="cursor-pointer text-xs font-semibold text-[var(--primary)] hover:underline"
+                    className="cursor-pointer text-xs font-semibold text-(--primary) hover:underline"
                   >
                     Forgot password?
                   </Link>
@@ -100,9 +100,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
                   name="password"
                   type="password"
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-[rgba(194,198,214,0.55)] bg-[var(--surface-container)] px-4 py-3 pr-12 text-sm text-[var(--on-surface)] placeholder:text-[var(--outline)] transition-all focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[rgba(0,88,190,0.15)]"
+                  className="form-field w-full px-4 py-3 pr-12 text-sm"
                 />
-                <LockIcon className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-[var(--outline)]" />
+                <LockIcon className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-(--outline)" />
               </div>
             </div>
 
@@ -112,11 +112,11 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
                 <input
                   id="remember"
                   type="checkbox"
-                  className="size-4 cursor-pointer rounded border-[var(--outline-variant)] bg-[var(--surface-container-low)] accent-[var(--primary)]"
+                  className="size-4 cursor-pointer rounded border-(--outline-variant) bg-(--surface-container-low) accent-(--primary)"
                 />
                 <label
                   htmlFor="remember"
-                  className="cursor-pointer text-sm font-medium text-[var(--on-surface-variant)]"
+                  className="cursor-pointer text-sm font-medium text-(--on-surface-variant)"
                 >
                   Remember me
                 </label>
@@ -126,7 +126,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             {/* Submit */}
             <button
               type="submit"
-              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#0058be] to-[#2170e4] py-3.5 text-base font-semibold text-white shadow-lg shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[0.98] active:scale-95"
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-br from-[#0058be] to-[#2170e4] py-3.5 text-base font-semibold text-white shadow-lg shadow-[rgba(0,88,190,0.20)] tonal-transition hover:scale-[0.98] active:scale-95"
             >
               {isLogin ? 'Sign In' : 'Create Account'}
               <ArrowRightIcon className="size-5" aria-hidden="true" />
@@ -134,13 +134,13 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           </form>
 
           {/* Footer link */}
-          <div className="mt-5 flex items-center justify-center gap-2 border-t border-[var(--surface-container)] pt-5">
-            <p className="text-sm text-[var(--on-surface-variant)]">
+          <div className="mt-5 flex items-center justify-center gap-2 border-t border-(--surface-container) pt-5">
+            <p className="text-sm text-(--on-surface-variant)">
               {isLogin ? 'New to ThumbnailAI?' : 'Already have an account?'}
             </p>
             <Link
               href={isLogin ? '/register' : '/login'}
-              className="cursor-pointer text-sm font-bold text-[var(--primary)] tonal-transition hover:underline"
+              className="cursor-pointer text-sm font-bold text-(--primary) tonal-transition hover:underline"
             >
               {isLogin ? 'Register' : 'Login'}
             </Link>
@@ -150,7 +150,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         <div className="mt-5 text-center">
           <Link
             href="/"
-            className="cursor-pointer text-sm text-[var(--on-surface-variant)] tonal-transition hover:text-[var(--primary)]"
+            className="cursor-pointer text-sm text-(--on-surface-variant) tonal-transition hover:text-(--primary)"
           >
             ← Back to Home
           </Link>
