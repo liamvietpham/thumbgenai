@@ -1,5 +1,14 @@
 #!/bin/sh
-cd backend || exit 1
+
+repo_root="$(git rev-parse --show-toplevel)" || exit 1
+
+# Skip backend checks for commits that only touch the frontend for now.
+if ! git -C "$repo_root" diff --cached --name-only -- backend/ | grep -q .; then
+  echo "No backend files staged, skipping backend pre-commit checks."
+  exit 0
+fi
+
+cd "$repo_root/backend" || exit 1
 
 echo "Running format..."
 yarn format || exit 1
