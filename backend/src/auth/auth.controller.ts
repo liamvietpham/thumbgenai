@@ -1,8 +1,20 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UseGuards
+} from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { LoginDto } from 'src/auth/dto/login.dto';
 import type { Response, Request } from 'express';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -90,5 +102,11 @@ export class AuthController {
     return {
       message: 'Refresh successful'
     };
+  }
+
+  @Get('me')
+  @UseGuards(AccessTokenGuard)
+  me(@CurrentUser('sub') userId: string) {
+    return this.authService.me(userId);
   }
 }

@@ -1,5 +1,7 @@
 import { BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import type { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthController } from './auth.controller';
@@ -9,6 +11,7 @@ type MockAuthService = {
   login: jest.MockedFunction<AuthService['login']>;
   logout: jest.MockedFunction<AuthService['logout']>;
   refresh: jest.MockedFunction<AuthService['refresh']>;
+  me: jest.MockedFunction<AuthService['me']>;
 };
 
 describe('AuthController', () => {
@@ -26,7 +29,20 @@ describe('AuthController', () => {
             register: jest.fn(),
             login: jest.fn(),
             logout: jest.fn(),
-            refresh: jest.fn()
+            refresh: jest.fn(),
+            me: jest.fn()
+          }
+        },
+        {
+          provide: JwtService,
+          useValue: {
+            verifyAsync: jest.fn()
+          }
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            getOrThrow: jest.fn()
           }
         }
       ]
@@ -253,5 +269,22 @@ describe('AuthController', () => {
     await expect(controller.refresh(response, request)).rejects.toBe(unauthorizedError);
 
     expect(cookieSpy).not.toHaveBeenCalled();
+  });
+
+  it('forwards current user id to me and returns the public user payload', async () => {
+    const meResult = {
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      credits: 15,
+      createdAt: '2026-04-07T00:00:00.000Z',
+      updatedAt: '2026-04-07T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+    };
+
+    authService.me.mockResolvedValue(meResult);
+
+    await expect(controller.me('user-1')).resolves.toEqual(meResult);
+    expect(authService.me).toHaveBeenCalledWith('user-1');
   });
 });

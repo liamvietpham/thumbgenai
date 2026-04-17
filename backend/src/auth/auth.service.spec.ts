@@ -13,6 +13,7 @@ jest.mock('src/common/utils/id.util', () => ({
 
 type MockUsersRepository = {
   findByEmail: jest.MockedFunction<UsersRepository['findByEmail']>;
+  findById: jest.MockedFunction<UsersRepository['findById']>;
   createUser: jest.MockedFunction<UsersRepository['createUser']>;
 };
 
@@ -46,6 +47,7 @@ describe('AuthService', () => {
 
     usersRepository = {
       findByEmail: jest.fn(),
+      findById: jest.fn(),
       createUser: jest.fn()
     };
 
@@ -479,5 +481,37 @@ describe('AuthService', () => {
     });
 
     nowSpy.mockRestore();
+  });
+
+  it('returns the public user payload for me when the user exists', async () => {
+    usersRepository.findById.mockResolvedValue({
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: 'hashed-password',
+      credits: 15,
+      createdAt: '2026-04-07T00:00:00.000Z',
+      updatedAt: '2026-04-07T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+    });
+
+    await expect(service.me('user-1')).resolves.toEqual({
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      credits: 15,
+      createdAt: '2026-04-07T00:00:00.000Z',
+      updatedAt: '2026-04-07T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+    });
+
+    expect(usersRepository.findById).toHaveBeenCalledWith('user-1');
+  });
+
+  it('throws UnauthorizedException when me user is missing', async () => {
+    usersRepository.findById.mockResolvedValue(null);
+
+    await expect(service.me('user-1')).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(usersRepository.findById).toHaveBeenCalledWith('user-1');
   });
 });

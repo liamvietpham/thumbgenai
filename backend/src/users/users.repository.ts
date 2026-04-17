@@ -1,4 +1,9 @@
-import { DynamoDBDocumentClient, QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  QueryCommand,
+  TransactWriteCommand
+} from '@aws-sdk/lib-dynamodb';
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { generateId } from 'src/common/utils/id.util';
@@ -88,5 +93,16 @@ export class UsersRepository {
     }
 
     return user;
+  }
+
+  async findById(id: string): Promise<UserEntity | null> {
+    const result = await this.ddb.send(
+      new GetCommand({
+        TableName: this.tableName,
+        Key: { id }
+      })
+    );
+
+    return (result.Item as UserEntity | undefined) ?? null;
   }
 }

@@ -233,4 +233,14 @@ export class AuthService {
       refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0)
     };
   }
+
+  async me(userId: string) {
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    return mapUserToPublicUser(user);
+  }
 }

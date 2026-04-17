@@ -5,7 +5,13 @@ import { RefreshTokenPayload } from 'src/auth/types/jwt-payload.type';
 import { generateId } from 'src/common/utils/id.util';
 import { createApp } from '../src/app.factory';
 import { SessionRepository } from '../src/session/session.repository';
-import { setupTestEnv, TEST_REFRESH_TOKEN_SECRET, TEST_REFRESH_TOKEN_TTL } from './setup-test-env';
+import {
+  setupTestEnv,
+  TEST_ACCESS_TOKEN_SECRET,
+  TEST_ACCESS_TOKEN_TTL,
+  TEST_REFRESH_TOKEN_SECRET,
+  TEST_REFRESH_TOKEN_TTL
+} from './setup-test-env';
 import { UsersRepository } from '../src/users/users.repository';
 
 jest.mock('src/common/utils/id.util', () => ({
@@ -45,6 +51,21 @@ type RefreshSuccessResponse = {
   statusCode: number;
   data: {
     message: string;
+  };
+};
+
+type MeSuccessResponse = {
+  success: boolean;
+  statusCode: number;
+  data: {
+    id: string;
+    name: string;
+    email: string;
+    credits: number;
+    createdAt?: string;
+    updatedAt?: string;
+    lastLoginAt?: string;
+    pwdUpdatedAt?: string;
   };
 };
 
@@ -318,6 +339,97 @@ describe('AuthModule (e2e)', () => {
     expect(body.statusCode).toBe(401);
     expect(body.message).toBe('Invalid refresh token');
     expect(body.path).toBe('/auth/refresh');
+  });
+
+  it('GET /auth/me returns the current public user when access token is valid', async () => {
+    const jwtService = app.get(JwtService);
+    const accessToken = jwtService.sign(
+      {
+        sub: 'user-1',
+        email: 'john@example.com',
+        sid: 'session-1',
+        type: 'access'
+      },
+      {
+        secret: TEST_ACCESS_TOKEN_SECRET,
+        expiresIn: TEST_ACCESS_TOKEN_TTL
+      }
+    );
+
+    const findByIdSpy = jest.spyOn(UsersRepository.prototype, 'findById').mockResolvedValue({
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: 'hashed-password',
+      credits: 15,
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-08T00:00:00.000Z'
+    });
+
+    const response = await fetch(`${baseUrl}/auth/me`, {
+      method: 'GET',
+      headers: {
+        cookie: `accessToken=${accessToken}`
+      }
+    });
+    const body = (await response.json()) as MeSuccessResponse;
+
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.statusCode).toBe(200);
+    expect(body.data).toMatchObject({
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      credits: 15
+    });
+    expect(findByIdSpy).toHaveBeenCalledWith('user-1');
+  });
+
+  it('GET /auth/me returns 401 when access token is missing', async () => {
+    const response = await fetch(`${baseUrl}/auth/me`, {
+      method: 'GET'
+    });
+    const body = (await response.json()) as ErrorResponse;
+
+    expect(response.status).toBe(401);
+    expect(body.success).toBe(false);
+    expect(body.statusCode).toBe(401);
+    expect(body.message).toBe('Invalid token');
+    expect(body.path).toBe('/auth/me');
+  });
+
+  it('GET /auth/me returns 401 when the user no longer exists', async () => {
+    const jwtService = app.get(JwtService);
+    const accessToken = jwtService.sign(
+      {
+        sub: 'user-1',
+        email: 'john@example.com',
+        sid: 'session-1',
+        type: 'access'
+      },
+      {
+        secret: TEST_ACCESS_TOKEN_SECRET,
+        expiresIn: TEST_ACCESS_TOKEN_TTL
+      }
+    );
+
+    jest.spyOn(UsersRepository.prototype, 'findById').mockResolvedValue(null);
+
+    const response = await fetch(`${baseUrl}/auth/me`, {
+      method: 'GET',
+      headers: {
+        cookie: `accessToken=${accessToken}`
+      }
+    });
+    const body = (await response.json()) as ErrorResponse;
+
+    expect(response.status).toBe(401);
+    expect(body.success).toBe(false);
+    expect(body.statusCode).toBe(401);
+    expect(body.message).toBe('Invalid token');
+    expect(body.path).toBe('/auth/me');
   });
 
   afterEach(async () => {
