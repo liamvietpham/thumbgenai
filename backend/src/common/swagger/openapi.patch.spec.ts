@@ -2,7 +2,7 @@ import type { OpenAPIObject } from '@nestjs/swagger';
 import { applyOpenApiPatches } from './openapi.patch';
 
 describe('applyOpenApiPatches', () => {
-  it('adds documented responses for health, logout, and refresh routes', () => {
+  it('adds documented responses for health, register, logout, and refresh routes', () => {
     const document = {
       openapi: '3.0.0',
       info: {
@@ -65,6 +65,14 @@ describe('applyOpenApiPatches', () => {
 
     expect(patchedDocument.paths?.['/health']?.get?.responses?.['200']).toMatchObject({
       description: 'Service health status'
+    });
+    expect(patchedDocument.paths?.['/auth/register']?.post?.responses?.['201']).toMatchObject({
+      description: 'User registered successfully',
+      headers: {
+        'Set-Cookie': {
+          schema: { type: 'string' }
+        }
+      }
     });
     expect(patchedDocument.paths?.['/auth/logout']?.post?.responses?.['200']).toMatchObject({
       description: 'Logout successful',

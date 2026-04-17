@@ -128,7 +128,12 @@ describe('AuthService', () => {
     expect(usersRepository.createUser).not.toHaveBeenCalled();
   });
 
-  it('hashes password, creates user, and returns public user payload', async () => {
+  it('hashes password, creates user, persists session, and returns auth payload', async () => {
+    const now = 1_700_000_000_000;
+    const accessExp = 1_700_000_300;
+    const refreshExp = 1_700_086_400;
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(now);
+
     usersRepository.findByEmail.mockResolvedValue(null);
     let capturedCreateUserPayload: Parameters<UsersRepository['createUser']>[0] | undefined;
 
@@ -145,6 +150,19 @@ describe('AuthService', () => {
         updatedAt: '2026-04-07T00:00:00.000Z',
         pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
       });
+    });
+
+    jwtService.sign.mockImplementation((_payload: unknown, options?: { secret?: string }) => {
+      if (options?.secret === 'access-secret') return 'access-token';
+      if (options?.secret === 'refresh-secret') return 'refresh-token';
+      return 'unknown-token';
+    });
+
+    jwtService.verifyAsync.mockImplementation((token: string) => {
+      if (token === 'access-token') return Promise.resolve({ exp: accessExp });
+      if (token === 'refresh-token') return Promise.resolve({ exp: refreshExp });
+
+      return Promise.reject(new Error(`Unexpected token: ${token}`));
     });
 
     const result = await service.register({
@@ -169,17 +187,36 @@ describe('AuthService', () => {
 
     expect(capturedCreateUserPayload.password).not.toBe('password-123');
     expect(typeof capturedCreateUserPayload.password).toBe('string');
+    expect(sessionRepository.createSession).toHaveBeenCalledTimes(1);
+    const [createSessionPayload] = sessionRepository.createSession.mock.calls[0] ?? [];
+    if (!createSessionPayload) {
+      throw new Error('Expected createSession payload');
+    }
+
+    expect(createSessionPayload.sid).toBe('session-1');
+    expect(mockGenerateId).toHaveBeenCalledTimes(1);
+    expect(createSessionPayload.userId).toBe('user-2');
+    expect(typeof createSessionPayload.refreshToken).toBe('string');
+    expect(createSessionPayload.expiresAt).toBe(new Date(refreshExp * 1000).toISOString());
+    expect(createSessionPayload.ttl).toBe(refreshExp);
 
     expect(result).toEqual({
-      id: 'user-2',
-      name: 'John Doe',
-      email: 'john@example.com',
-      credits: 15,
-      createdAt: '2026-04-07T00:00:00.000Z',
-      updatedAt: '2026-04-07T00:00:00.000Z',
-      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+      accessToken: 'access-token',
+      refreshToken: 'refresh-token',
+      accessTokenMaxAgeMs: accessExp * 1000 - now,
+      refreshTokenMaxAgeMs: refreshExp * 1000 - now,
+      user: {
+        id: 'user-2',
+        name: 'John Doe',
+        email: 'john@example.com',
+        credits: 15,
+        createdAt: '2026-04-07T00:00:00.000Z',
+        updatedAt: '2026-04-07T00:00:00.000Z',
+        pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+      }
     });
-    expect(result).not.toHaveProperty('password');
+
+    nowSpy.mockRestore();
   });
 
   it('throws UnauthorizedException when login email does not exist', async () => {

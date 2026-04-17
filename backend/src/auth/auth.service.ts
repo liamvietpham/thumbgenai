@@ -7,7 +7,7 @@ import {
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { argon2id, hash, verify } from 'argon2';
 import { UsersRepository } from 'src/users/users.repository';
-import { mapUserToPublicUser, PublicUser } from 'src/users/mappers/user.mapper';
+import { mapUserToPublicUser } from 'src/users/mappers/user.mapper';
 import { LoginDto } from 'src/auth/dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -20,6 +20,7 @@ import {
   RefreshTokenPayload
 } from 'src/auth/types/jwt-payload.type';
 import { generateId } from 'src/common/utils/id.util';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +37,7 @@ export class AuthService {
     this.refreshSecret = this.configService.getOrThrow<string>('REFRESH_TOKEN_SECRET');
   }
 
-  async register(registerDto: RegisterDto): Promise<PublicUser> {
+  async register(registerDto: RegisterDto): Promise<LoginResult> {
     const { name, email, password, confirmPassword } = registerDto;
 
     if (password !== confirmPassword) {
@@ -61,7 +62,7 @@ export class AuthService {
       password: hashPassword
     });
 
-    return mapUserToPublicUser(createdUser);
+    return this.issueAuthSession(createdUser);
   }
 
   async login(loginDto: LoginDto): Promise<LoginResult> {
@@ -79,50 +80,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const sid = await generateId();
-
-    const payload: AccessTokenPayload = {
-      sub: user.id,
-      email: user.email,
-      sid,
-      type: 'access'
-    };
-
-    const accessToken = this.jwtService.sign(payload, {
-      secret: this.accessSecret,
-      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL')
-    });
-    const refreshToken = this.jwtService.sign(
-      { ...payload, type: 'refresh' },
-      {
-        secret: this.refreshSecret,
-        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL')
-      }
-    );
-
-    const now = Date.now();
-    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(accessToken, {
-      secret: this.accessSecret
-    });
-    const { exp: refreshExp } = await this.jwtService.verifyAsync<JwtExpPayload>(refreshToken, {
-      secret: this.refreshSecret
-    });
-
-    await this.sessionRepository.createSession({
-      sid,
-      userId: user.id,
-      refreshToken,
-      expiresAt: new Date(refreshExp * 1000).toISOString(),
-      ttl: refreshExp
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-      user: mapUserToPublicUser(user),
-      accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
-      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0)
-    };
+    return this.issueAuthSession(user);
   }
 
   async logout(refreshToken?: string) {
@@ -242,5 +200,63 @@ export class AuthService {
     }
 
     return mapUserToPublicUser(user);
+  }
+
+  private async issueAuthSession(user: UserEntity): Promise<LoginResult> {
+    const sid = await generateId();
+
+    const payload: AccessTokenPayload = {
+      sub: user.id,
+      email: user.email,
+      sid,
+      type: 'access'
+    };
+
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.accessSecret,
+      expiresIn: this.configService.getOrThrow('ACCESS_TOKEN_TTL')
+    });
+    const refreshToken = this.jwtService.sign(
+      { ...payload, type: 'refresh' },
+      {
+        secret: this.refreshSecret,
+        expiresIn: this.configService.getOrThrow('REFRESH_TOKEN_TTL')
+      }
+    );
+
+    const now = Date.now();
+    const { exp: accessExp } = await this.jwtService.verifyAsync<JwtExpPayload>(accessToken, {
+      secret: this.accessSecret
+    });
+    const { exp: refreshExp } = await this.jwtService.verifyAsync<JwtExpPayload>(refreshToken, {
+      secret: this.refreshSecret
+    });
+
+    await this.sessionRepository.createSession({
+      sid,
+      userId: user.id,
+      refreshToken,
+      expiresAt: new Date(refreshExp * 1000).toISOString(),
+      ttl: refreshExp
+    });
+
+    return this.buildAuthSessionResult(user, accessToken, refreshToken, accessExp, refreshExp, now);
+  }
+
+  private buildAuthSessionResult(
+    user: UserEntity,
+    accessToken: string,
+    refreshToken: string,
+    accessExp: number,
+    refreshExp: number,
+    now: number
+  ): LoginResult {
+    return {
+      accessToken,
+      refreshToken,
+      user: mapUserToPublicUser(user),
+      accessTokenMaxAgeMs: Math.max(accessExp * 1000 - now, 0),
+      refreshTokenMaxAgeMs: Math.max(refreshExp * 1000 - now, 0)
+    };
   }
 }

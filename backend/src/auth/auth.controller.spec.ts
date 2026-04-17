@@ -60,7 +60,9 @@ describe('AuthController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('forwards register payload to auth service and returns result', async () => {
+  it('sets auth cookies and returns user payload for register', async () => {
+    process.env.NODE_ENV = 'prod';
+
     const registerDto = {
       name: 'John Doe',
       email: 'john@example.com',
@@ -68,20 +70,53 @@ describe('AuthController', () => {
       confirmPassword: 'password-123'
     };
     const registerResult = {
-      id: 'user-2',
-      name: 'John Doe',
-      email: 'john@example.com',
-      credits: 15,
-      createdAt: '2026-04-07T00:00:00.000Z',
-      updatedAt: '2026-04-07T00:00:00.000Z',
-      pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+      accessToken: 'access-token',
+      refreshToken: 'refresh-token',
+      accessTokenMaxAgeMs: 900_000,
+      refreshTokenMaxAgeMs: 604_800_000,
+      user: {
+        id: 'user-2',
+        name: 'John Doe',
+        email: 'john@example.com',
+        credits: 15,
+        createdAt: '2026-04-07T00:00:00.000Z',
+        updatedAt: '2026-04-07T00:00:00.000Z',
+        pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+      }
     };
+    const cookieSpy = jest.fn();
+    const response = {
+      cookie: cookieSpy
+    } as unknown as Response;
 
     authService.register.mockResolvedValue(registerResult);
 
-    await expect(controller.register(registerDto)).resolves.toEqual(registerResult);
+    await expect(controller.register(registerDto, response)).resolves.toEqual({
+      user: {
+        id: 'user-2',
+        name: 'John Doe',
+        email: 'john@example.com',
+        credits: 15,
+        createdAt: '2026-04-07T00:00:00.000Z',
+        updatedAt: '2026-04-07T00:00:00.000Z',
+        pwdUpdatedAt: '2026-04-07T00:00:00.000Z'
+      }
+    });
     expect(authService.register).toHaveBeenCalledTimes(1);
     expect(authService.register).toHaveBeenCalledWith(registerDto);
+    expect(cookieSpy).toHaveBeenNthCalledWith(1, 'accessToken', 'access-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 900_000
+    });
+    expect(cookieSpy).toHaveBeenNthCalledWith(2, 'refreshToken', 'refresh-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 604_800_000,
+      path: '/auth'
+    });
   });
 
   it('propagates service errors from register', async () => {
@@ -92,11 +127,16 @@ describe('AuthController', () => {
       confirmPassword: 'password-123'
     };
     const conflictError = new ConflictException('User already exists');
+    const cookieSpy = jest.fn();
+    const response = {
+      cookie: cookieSpy
+    } as unknown as Response;
 
     authService.register.mockRejectedValue(conflictError);
 
-    await expect(controller.register(registerDto)).rejects.toBe(conflictError);
+    await expect(controller.register(registerDto, response)).rejects.toBe(conflictError);
     expect(authService.register).toHaveBeenCalledWith(registerDto);
+    expect(cookieSpy).not.toHaveBeenCalled();
   });
 
   it('sets auth cookies and returns user payload for login', async () => {

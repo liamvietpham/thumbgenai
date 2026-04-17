@@ -21,8 +21,27 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
+  @HttpCode(HttpStatus.CREATED)
+  async register(@Body() registerDto: RegisterDto, @Res({ passthrough: true }) res: Response) {
+    const result = await this.authService.register(registerDto);
+    const { accessToken, refreshToken, user, accessTokenMaxAgeMs, refreshTokenMaxAgeMs } = result;
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'prod',
+      sameSite: 'strict',
+      maxAge: accessTokenMaxAgeMs
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'prod',
+      sameSite: 'strict',
+      maxAge: refreshTokenMaxAgeMs,
+      path: '/auth'
+    });
+
+    return { user };
   }
 
   @Post('login')

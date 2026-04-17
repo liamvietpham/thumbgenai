@@ -106,6 +106,64 @@ describe('AuthModule (e2e)', () => {
     expect(body.path).toBe('/auth/register');
   });
 
+  it('POST /auth/register sets auth cookies and returns the public user', async () => {
+    const findByEmailSpy = jest
+      .spyOn(UsersRepository.prototype, 'findByEmail')
+      .mockResolvedValue(null);
+    const createUserSpy = jest.spyOn(UsersRepository.prototype, 'createUser').mockResolvedValue({
+      id: 'user-2',
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: 'hashed-password',
+      credits: 15,
+      createdAt: '2026-04-08T00:00:00.000Z',
+      updatedAt: '2026-04-08T00:00:00.000Z',
+      pwdUpdatedAt: '2026-04-08T00:00:00.000Z'
+    });
+    const createSessionSpy = jest
+      .spyOn(SessionRepository.prototype, 'createSession')
+      .mockResolvedValue(undefined);
+
+    const response = await fetch(`${baseUrl}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'password-123',
+        confirmPassword: 'password-123'
+      })
+    });
+    const body = (await response.json()) as LoginSuccessResponse;
+    const setCookieHeader = response.headers.get('set-cookie') ?? '';
+
+    expect(response.status).toBe(201);
+    expect(body.success).toBe(true);
+    expect(body.statusCode).toBe(201);
+    expect(body.data.user).toMatchObject({
+      id: 'user-2',
+      name: 'John Doe',
+      email: 'john@example.com',
+      credits: 15
+    });
+
+    expect(setCookieHeader).toContain('accessToken=');
+    expect(setCookieHeader).toContain('refreshToken=');
+    expect(setCookieHeader).toContain('HttpOnly');
+    expect(setCookieHeader).toContain('Path=/auth');
+
+    expect(findByEmailSpy).toHaveBeenCalledWith('john@example.com');
+    expect(createUserSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'John Doe',
+        email: 'john@example.com'
+      })
+    );
+    expect(createSessionSpy).toHaveBeenCalledTimes(1);
+  });
+
   it('POST /auth/login returns 400 when DTO validation fails', async () => {
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
