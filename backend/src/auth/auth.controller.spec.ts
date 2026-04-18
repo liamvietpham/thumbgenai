@@ -186,6 +186,51 @@ describe('AuthController', () => {
     });
   });
 
+  it('sets session cookies without maxAge when login remember is false', async () => {
+    process.env.NODE_ENV = 'prod';
+
+    const loginDto = {
+      email: 'john@example.com',
+      password: 'password-123',
+      remember: false
+    };
+    const loginResult = {
+      accessToken: 'access-token',
+      refreshToken: 'refresh-token',
+      accessTokenMaxAgeMs: 900_000,
+      refreshTokenMaxAgeMs: 604_800_000,
+      user: {
+        id: 'user-1',
+        name: 'John Doe',
+        email: 'john@example.com',
+        credits: 15
+      }
+    };
+
+    const cookieSpy = jest.fn();
+    const response = {
+      cookie: cookieSpy
+    } as unknown as Response;
+
+    authService.login.mockResolvedValue(loginResult);
+
+    await expect(controller.login(loginDto, response)).resolves.toEqual({
+      user: loginResult.user
+    });
+
+    expect(cookieSpy).toHaveBeenNthCalledWith(1, 'accessToken', 'access-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict'
+    });
+    expect(cookieSpy).toHaveBeenNthCalledWith(2, 'refreshToken', 'refresh-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/auth'
+    });
+  });
+
   it('propagates service errors from login', async () => {
     const loginDto = {
       email: 'john@example.com',

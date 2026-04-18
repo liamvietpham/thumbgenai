@@ -5,6 +5,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { applyOpenApiPatches } from 'src/common/swagger/openapi.patch';
 import cookieParser from 'cookie-parser';
 
+export function parseCorsOrigins(rawOrigins?: string) {
+  const origins = rawOrigins
+    ?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return origins?.length ? origins : undefined;
+}
+
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
 
@@ -50,7 +59,7 @@ export async function createApp(): Promise<INestApplication> {
   }
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN,
+    origin: parseCorsOrigins(process.env.CORS_ORIGIN),
     credentials: true
   });
 

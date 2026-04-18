@@ -24,22 +24,9 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() registerDto: RegisterDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.register(registerDto);
-    const { accessToken, refreshToken, user, accessTokenMaxAgeMs, refreshTokenMaxAgeMs } = result;
+    const { user } = result;
 
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'prod',
-      sameSite: 'strict',
-      maxAge: accessTokenMaxAgeMs
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'prod',
-      sameSite: 'strict',
-      maxAge: refreshTokenMaxAgeMs,
-      path: '/auth'
-    });
+    this.setAuthCookies(res, result, true);
 
     return { user };
   }
@@ -48,22 +35,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.login(loginDto);
-    const { accessToken, refreshToken, user, accessTokenMaxAgeMs, refreshTokenMaxAgeMs } = result;
+    const { user } = result;
 
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'prod',
-      sameSite: 'strict',
-      maxAge: accessTokenMaxAgeMs
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'prod',
-      sameSite: 'strict',
-      maxAge: refreshTokenMaxAgeMs,
-      path: '/auth'
-    });
+    this.setAuthCookies(res, result, loginDto.remember ?? true);
 
     return { user };
   }
@@ -127,5 +101,38 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   me(@CurrentUser('sub') userId: string) {
     return this.authService.me(userId);
+  }
+
+  private setAuthCookies(
+    res: Response,
+    result: Awaited<ReturnType<AuthService['login']>>,
+    remember: boolean
+  ) {
+    const baseCookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'prod',
+      sameSite: 'strict' as const
+    };
+
+    const accessCookieOptions = remember
+      ? {
+          ...baseCookieOptions,
+          maxAge: result.accessTokenMaxAgeMs
+        }
+      : baseCookieOptions;
+
+    const refreshCookieOptions = remember
+      ? {
+          ...baseCookieOptions,
+          maxAge: result.refreshTokenMaxAgeMs,
+          path: '/auth'
+        }
+      : {
+          ...baseCookieOptions,
+          path: '/auth'
+        };
+
+    res.cookie('accessToken', result.accessToken, accessCookieOptions);
+    res.cookie('refreshToken', result.refreshToken, refreshCookieOptions);
   }
 }
