@@ -95,6 +95,9 @@ functions:
       - httpApi:
           method: POST
           path: /auth/refresh
+      - httpApi:
+          method: GET
+          path: /auth/me
 
       - httpApi:
           method: POST
