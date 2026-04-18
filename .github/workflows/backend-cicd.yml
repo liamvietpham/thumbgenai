@@ -9,7 +9,7 @@ on:
       - 'backend/test/**'
       - 'backend/package.json'
       - 'backend/yarn.lock'
-      - 'backend/serverless.yml'
+      - 'backend/serverless.ts'
       - 'backend/nest-cli.json'
       - 'backend/tsconfig*.json'
       - 'backend/eslint.config.mjs'
@@ -178,7 +178,7 @@ jobs:
           echo "Changed files:"
           echo "$changed_files"
 
-          if echo "$changed_files" | grep -Eq '(serverless\.yml|backend-cicd\.yml)'; then
+          if echo "$changed_files" | grep -Eq '(serverless\.ts|backend-cicd\.yml)'; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"

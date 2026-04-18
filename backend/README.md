@@ -9,6 +9,7 @@ Minimal NestJS backend baseline for `thumbgen-ai`.
 - `src/health`: minimal health-check module
 - `src/main.ts`: local HTTP entrypoint
 - `src/lambda.ts`: AWS Lambda entrypoint via `@vendia/serverless-express`
+- `serverless.ts`: Serverless Framework deployment config
 
 ## Scripts
 
@@ -19,6 +20,13 @@ yarn test
 yarn test:e2e
 yarn deploy
 ```
+
+`serverless.ts` is loaded automatically by the Serverless CLI, so `yarn deploy` and `yarn deploy:prod` use the TypeScript config directly.
+
+Note:
+
+- `/thumbgenai/cors-origin` should be stored as an SSM `StringList` so Serverless can resolve `allowedOrigins` to an array.
+- `CORS_ORIGIN` in the Lambda environment is still read as a raw comma-separated string for Nest bootstrap.
 
 ## API
 

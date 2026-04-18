@@ -49,7 +49,8 @@ Error responses follow the same pattern with `success: false`.
 Why Node 20.9+:
 
 - `frontend` uses Next.js 16.2.2, which requires Node.js `>= 20.9.0`
-- `backend` is deployed with `nodejs20.x` in Serverless
+- `backend` is deployed with `nodejs22.x` in Serverless
+- `backend/serverless.ts` is the Serverless config file
 
 ## Install Dependencies
 
@@ -220,9 +221,10 @@ yarn deploy
 
 Current deployment config expects:
 
-- AWS runtime: `nodejs20.x`
+- AWS runtime: `nodejs22.x`
 - region from `AWS_REGION` or `ap-southeast-1`
 - SSM parameter: `/thumbgenai/users-table`
+- Serverless config file: [`backend/serverless.ts`](/Users/vietpham/Documents/study/thumbgen-ai/backend/serverless.ts)
 
 ## Review Notes
 
