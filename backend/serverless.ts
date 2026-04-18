@@ -100,7 +100,7 @@ const serverlessConfiguration = {
   },
   functions: {
     api: {
-      handler: 'dist/lambda.handler',
+      handler: 'dist/src/lambda.handler',
       events: [
         {
           httpApi: {
@@ -165,7 +165,7 @@ const serverlessConfiguration = {
       ]
     },
     thumbnailJobsWorker: {
-      handler: 'dist/thumbnail-jobs/thumbnail-jobs.worker.handler',
+      handler: 'dist/src/thumbnail-jobs/thumbnail-jobs.worker.handler',
       timeout: 300,
       memorySize: 1024,
       events: [
